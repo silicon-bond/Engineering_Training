@@ -7,6 +7,7 @@
     <div id="main">
       <div id="sidebar">
         <el-menu
+          style="border: 0"
           default-active="/user/logistics"
           class="el-menu-vertical-demo"
           @open="handleOpen"
@@ -33,11 +34,14 @@
           </el-menu-item>
         </el-menu>
       </div>
-      <div id="right">
-        <div>
-          <router-view></router-view>
+      <div id="rightBox">
+        <div id="right">
+          <div>
+            <router-view></router-view>
+          </div>
         </div>
       </div>
+
 
     </div>
 
@@ -104,12 +108,18 @@ export default {
   overflow: hidden;
   background-color: #545c64;
 }
+#rightBox{
+  width: 100%;
+  height: 100%;
+  background-color: #e2e2e2;
+}
 #right{
   position: absolute;
   width: 80%;
   top: 15px;
   bottom: 0;
   right: 1%;
+  background-color: white;
 }
 #exit{
   float: right;
