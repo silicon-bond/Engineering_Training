@@ -4,7 +4,7 @@
       <h3 id="searchTitle">物流查询</h3>
       <div id="search">
         <span id="logisticsState">物流状态</span>
-        <el-select v-model="value" placeholder="请选择">
+        <el-select v-model="value" placeholder="请选择物流状态">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -63,19 +63,19 @@ export default {
     return {
       options: [{
         value: '选项1',
-        label: '黄金糕'
+        label: '未揽件'
       }, {
         value: '选项2',
-        label: '双皮奶'
+        label: '已揽件'
       }, {
         value: '选项3',
-        label: '蚵仔煎'
+        label: '运输中'
       }, {
         value: '选项4',
-        label: '龙须面'
+        label: '未派送'
       }, {
         value: '选项5',
-        label: '北京烤鸭'
+        label: '已送达'
       }],
       value: '',
       searchContent:'',
