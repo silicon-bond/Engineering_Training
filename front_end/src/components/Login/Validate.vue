@@ -1,69 +1,67 @@
-<!--<template>-->
-<!--<div>-->
-<!--  忘记密码-->
-<!--</div>-->
-<!--</template>-->
-
-<!--<script>-->
-<!--export default {-->
-<!--  name: "ForgetPassword"-->
-<!--}-->
-<!--</script>-->
-
-<!--<style scoped>-->
-
-<!--</style>-->
 <template>
   <div>
     <div id="messagebox">
-      <p id="logintopic">找回密码</p>
+      <p id="logintopic">验证身份</p>
       <el-form :model="information" :rules="rules" ref="information">
 
-        <el-form-item prop="email">
+        <el-form-item prop="valicode">
           <el-input
-            id="email"
+            id="valicode"
             prefix-icon="el-icon-lock"
             size="large"
-            placeholder="请输入邮箱"
+            placeholder="请输入验证码"
             show-password
             required
-            v-model="information.email"
+            v-model="information.valcode"
           ></el-input>
         </el-form-item>
-
+        <el-form-item prop="newPwd">
+          <el-input
+            id="newPwd"
+            prefix-icon="el-icon-lock"
+            size="large"
+            placeholder="请输入新密码"
+            show-password
+            required
+            v-model="information.newPwd"
+          ></el-input>
+        </el-form-item>
       </el-form>
-      <el-button @click="toValidate" id="registerbtn" type="primary" >发送验证码</el-button>
-      <el-button type="text" id="toLoginbtn" @click="toLogin">返回上一级</el-button>
+      <el-button @click="register('information')" id="registerbtn" type="primary" >确定</el-button>
+      <el-button type="text" id="toLoginbtn" @click="toFoget">未收到验证码</el-button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "ForgetPassword",
+  name: "Validate",
   data(){
-    var validatePass2 = (rule, value, callback) => {
+    var validatemail = (rule, value, callback) => {
       if (value === '') {
-        callback(new Error('请输入邮箱'));
-      } else if (value !== this.information.email) {
-        callback(new Error('输入邮箱与认证邮箱不一致!'));
-      }
-        else {
+        callback(new Error(''));
+      } else if (value !== this.information.pwd) {
+        callback(new Error('两次输入密码不一致!'));
+      } else {
         callback();
       }
     };
     return{
       information:{
-        email:'',
+        valicode: '',
+        newPwd:'',
       },
       rules:{
-        email:[
-          {required: true, message: '邮箱不能为空',validator: validatePass2, trigger: ['blur', 'change']}
+        valicode:[
+          {required: true, message: '验证码不能为空',validator: validatemail, trigger: ['blur', 'change']}
         ],
-        // newpwd:[
-        //   {required: true, message: '密码不能为空', trigger: 'blur'},
-        //   { pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/, message: '密码必须同时包含数字与字母,且长度为 8-20位' }
-        // ],
+        newPwd:[
+          {required: true, message: '密码不能为空', trigger: 'blur'},
+          { pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/, message: '密码必须同时包含数字与字母,且长度为 8-20位' }
+        ],
+        // twicePwd: [
+        //   {validator: validatePass2, trigger: 'blur'}
+        // ]
       },
     }
   },
@@ -71,8 +69,8 @@ export default {
     toLogin(){
       this.$router.push('/login/login')
     },
-    toValidate(){
-      this.$router.push('/login/validate')
+    toFoget(){
+      this.$router.push('/login/forgetPassword')
     },
     register(message){
       let userMessage = {
