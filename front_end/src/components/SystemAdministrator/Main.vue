@@ -37,9 +37,11 @@
           </el-menu-item>
         </el-menu>
       </div>
-      <div id="right">
-        <div>
-          <router-view></router-view>
+      <div id="rightBox">
+        <div id="right">
+          <div>
+            <router-view></router-view>
+          </div>
         </div>
       </div>
 
@@ -115,6 +117,12 @@ export default {
   top: 15px;
   bottom: 0;
   right: 1%;
+  background-color: white;
+}
+#rightBox{
+  width: 100%;
+  height: 100%;
+  background-color: #e2e2e2;
 }
 #exit{
   float: right;

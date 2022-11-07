@@ -8,7 +8,7 @@
       <div id="sidebar">
         <el-menu
           style="border: 0"
-          default-active="/user/logistics"
+          :default-active="this.$route.path"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
@@ -41,8 +41,6 @@
           </div>
         </div>
       </div>
-
-
     </div>
 
   </div>
@@ -53,6 +51,7 @@ export default {
   name: "Main",
   data(){
     return{
+
     }
   },
   methods: {
@@ -76,6 +75,7 @@ export default {
 
   },
   created() {
+
   },
 }
 </script>
@@ -96,15 +96,15 @@ export default {
 }
 #main{
   position: absolute;
+  height: 100%;
   width: 100%;
   top: 70px;
   bottom: 0;
 }
 #sidebar{
   position: absolute;
-  top: 0;
-  bottom: 0;
   width: 18%;
+  height: 100%;
   overflow: hidden;
   background-color: #545c64;
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <h3 id="searchTitle">物流查询</h3>
+      <h2 id="searchTitle">物流查询</h2>
       <div id="search">
         <span id="logisticsState">物流状态</span>
         <el-select v-model="value" placeholder="请选择物流状态">
@@ -171,18 +171,17 @@ export default {
 
 <style scoped>
 #searchTitle{
-  margin-left: 1%;
-  margin-right: 1%;
+  margin-left: 2%;
 }
 #logisticsState{
   font-weight: 600;
   margin-right: 1%;
 }
 #search{
-  margin-left: 1%;
+  margin-left: 3%;
 }
 #tableTitle{
-  margin-left: 1%;
+  margin-left: 3%;
 }
 #searchContent{
   display:inline-block;
