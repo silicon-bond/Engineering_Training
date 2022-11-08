@@ -17,7 +17,6 @@ import java.io.Serializable;
  */
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class ResultBean<T> implements Serializable {
 
@@ -33,6 +32,12 @@ public class ResultBean<T> implements Serializable {
     private String code = ResultBean.SUCCESS_CODE;
 
     private T data;
+
+    public ResultBean(String msg, String code, T data){
+        this.message = msg;
+        this.code = code;
+        this.data = data;
+    }
 
     public ResultBean(String msg, String code) {
         this.message = msg;
@@ -66,6 +71,8 @@ public class ResultBean<T> implements Serializable {
         this.message = e.getMessage();
         this.code = e.getCode();
     }
+
+
 
 
 }

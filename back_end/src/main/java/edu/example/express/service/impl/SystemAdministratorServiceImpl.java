@@ -1,14 +1,20 @@
 package edu.example.express.service.impl;
 
+import edu.example.express.entity.Deliveryman;
 import edu.example.express.entity.SystemAdministrator;
+import edu.example.express.entity.User;
 import edu.example.express.mapper.SystemAdministratorMapper;
 import edu.example.express.service.SystemAdministratorService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import edu.example.express.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import edu.example.express.exception.bizException.BizException;
+
+import javax.annotation.Resource;
 
 /**
 * <p>
@@ -21,6 +27,93 @@ import edu.example.express.exception.bizException.BizException;
 @Slf4j
 @Service
 public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministratorMapper, SystemAdministrator> implements SystemAdministratorService {
+
+    @Resource
+    UserService userService;
+
+    /**
+     * 模块一：对用户，快递员，网点管理员的增删改查
+     */
+
+    @Override
+    public int addOneUser(User user) {
+        int result = userService.insertUser(user);
+        return result;
+    }
+
+    @Override
+    public int deleteUserById(int id) {
+        int result = userService.deleteUserById(id);
+        return result;
+    }
+
+    @Override
+    public int updateUser(User user) {
+        int result = userService.updateUser(user);
+        return result;
+    }
+
+    @Override
+    public User getUserById(int id) {
+        User user = userService.getUserById(id);
+        return user;
+    }
+
+    @Override
+    public Page<User> getUserByPage(int page, int pageSize, String factor) {
+        Page<User> userList = userService.listUsersByPage(page, pageSize, factor);
+        return userList;
+    }
+
+    @Override
+    public int addOneDeliveryman(Deliveryman deliveryman) {
+        return 0;
+    }
+
+    @Override
+    public int deleteDeliverymanById(int id) {
+        return 0;
+    }
+
+    @Override
+    public int updateDeliverymanById(int id) {
+        return 0;
+    }
+
+    @Override
+    public Deliveryman getDeliverymanById(int id) {
+        return null;
+    }
+
+    @Override
+    public Page<Deliveryman> getDeliverymanByPage() {
+        return null;
+    }
+
+    @Override
+    public int addOneNetworkAdministrator(int id) {
+        return 0;
+    }
+
+    @Override
+    public int deleteNetworkAdministratorById(int id) {
+        return 0;
+    }
+
+    @Override
+    public int updateNetworkAdministratorById(int id) {
+        return 0;
+    }
+
+    @Override
+    public Deliveryman getNetworkAdministratorById(int id) {
+        return null;
+    }
+
+    @Override
+    public Page<Deliveryman> getNetworkAdministratorByPage() {
+        return null;
+    }
 
     @Override
     public Page<SystemAdministrator> listSystemAdministratorsByPage(int page, int pageSize, String factor) {

@@ -1,8 +1,10 @@
 package edu.example.express.service;
 
+import edu.example.express.entity.Deliveryman;
 import edu.example.express.entity.SystemAdministrator;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import edu.example.express.entity.User;
 
 /**
 * <p>
@@ -13,6 +15,64 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 * @since 2022-11-05
 */
 public interface SystemAdministratorService {
+
+    /**
+     * 模块一：对用户，快递员，网点管理员的增删改查
+     */
+
+    int addOneUser(User user);
+
+    int deleteUserById(int id);
+
+    int updateUser(User user);
+
+    User getUserById(int id);
+
+    Page<User> getUserByPage(int page, int pageSize, String factor);
+
+
+    int addOneDeliveryman(Deliveryman deliveryman);
+
+    int deleteDeliverymanById(int id);
+
+    int updateDeliverymanById(int id);
+
+    Deliveryman getDeliverymanById(int id);
+
+    Page<Deliveryman> getDeliverymanByPage();
+
+
+    int addOneNetworkAdministrator(int id);
+
+    int deleteNetworkAdministratorById(int id);
+
+    int updateNetworkAdministratorById(int id);
+
+    Deliveryman getNetworkAdministratorById(int id);
+
+    Page<Deliveryman> getNetworkAdministratorByPage();
+
+
+    /**
+     * 模块二：对网点进行管理
+     */
+
+    /**
+     * 模块三：对物流进行管理
+     */
+
+    /**
+     * 模块四：异常反馈处理
+     */
+
+    /**
+     * 模块五：公司资讯管理
+     */
+
+
+
+
+
 
     /**
     * 分页查询SystemAdministrator
