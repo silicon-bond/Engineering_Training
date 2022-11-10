@@ -43,6 +43,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public int insertUser(User user) {
         log.info("正在插入user");
+        System.out.println(user.getEmail());
         if (super.save(user)) {
             log.info("插入user成功,id为{}",user.getUserId());
             return user.getUserId();

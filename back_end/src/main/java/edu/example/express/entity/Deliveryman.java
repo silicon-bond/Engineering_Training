@@ -24,7 +24,7 @@ public class Deliveryman extends Model<Deliveryman> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "delivery_id", type = IdType.AUTO)
+    @TableId(value = "deliveryman_id", type = IdType.AUTO)
     private Integer deliverymanId;
 
     private String email;

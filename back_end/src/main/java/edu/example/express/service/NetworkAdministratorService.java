@@ -30,7 +30,7 @@ public interface NetworkAdministratorService {
     /**
      * 修改快递员
      *
-     * @param deliveryman 要修改的NetworkAdministrator整个对象
+     * @param networkAdministrator 要修改的NetworkAdministrator整个对象
      * @return 返回修改成功之后NetworkAdministrator对象的id
      * @author zlh
      * @since 2022-11-08
@@ -46,7 +46,7 @@ public interface NetworkAdministratorService {
      * @author zlh
      * @since 2022-11-08
      */
-    Deliveryman getNetworkAdministratorById(int id);
+    NetworkAdministrator getNetworkAdministratorById(int id);
 
 
     /**
@@ -59,5 +59,5 @@ public interface NetworkAdministratorService {
      * @author zlh
      * @since 2022-11-08
      */
-    Page<Deliveryman> getNetworkAdministratorByPage(int page, int pageSize, String factor);
+    Page<NetworkAdministrator> getNetworkAdministratorByPage(int page, int pageSize, String factor);
 }

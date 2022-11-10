@@ -1,10 +1,9 @@
 package edu.example.express.service;
 
-import edu.example.express.entity.Deliveryman;
-import edu.example.express.entity.SystemAdministrator;
+import edu.example.express.entity.*;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import edu.example.express.entity.User;
+import sun.nio.ch.Net;
 
 /**
 * <p>
@@ -35,27 +34,36 @@ public interface SystemAdministratorService {
 
     int deleteDeliverymanById(int id);
 
-    int updateDeliverymanById(int id);
+    int updateDeliveryman(Deliveryman deliveryman);
 
     Deliveryman getDeliverymanById(int id);
 
-    Page<Deliveryman> getDeliverymanByPage();
+    Page<Deliveryman> getDeliverymanByPage(int page, int pageSize, String factor);
 
 
-    int addOneNetworkAdministrator(int id);
+    int addOneNetworkAdministrator(NetworkAdministrator networkAdministrator);
 
     int deleteNetworkAdministratorById(int id);
 
-    int updateNetworkAdministratorById(int id);
+    int updateNetworkAdministrator(NetworkAdministrator networkAdministrator);
 
-    Deliveryman getNetworkAdministratorById(int id);
+    NetworkAdministrator getNetworkAdministratorById(int id);
 
-    Page<Deliveryman> getNetworkAdministratorByPage();
-
+    Page<NetworkAdministrator> getNetworkAdministratorByPage(int page, int pageSize, String factor);
 
     /**
      * 模块二：对网点进行管理
      */
+
+    int addOneNetwork(Network network);
+
+    int deleteNetworkById(int id);
+
+    int updateNetwork(Network network);
+
+    Network getNetworkById(int id);
+
+    Page<Network> getNetworkByPage(int page, int pageSize, String factor);
 
     /**
      * 模块三：对物流进行管理

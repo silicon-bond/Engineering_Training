@@ -1,13 +1,10 @@
 package edu.example.express.service.impl;
 
-import edu.example.express.entity.Deliveryman;
-import edu.example.express.entity.SystemAdministrator;
-import edu.example.express.entity.User;
+import edu.example.express.entity.*;
 import edu.example.express.mapper.SystemAdministratorMapper;
-import edu.example.express.service.SystemAdministratorService;
+import edu.example.express.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import edu.example.express.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -31,10 +28,19 @@ public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministra
     @Resource
     UserService userService;
 
+    @Resource
+    DeliverymanService deliverymanService;
+
+    @Resource
+    NetworkAdministratorService networkAdministratorService;
+
+    @Resource
+    NetworkService networkService;
+
+
     /**
      * 模块一：对用户，快递员，网点管理员的增删改查
      */
-
     @Override
     public int addOneUser(User user) {
         int result = userService.insertUser(user);
@@ -65,55 +71,144 @@ public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministra
         return userList;
     }
 
+
     @Override
     public int addOneDeliveryman(Deliveryman deliveryman) {
-        return 0;
+        int id = deliverymanService.insertDeliveryman(deliveryman);
+        return id;
     }
 
     @Override
     public int deleteDeliverymanById(int id) {
-        return 0;
+        int result = deliverymanService.deleteDeliverymanById(id);
+        return result;
     }
 
     @Override
-    public int updateDeliverymanById(int id) {
-        return 0;
+    public int updateDeliveryman(Deliveryman deliveryman) {
+        int id = deliverymanService.updateDeliveryman(deliveryman);
+        return id;
     }
 
     @Override
     public Deliveryman getDeliverymanById(int id) {
-        return null;
+        Deliveryman deliveryman = deliverymanService.getDeliverymanById(id);
+        return deliveryman;
     }
 
     @Override
-    public Page<Deliveryman> getDeliverymanByPage() {
-        return null;
+    public Page<Deliveryman> getDeliverymanByPage(int page, int pageSize, String factor) {
+        Page<Deliveryman> deliverymanList = deliverymanService.getDeliverymanByPage(page, pageSize, factor);
+        return deliverymanList;
     }
 
+
     @Override
-    public int addOneNetworkAdministrator(int id) {
-        return 0;
+    public int addOneNetworkAdministrator(NetworkAdministrator networkAdministrator) {
+        int id = networkAdministratorService.insertNetworkAdministrator(networkAdministrator);
+        return id;
     }
 
     @Override
     public int deleteNetworkAdministratorById(int id) {
-        return 0;
+        networkAdministratorService.deleteNetworkAdministratorById(id);
+        return id;
     }
 
     @Override
-    public int updateNetworkAdministratorById(int id) {
-        return 0;
+    public int updateNetworkAdministrator(NetworkAdministrator networkAdministrator) {
+        int id = networkAdministratorService.updateNetworkAdministrator(networkAdministrator);
+        return id;
     }
 
     @Override
-    public Deliveryman getNetworkAdministratorById(int id) {
-        return null;
+    public NetworkAdministrator getNetworkAdministratorById(int id) {
+        NetworkAdministrator networkAdministrator = networkAdministratorService.getNetworkAdministratorById(id);
+        return networkAdministrator;
     }
 
     @Override
-    public Page<Deliveryman> getNetworkAdministratorByPage() {
-        return null;
+    public Page<NetworkAdministrator> getNetworkAdministratorByPage(int page, int pageSize, String factor) {
+        Page<NetworkAdministrator> networkAdministratorList = networkAdministratorService.getNetworkAdministratorByPage(page, pageSize, factor);
+        return networkAdministratorList;
     }
+
+
+    /**
+     * 模块二：对网点进行管理
+     */
+    @Override
+    public int addOneNetwork(Network network) {
+        int id = networkService.insertNetwork(network);
+        return id;
+    }
+
+    @Override
+    public int deleteNetworkById(int id) {
+        networkService.deleteNetworkById(id);
+        return id;
+    }
+
+    @Override
+    public int updateNetwork(Network network) {
+        int id = networkService.updateNetwork(network);
+        return id;
+    }
+
+    @Override
+    public Network getNetworkById(int id) {
+        Network network = networkService.getNetworkById(id);
+        return network;
+    }
+
+    @Override
+    public Page<Network> getNetworkByPage(int page, int pageSize, String factor) {
+        Page<Network> networkList = networkService.getNetworkByPage(page, pageSize, factor);
+        return networkList;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public Page<SystemAdministrator> listSystemAdministratorsByPage(int page, int pageSize, String factor) {
