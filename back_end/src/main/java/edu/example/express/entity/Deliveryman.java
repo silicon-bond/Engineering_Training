@@ -1,6 +1,7 @@
 package edu.example.express.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -33,13 +34,13 @@ public class Deliveryman extends Model<Deliveryman> {
 
     private String username;
 
-    @TableId(value = "register_data")
+    @TableField(value = "register_date")
     private LocalDate registerDate;
 
-    @TableId(value = "network_id")
+    @TableField(value = "network_id")
     private Integer networkId;
 
-    @TableId(value = "phone_number")
+    @TableField(value = "phone_number")
     private String phoneNumber;
 
 

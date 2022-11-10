@@ -1,6 +1,7 @@
 package edu.example.express.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class Network extends Model<Network> {
 
     private LocalDate registerDate;
 
-    @TableId(value = "network_name")
+    @TableField(value = "network_name")
     private String networkName;
 
     @Override

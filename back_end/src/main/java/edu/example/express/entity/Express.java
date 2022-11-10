@@ -2,6 +2,7 @@ package edu.example.express.entity;
 
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
@@ -20,57 +21,57 @@ public class Express extends Model<Express> {
     @TableId(value = "express_id", type = IdType.AUTO)
     private Integer expressId;
 
-    @TableId(value = "order_date")
+    @TableField(value = "order_date")
     private LocalDate orderDate;
 
     private Integer state;
 
-    @TableId(value = "network_id")
+    @TableField(value = "network_id")
     private Integer networkId;
 
-    @TableId(value = "delivery_province")
+    @TableField(value = "delivery_province")
     private String deliveryProvince;
 
-    @TableId(value = "delivery_municipal")
+    @TableField(value = "delivery_municipal")
     private String deliveryMunicipal;
 
-    @TableId(value = "delivery_country")
+    @TableField(value = "delivery_country")
     private String deliveryCountry;
 
-    @TableId(value = "delivery_street")
+    @TableField(value = "delivery_street")
     private String deliveryStreet;
 
-    @TableId(value = "delivery_detail_address")
+    @TableField(value = "delivery_detail_address")
     private String deliveryDetailAddress;
 
-    @TableId(value = "delivery_phone_number")
+    @TableField(value = "delivery_phone_number")
     private String deliveryPhoneNumber;
 
-    @TableId(value = "receipt_province")
+    @TableField(value = "receipt_province")
     private String receiptProvince;
 
-    @TableId(value = "receipt_municipal")
+    @TableField(value = "receipt_municipal")
     private String receiptMunicipal;
 
-    @TableId(value = "receipt_country")
+    @TableField(value = "receipt_country")
     private String receiptCountry;
 
-    @TableId(value = "receipt_street")
+    @TableField(value = "receipt_street")
     private String receiptStreet;
 
-    @TableId(value = "receipt_detail_address")
+    @TableField(value = "receipt_detail_address")
     private String receiptDetailAddress;
 
-    @TableId(value = "receipt_phone_number")
+    @TableField(value = "receipt_phone_number")
     private String receiptPhoneNumber;
 
-    @TableId(value = "collect_id")
+    @TableField(value = "collect_id")
     private Integer collectId;
 
-    @TableId(value = "deliveryman_id")
+    @TableField(value = "deliveryman_id")
     private Integer deliverymanId;
 
-    @TableId(value = "orderer_id")
+    @TableField(value = "orderer_id")
     private Integer ordererId;
 
     private String description;

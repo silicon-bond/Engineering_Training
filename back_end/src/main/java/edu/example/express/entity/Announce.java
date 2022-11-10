@@ -2,6 +2,7 @@ package edu.example.express.entity;
 
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
@@ -20,7 +21,7 @@ public class Announce extends Model<Announce> {
     @TableId(value = "announce_id",type = IdType.AUTO)
     private Integer announceId;
 
-    @TableId(value = "publish_date")
+    @TableField(value = "publish_date")
     private LocalDate publishDate;
 
     private Integer publisher;
