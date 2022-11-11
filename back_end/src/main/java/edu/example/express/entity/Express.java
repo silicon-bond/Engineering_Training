@@ -79,7 +79,7 @@ public class Express extends Model<Express> {
     private Integer collectId;
 
     @TableField("delivery_id")
-    private String deliveryId;
+    private Integer deliveryId;
 
     private String description;
 
