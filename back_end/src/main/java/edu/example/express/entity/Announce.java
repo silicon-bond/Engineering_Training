@@ -1,27 +1,32 @@
 package edu.example.express.entity;
 
-
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import java.time.LocalDate;
+import com.baomidou.mybatisplus.annotation.TableId;
+import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
+/**
+ * <p>
+ * 公告表
+ * </p>
+ *
+ * @author zlh
+ * @since 2022-11-11
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class Announce extends Model<Announce> {
+
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "announce_id",type = IdType.AUTO)
+    @TableId(value = "announce_id", type = IdType.AUTO)
     private Integer announceId;
 
-    @TableField(value = "publish_date")
     private LocalDate publishDate;
 
     private Integer publisher;
@@ -30,16 +35,10 @@ public class Announce extends Model<Announce> {
 
     private Integer state;
 
+
     @Override
     protected Serializable pkVal() {
         return this.announceId;
     }
 
-
 }
-
-
-
-
-
-
