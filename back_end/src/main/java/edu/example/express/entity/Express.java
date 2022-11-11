@@ -1,84 +1,95 @@
 package edu.example.express.entity;
 
-
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import java.time.LocalDate;
+import com.baomidou.mybatisplus.annotation.TableId;
+import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
-import java.time.LocalDate;
-
+/**
+ * <p>
+ * 快递单
+ * </p>
+ *
+ * @author zxy
+ * @since 2022-11-11
+ */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class Express extends Model<Express> {
+
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "express_id", type = IdType.AUTO)
     private Integer expressId;
 
-    @TableField(value = "order_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+    @TableField("order_date")
     private LocalDate orderDate;
 
     private Integer state;
 
-    @TableField(value = "network_id")
+    @TableField("network_id")
     private Integer networkId;
 
-    @TableField(value = "delivery_province")
-    private String deliveryProvince;
+    @TableField("deliver_province")
+    private String deliverProvince;
 
-    @TableField(value = "delivery_municipal")
-    private String deliveryMunicipal;
+    @TableField("deliver_municipal")
+    private String deliverMunicipal;
 
-    @TableField(value = "delivery_country")
-    private String deliveryCountry;
+    @TableField("deliver_country")
+    private String deliverCountry;
 
-    @TableField(value = "delivery_street")
-    private String deliveryStreet;
+    @TableField("deliver_street")
+    private String deliverStreet;
 
-    @TableField(value = "delivery_detail_address")
-    private String deliveryDetailAddress;
+    @TableField("deliver_detail_address")
+    private String deliverDetailAddress;
 
-    @TableField(value = "delivery_phone_number")
-    private String deliveryPhoneNumber;
+    @TableField("deliver_phone_number")
+    private String deliverPhoneNumber;
 
-    @TableField(value = "receipt_province")
+    @TableField("receipt_province")
     private String receiptProvince;
 
-    @TableField(value = "receipt_municipal")
+    @TableField("receipt_municipal")
     private String receiptMunicipal;
 
-    @TableField(value = "receipt_country")
+    @TableField("receipt_province")
     private String receiptCountry;
 
-    @TableField(value = "receipt_street")
+    @TableField("receipt_street")
     private String receiptStreet;
 
-    @TableField(value = "receipt_detail_address")
+    @TableField("receipt_detail_address")
     private String receiptDetailAddress;
 
-    @TableField(value = "receipt_phone_number")
+    @TableField("receipt_phone_number")
     private String receiptPhoneNumber;
 
-    @TableField(value = "collect_id")
+    @TableField("collect_id")
     private Integer collectId;
 
-    @TableField(value = "deliveryman_id")
-    private Integer deliverymanId;
-
-    @TableField(value = "orderer_id")
-    private Integer ordererId;
+    @TableField("delivery_id")
+    private String deliveryId;
 
     private String description;
+
+    @TableField("orderer_id")
+    private Integer ordererId;
 
 
     @Override
     protected Serializable pkVal() {
         return this.expressId;
     }
+
 }
