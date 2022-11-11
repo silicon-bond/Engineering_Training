@@ -30,7 +30,7 @@ public class Express extends Model<Express> {
     @TableId(value = "express_id", type = IdType.AUTO)
     private Integer expressId;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @TableField("order_date")
     private LocalDate orderDate;
 

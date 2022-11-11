@@ -76,4 +76,13 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         }
     }
 
+    @Override
+    public Page<Express> getExpressListByNetworkId(Integer networkId, int page, int pageSize) {
+        log.info("正在查询express中networkId为{}的数据",networkId);
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("network_id", networkId);
+        Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
+        return result;
+    }
+
 }

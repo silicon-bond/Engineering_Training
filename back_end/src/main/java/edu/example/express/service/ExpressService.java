@@ -66,4 +66,6 @@ public interface ExpressService {
     */
     int updateExpress(Express express);
 
+    Page<Express> getExpressListByNetworkId(Integer networkId, int page, int pageSize);
+
 }
