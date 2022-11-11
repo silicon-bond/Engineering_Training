@@ -5,6 +5,7 @@ import edu.example.express.entity.Deliveryman;
 import edu.example.express.entity.User;
 import edu.example.express.entity.dto.ResultBean;
 import edu.example.express.service.DeliverymanService;
+import edu.example.express.service.ExpressService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -15,6 +16,9 @@ public class DeliverymanController {
 
     @Resource
     private DeliverymanService deliverymanService;
+
+    @Resource
+    private ExpressService expressService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResultBean<?> listByPage(@RequestParam(name = "page", defaultValue = "1") int page,
@@ -41,6 +45,13 @@ public class DeliverymanController {
     @RequestMapping(method = RequestMethod.PUT)
     public ResultBean<?> updateById(@RequestBody Deliveryman deliveryman) {
         return new ResultBean<>(deliverymanService.updateDeliveryman(deliveryman));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/expressList/{networkId}")
+    private ResultBean<?> getExpressListByNetworkId(@RequestParam(name = "page", defaultValue = "1") int page,
+                                                    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                                    @PathVariable("networkId")Integer networkId){
+        return new ResultBean<>(expressService.getExpressListByNetworkId(networkId, page, pageSize));
     }
 
 }

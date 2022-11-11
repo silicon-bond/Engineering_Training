@@ -2,7 +2,10 @@ package edu.example.express.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.example.express.entity.Deliveryman;
+import edu.example.express.entity.Express;
 import edu.example.express.entity.User;
+
+import java.util.List;
 
 public interface DeliverymanService {
     /**

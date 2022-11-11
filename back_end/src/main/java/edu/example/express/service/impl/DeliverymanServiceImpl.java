@@ -5,13 +5,15 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import edu.example.express.entity.Deliveryman;
-import edu.example.express.entity.User;
+import edu.example.express.entity.Express;
 import edu.example.express.exception.bizException.BizException;
 import edu.example.express.mapper.DeliverymanMapper;
 import edu.example.express.service.DeliverymanService;
+import edu.example.express.service.ExpressService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import edu.example.express.exception.bizException.BizException;
+
+import javax.annotation.Resource;
 
 @Slf4j
 @Service
