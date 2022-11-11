@@ -72,4 +72,11 @@ public class DeliverymanController {
             return new ResultBean<>("物流状态修改失败", "500");
         }
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "myExpressList/{deliverymanId}")
+    private ResultBean<?> getMyExpressList(@RequestParam(name = "page", defaultValue = "1") int page,
+                                           @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                           @PathVariable("deliverymanId")Integer deliverymanId){
+        return new ResultBean<>(expressService.getExpressListByDeliverymanId(deliverymanId, page, pageSize));
+    }
 }

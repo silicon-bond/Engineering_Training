@@ -68,4 +68,5 @@ public interface ExpressService {
 
     Page<Express> getExpressListByNetworkId(Integer networkId, int page, int pageSize);
 
+    Page<Express> getExpressListByDeliverymanId(Integer deliverymanId, int page, int pageSize);
 }
