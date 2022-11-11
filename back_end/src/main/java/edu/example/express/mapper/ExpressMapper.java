@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,8 +22,4 @@ import java.util.List;
 @Mapper
 @Repository
 public interface ExpressMapper extends BaseMapper<Express> {
-
-    @Select("select * from express where network_id = #{networkId}")
-    public List<Express> getExpressListByNetworkId(@Param("networkId")Integer networkId);
-
 }

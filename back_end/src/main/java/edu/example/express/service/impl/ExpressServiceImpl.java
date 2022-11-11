@@ -10,6 +10,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import edu.example.express.exception.bizException.BizException;
 
+import javax.annotation.Resource;
+
 /**
 * <p>
 * 快递单 服务实现类
@@ -21,7 +23,6 @@ import edu.example.express.exception.bizException.BizException;
 @Slf4j
 @Service
 public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> implements ExpressService {
-
     @Override
     public Page<Express> listExpresssByPage(int page, int pageSize, String factor) {
         log.info("正在执行分页查询express: page = {} pageSize = {} factor = {}",page,pageSize,factor);
@@ -68,7 +69,7 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
     public int updateExpress(Express express) {
         log.info("正在更新id为{}的express",express.getExpressId());
         if (super.updateById(express)) {
-            log.info("更新d为{}的express成功",express.getExpressId());
+            log.info("更新id为{}的express成功",express.getExpressId());
             return express.getExpressId();
         } else {
             log.error("更新id为{}的express失败",express.getExpressId());
@@ -84,5 +85,4 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;
     }
-
 }

@@ -2,6 +2,7 @@ package edu.example.express.controller;
 
 
 import edu.example.express.entity.Deliveryman;
+import edu.example.express.entity.Express;
 import edu.example.express.entity.User;
 import edu.example.express.entity.dto.ResultBean;
 import edu.example.express.service.DeliverymanService;
@@ -54,4 +55,21 @@ public class DeliverymanController {
         return new ResultBean<>(expressService.getExpressListByNetworkId(networkId, page, pageSize));
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/orderReceiving/{expressId}/{deliverymanId}")
+    private ResultBean<?> orderReceiving(@PathVariable("expressId")Integer expressId,
+                                         @PathVariable("deliverymanId")Integer deliverymanId){
+        Express express = expressService.getExpressById(expressId);
+        if (express != null){
+            Integer state = express.getState();
+            express.setState(state+1);
+            if (state == 0){
+                express.setCollectId(deliverymanId);
+            } else {
+                express.setDeliveryId(deliverymanId);
+            }
+            return new ResultBean<>(expressService.updateExpress(express));
+        } else {
+            return new ResultBean<>("物流状态修改失败", "500");
+        }
+    }
 }
