@@ -13,5 +13,26 @@ spring:
     password: 12345678
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://8.130.39.140/express?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT
+
+  #设置邮箱
+  mail:
+    host: smtp.qq.com    #邮箱服务器地址
+    username: 1376060367@qq.com   #邮箱账号
+    password: rbxzohuzgcpcicjj       #邮箱授权码
+    default-encoding: utf-8    #默认编码
+    properties:
+      mail:
+        smtp:
+          auth=true:
+          starttls:
+            enable: true
+            required: true
+
+
 server:
   port: 8080
+
+#邮件发件人
+mail:
+  fromMail:
+    fromAddress: 1376060367@qq.com

@@ -1,12 +1,12 @@
 package edu.example.express.controller;
 
 
-import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import edu.example.express.entity.dto.ResultBean;
-import edu.example.express.service.UserService;
 import edu.example.express.entity.User;
-import org.springframework.web.bind.annotation.RestController;
+import edu.example.express.entity.dto.ResultBean;
+import edu.example.express.service.ExpressService;
+import edu.example.express.service.UserService;
+import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 
 
@@ -26,6 +26,9 @@ public class UserController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private ExpressService expressService;
 
     /**
     * 查询分页数据
