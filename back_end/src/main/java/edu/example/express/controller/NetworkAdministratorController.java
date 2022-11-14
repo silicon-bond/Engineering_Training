@@ -1,6 +1,7 @@
 package edu.example.express.controller;
 
 
+import edu.example.express.service.DeliverymanService;
 import edu.example.express.service.ExpressService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class NetworkAdministratorController {
 
     @Resource
     private ExpressService expressService;
+
+    @Resource
+    private DeliverymanService deliverymanService;
 
     /**
     * 查询分页数据
@@ -88,5 +92,15 @@ public class NetworkAdministratorController {
                                                @RequestParam(name = "dateStart", defaultValue = "2000-01-01") LocalDate dateStart,
                                                @RequestParam(name = "dateOver", defaultValue = "2099-12-31") LocalDate dateOver) {
         return new ResultBean<>(expressService.getExpressListByNetworkIdAndDate(NetworkId, page, pageSize, dateStart, dateOver));
+    }
+
+    /**
+     * 根据网点id查询快递员
+     */
+    @RequestMapping(method = RequestMethod.GET, path = "/getDeliveryman")
+    public ResultBean<?> getDeliverymanByNetworkId(@RequestParam(name = "page", defaultValue = "1") int page,
+                                                   @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                                   @RequestParam(name = "networkId", defaultValue = "") int NetworkId) {
+        return new ResultBean<>(deliverymanService.getDeliverymanByNetworkId(page, pageSize, NetworkId));
     }
 }
