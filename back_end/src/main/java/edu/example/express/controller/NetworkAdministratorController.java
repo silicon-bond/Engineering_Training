@@ -1,6 +1,7 @@
 package edu.example.express.controller;
 
 
+import edu.example.express.service.ExpressService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import edu.example.express.entity.dto.ResultBean;
@@ -8,6 +9,7 @@ import edu.example.express.service.NetworkAdministratorService;
 import edu.example.express.entity.NetworkAdministrator;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
+import java.time.LocalDate;
 
 
 /**
@@ -27,6 +29,9 @@ public class NetworkAdministratorController {
     @Resource
     private NetworkAdministratorService networkAdministratorService;
 
+    @Resource
+    private ExpressService expressService;
+
     /**
     * 查询分页数据
     */
@@ -36,6 +41,9 @@ public class NetworkAdministratorController {
                                     @RequestParam(name = "factor", defaultValue = "") String factor) {
         return new ResultBean<>(networkAdministratorService.getNetworkAdministratorByPage(page, pageSize,factor));
     }
+
+
+
 
 
     /**
@@ -68,5 +76,17 @@ public class NetworkAdministratorController {
     @RequestMapping(method = RequestMethod.PUT)
     public ResultBean<?> updateById(@RequestBody NetworkAdministrator networkAdministrator) {
         return new ResultBean<>(networkAdministratorService.updateNetworkAdministrator(networkAdministrator));
+    }
+
+    /**
+     * 根据网点id查询快递
+     */
+    @RequestMapping(method = RequestMethod.GET, path = "/getExpress")
+    public ResultBean<?> getExpressByNetworkId(@RequestParam(name = "page", defaultValue = "1") int page,
+                                               @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                               @RequestParam(name = "networkId", defaultValue = "") int NetworkId,
+                                               @RequestParam(name = "dateStart", defaultValue = "2000-01-01") LocalDate dateStart,
+                                               @RequestParam(name = "dateOver", defaultValue = "2099-12-31") LocalDate dateOver) {
+        return new ResultBean<>(expressService.getExpressListByNetworkIdAndDate(NetworkId, page, pageSize, dateStart, dateOver));
     }
 }

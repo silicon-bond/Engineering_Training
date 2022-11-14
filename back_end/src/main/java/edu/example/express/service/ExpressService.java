@@ -4,6 +4,8 @@ import edu.example.express.entity.Express;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.time.LocalDate;
+
 /**
 * <p>
 * 快递单 服务类
@@ -36,6 +38,7 @@ public interface ExpressService {
     */
     Express getExpressById(int id);
 
+
     /**
     * 插入Express
     *
@@ -67,6 +70,8 @@ public interface ExpressService {
     int updateExpress(Express express);
 
     Page<Express> getExpressListByNetworkId(Integer networkId, int page, int pageSize);
+
+    Page<Express> getExpressListByNetworkIdAndDate(Integer networkId, int page, int pageSize, LocalDate DateStart, LocalDate DateOver);
 
     Page<Express> getExpressListByDeliverymanId(Integer deliverymanId, int page, int pageSize);
 }
