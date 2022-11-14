@@ -1,22 +1,45 @@
 package edu.example.express.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import edu.example.express.entity.Deliveryman;
 import edu.example.express.entity.NetworkAdministrator;
-import edu.example.express.entity.User;
-import edu.example.express.exception.bizException.BizException;
 import edu.example.express.mapper.NetworkAdministratorMapper;
 import edu.example.express.service.NetworkAdministratorService;
-import lombok.extern.slf4j.Slf4j;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Service;
-import sun.nio.ch.Net;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.extern.slf4j.Slf4j;
+import edu.example.express.exception.bizException.BizException;
 
-
+/**
+* <p>
+* 网点管理员 服务实现类
+* </p>
+*
+* @author csk
+* @since 2022-11-14
+*/
 @Slf4j
 @Service
 public class NetworkAdministratorServiceImpl extends ServiceImpl<NetworkAdministratorMapper, NetworkAdministrator> implements NetworkAdministratorService {
+
+    @Override
+    public Page<NetworkAdministrator> getNetworkAdministratorByPage(int page, int pageSize, String factor) {
+        log.info("正在执行分页查询networkAdministrator: page = {} pageSize = {} factor = {}",page,pageSize,factor);
+        QueryWrapper<NetworkAdministrator> queryWrapper =  new QueryWrapper<NetworkAdministrator>().like("", factor);
+        //TODO 这里需要自定义用于匹配的字段,并把wrapper传入下面的page方法
+        Page<NetworkAdministrator> result = super.page(new Page<>(page, pageSize));
+        log.info("分页查询networkAdministrator完毕: 结果数 = {} ",result.getRecords().size());
+        return result;
+    }
+
+    @Override
+    public NetworkAdministrator getNetworkAdministratorById(int id) {
+        log.info("正在查询networkAdministrator中id为{}的数据",id);
+        NetworkAdministrator networkAdministrator = super.getById(id);
+        log.info("查询id为{}的networkAdministrator{}",id,(null == networkAdministrator?"无结果":"成功"));
+        return networkAdministrator;
+    }
+
     @Override
     public int insertNetworkAdministrator(NetworkAdministrator networkAdministrator) {
         log.info("正在插入networkAdministrator");
@@ -45,29 +68,12 @@ public class NetworkAdministratorServiceImpl extends ServiceImpl<NetworkAdminist
     public int updateNetworkAdministrator(NetworkAdministrator networkAdministrator) {
         log.info("正在更新id为{}的networkAdministrator",networkAdministrator.getNetworkAdministratorId());
         if (super.updateById(networkAdministrator)) {
-            log.info("更新id为{}的networkAdministrator成功",networkAdministrator.getNetworkAdministratorId());
+            log.info("更新d为{}的networkAdministrator成功",networkAdministrator.getNetworkAdministratorId());
             return networkAdministrator.getNetworkAdministratorId();
         } else {
-            log.error("更新id为{}的deliveryman失败",networkAdministrator.getNetworkAdministratorId());
+            log.error("更新id为{}的networkAdministrator失败",networkAdministrator.getNetworkAdministratorId());
             throw new BizException("更新失败[id=" + networkAdministrator.getNetworkAdministratorId() + "]");
         }
     }
 
-    @Override
-    public NetworkAdministrator getNetworkAdministratorById(int id) {
-        log.info("正在查询networkAdministrator中id为{}的数据",id);
-        NetworkAdministrator networkAdministrator = super.getById(id);
-        log.info("查询id为{}的networkAdministrator{}",id,(null == networkAdministrator?"无结果":"成功"));
-        return networkAdministrator;
-    }
-
-    @Override
-    public Page<NetworkAdministrator> getNetworkAdministratorByPage(int page, int pageSize, String factor) {
-        log.info("正在执行分页查询networkAdministrator: page = {} pageSize = {} factor = {}",page,pageSize,factor);
-        QueryWrapper<NetworkAdministrator> queryWrapper =  new QueryWrapper<NetworkAdministrator>().like("", factor);
-        //TODO 这里需要自定义用于匹配的字段,并把wrapper传入下面的page方法
-        Page<NetworkAdministrator> result = super.page(new Page<>(page, pageSize));
-        log.info("分页查询networkAdministrator完毕: 结果数 = {} ",result.getRecords().size());
-        return result;
-    }
 }
