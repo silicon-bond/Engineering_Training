@@ -1,5 +1,6 @@
 package edu.example.express.service.impl;
 
+import edu.example.express.entity.Deliveryman;
 import edu.example.express.entity.User;
 import edu.example.express.mapper.UserMapper;
 import edu.example.express.service.UserService;
@@ -77,4 +78,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
     }
 
+    @Override
+    public User getUserByEmail(String email) {
+        log.info("正在查询user中email为{}的数据", email);
+        QueryWrapper<User> queryWrapper =  new QueryWrapper<User>().eq("email", email);
+        User user = super.getOne(queryWrapper);
+        log.info("查询email为{}的user{}",email,(null == user?"无结果":"成功"));
+        return user;
+    }
 }
