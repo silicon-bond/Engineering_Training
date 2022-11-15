@@ -61,4 +61,5 @@ public interface NetworkService {
      * @since 2022-11-08
      */
     Page<Network> getNetworkByPage(int page, int pageSize, String factor);
+
 }
