@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +21,6 @@ import lombok.experimental.Accessors;
  * @since 2022-11-12
  */
 @Data
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @TableName("VerificationCode")
@@ -32,6 +32,7 @@ public class VerificationCode extends Model<VerificationCode> {
     private String email;
 
     private String code;
+
 
 
     @Override

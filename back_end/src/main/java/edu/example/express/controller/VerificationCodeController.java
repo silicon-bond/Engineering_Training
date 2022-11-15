@@ -7,6 +7,10 @@ import edu.example.express.service.VerificationCodeService;
 import edu.example.express.entity.VerificationCode;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 
 /**
@@ -67,7 +71,7 @@ public class VerificationCodeController {
 //    }
 
     @GetMapping("/{email}")
-    public ResultBean<?> getVerificationCode(@PathVariable("email") String email) {
+    public ResultBean<?> getVerificationCode(@PathVariable("email") String email) throws ParseException {
         ResultBean<Object> result = new ResultBean<>();
         VerificationCode verificationCodeByEmail = verificationCodeService.getVerificationCodeByEmail(email);
         if(verificationCodeByEmail != null)
@@ -88,8 +92,10 @@ public class VerificationCodeController {
     }
 
     @GetMapping("/Verificationresult/{email}/{code}")
-    public ResultBean<?> GetVerificationresult(@PathVariable("email")String email,@PathVariable("code")String code){
-        VerificationCode vcode = new VerificationCode(email,code);
+    public ResultBean<?> GetVerificationresult(@PathVariable("email")String email,@PathVariable("code")String code) throws ParseException {
+        VerificationCode vcode = new VerificationCode();
+        vcode.setEmail(email);
+        vcode.setCode(code);
         boolean result = verificationCodeService.IsVerificationCode(vcode);
         return new ResultBean<>(result);
     }

@@ -93,4 +93,8 @@ public class NetworkAdministratorServiceImpl extends ServiceImpl<NetworkAdminist
         }
     }
 
+    @Override
+    public boolean save(NetworkAdministrator entity) {
+        return false;
+    }
 }
