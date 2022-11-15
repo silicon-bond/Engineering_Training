@@ -7,7 +7,8 @@
     <div id="main">
       <div id="sidebar">
         <el-menu
-          default-active="/branch/logistics"
+          style="border: 0"
+          :default-active="this.$route.path"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"

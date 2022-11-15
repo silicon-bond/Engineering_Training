@@ -3,7 +3,7 @@
     <div id="content">
       <div id="loginleft">
         <p id="welcome">Welcome</p>
-        <p id="topic1">社区交流平台</p>
+        <p id="topic1">快递配送系统</p>
       </div>
       <div id="loginbox">
         <router-view></router-view>
