@@ -63,4 +63,6 @@ public interface DeliverymanService {
      * @since 2022-11-08
      */
     Page<Deliveryman> getDeliverymanByPage(int page, int pageSize, String factor);
+
+    Page<Deliveryman> getDeliverymanByNetworkId(int page, int pageSize, int networkId);
 }

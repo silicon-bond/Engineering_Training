@@ -71,4 +71,14 @@ public class DeliverymanServiceImpl extends ServiceImpl<DeliverymanMapper,Delive
         log.info("分页查询deliveryman完毕: 结果数 = {} ",result.getRecords().size());
         return result;
     }
+
+    @Override
+    public Page<Deliveryman> getDeliverymanByNetworkId(int page, int pageSize, int networkId) {
+        log.info("正在执行分页查询deliveryman: page = {} pageSize = {} networkId = {}", page, pageSize, networkId);
+        QueryWrapper<Deliveryman> queryWrapper =  new QueryWrapper<Deliveryman>().eq("network_id", networkId);
+        //TODO 这里需要自定义用于匹配的字段,并把wrapper传入下面的page方法
+        Page<Deliveryman> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        log.info("分页查询deliveryman完毕: 结果数 = {} ",result.getRecords().size());
+        return result;
+    }
 }

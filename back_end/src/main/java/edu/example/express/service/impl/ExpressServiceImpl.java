@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import edu.example.express.exception.bizException.BizException;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 
 /**
 * <p>
@@ -92,6 +93,16 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("delivery_id", deliverymanId)
                                                                         .or()
                                                                         .eq("collect_id", deliverymanId);
+        Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
+        return result;
+    }
+
+    @Override
+    public Page<Express> getExpressListByNetworkIdAndDate(Integer networkId, int page, int pageSize, LocalDate DateStart, LocalDate DateOver){
+        log.info("正在查询express中NetworkId为{}且时间范围在{}和{}之间的数据", networkId, DateStart, DateOver);
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("network_id", networkId)
+                .between("order_date", DateStart, DateOver);
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;

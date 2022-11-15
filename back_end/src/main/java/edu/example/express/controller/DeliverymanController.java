@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/express/api/deliveryman")
+@CrossOrigin(origins = "*")
 public class DeliverymanController {
 
     @Resource
@@ -28,8 +29,12 @@ public class DeliverymanController {
         return new ResultBean<>(deliverymanService.getDeliverymanByPage(page, pageSize, factor));
     }
 
+
+    /**
+     * 根据id查询
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public ResultBean<?> getById(@PathVariable("id")Integer id){
+    public ResultBean<?> getById(@PathVariable("id") Integer id) {
         return new ResultBean<>(deliverymanService.getDeliverymanById(id));
     }
 
@@ -48,23 +53,23 @@ public class DeliverymanController {
         return new ResultBean<>(deliverymanService.updateDeliveryman(deliveryman));
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/expressList/{networkId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/expressList")
     private ResultBean<?> getExpressListByNetworkId(@RequestParam(name = "page", defaultValue = "1") int page,
                                                     @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-                                                    @PathVariable("networkId")Integer networkId){
+                                                    @RequestParam("networkId")Integer networkId){
         return new ResultBean<>(expressService.getExpressListByNetworkId(networkId, page, pageSize));
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/orderReceiving/{expressId}/{deliverymanId}")
-    private ResultBean<?> orderReceiving(@PathVariable("expressId")Integer expressId,
-                                         @PathVariable("deliverymanId")Integer deliverymanId){
+    @RequestMapping(method = RequestMethod.GET, value = "/orderReceiving")
+    private ResultBean<?> orderReceiving(@RequestParam("expressId")Integer expressId,
+                                         @RequestParam("deliverymanId")Integer deliverymanId){
         Express express = expressService.getExpressById(expressId);
         if (express != null){
             Integer state = express.getState();
             express.setState(state+1);
             if (state == 0){
                 express.setCollectId(deliverymanId);
-            } else {
+            } else if (state == 3) {
                 express.setDeliveryId(deliverymanId);
             }
             return new ResultBean<>(expressService.updateExpress(express));
@@ -73,10 +78,10 @@ public class DeliverymanController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "myExpressList/{deliverymanId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/myExpressList")
     private ResultBean<?> getMyExpressList(@RequestParam(name = "page", defaultValue = "1") int page,
                                            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-                                           @PathVariable("deliverymanId")Integer deliverymanId){
+                                           @RequestParam("deliverymanId")Integer deliverymanId){
         return new ResultBean<>(expressService.getExpressListByDeliverymanId(deliverymanId, page, pageSize));
     }
 }

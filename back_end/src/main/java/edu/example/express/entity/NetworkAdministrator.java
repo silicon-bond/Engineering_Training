@@ -1,9 +1,7 @@
 package edu.example.express.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
-import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
@@ -12,11 +10,11 @@ import lombok.experimental.Accessors;
 
 /**
  * <p>
- * 用户
+ * 网点管理员
  * </p>
  *
- * @author zlh
- * @since 2022-11-08
+ * @author csk
+ * @since 2022-11-14
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -34,9 +32,8 @@ public class NetworkAdministrator extends Model<NetworkAdministrator> {
 
     private String nickname;
 
-    private Integer outlet;
+    private Integer networkId;
 
-    @TableField(value = "phone_number")
     private String phoneNumber;
 
 
