@@ -1,5 +1,7 @@
 package edu.example.express.service;
 
+import edu.example.express.entity.Deliveryman;
+import edu.example.express.entity.Express;
 import edu.example.express.entity.NetworkAdministrator;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -13,6 +15,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 * @since 2022-11-14
 */
 public interface NetworkAdministratorService {
+
+    /**
+     * 将网点物流列表里的某个快递单派单给一个指定的快递员
+     *
+     * @param express     当前快递列表中被选中的快递单
+     * @param deliveryId     快递员Id
+     * @author wh
+     * @since 2022-11-15
+     */
+    int updateDeliverymanInExpress(Express express, Integer deliveryId);
 
     /**
     * 分页查询NetworkAdministrator
