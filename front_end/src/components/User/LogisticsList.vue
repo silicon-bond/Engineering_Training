@@ -21,6 +21,18 @@
     <el-divider></el-divider>
     <h3 id="tableTitle">物流信息列表</h3>
     <el-divider></el-divider>
+    <el-dialog title="物流详情" :visible.sync="dialogDetail">
+
+      <div>
+        订单编号：<p id="detailId">{{ detail.id }}</p>
+        <p id="detailSender">{{ detail.sender }}</p>
+        <p id="detailRecipient">{{ detail.recipient}}</p>
+        <p id="detailState">{{ detail.state }}</p>
+        <p id="detailDeliveryTime">{{ detail.deliveryTime }}</p>
+        <p id="detailArrivalTime">{{ detail.arrivalTime }}</p>
+      </div>
+
+    </el-dialog>
     <div id="table">
       <el-table :data="tableData"
                 stripe
@@ -61,6 +73,15 @@ export default {
   name: "LogisticsList",
   data() {
     return {
+      dialogDetail: false,
+      detail: {
+        id:'',
+        sender:'',
+        recipient:'',
+        deliveryTime:'',
+        state:'',
+        arrivalTime:''
+      },
       options: [{
         value: '选项1',
         label: '未揽件'
@@ -158,13 +179,40 @@ export default {
     },
 
     lookClick(index,row) {
+      this.detail.id = row.id
+      this.detail.sender = row.sender
+      this.detail.recipient = row.recipient
+      this.detail.arrivalTime = row.arrivalTime
+      this.detail.deliveryTime = row.deliveryTime
+      this.detail.state = row.state
+      this.dialogDetail = true
 
     },
-
+    querySearch(pageNum) {
+      let message = {
+        email: "1234@qq.com",
+        password:''
+      }
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8080/express/api/deliveryman/expressList?page=1&pageSize=10&networkId=1',
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response)
+        // if (response.data.code==='200') {
+        //   this.result = response.data.data.list
+        //   this.totalCount = response.data.data.total
+        // }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
   },
 
   created () {
-
+    this.querySearch(this.currentPage)
   }
 }
 </script>
