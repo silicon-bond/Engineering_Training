@@ -7,7 +7,8 @@
     <div id="main">
       <div id="sidebar">
         <el-menu
-          default-active="/system/logistics"
+          style="border: 0"
+          :default-active="this.$route.path"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose"
@@ -123,6 +124,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #e2e2e2;
+  /*background-color: #95b695;*/
 }
 #exit{
   float: right;

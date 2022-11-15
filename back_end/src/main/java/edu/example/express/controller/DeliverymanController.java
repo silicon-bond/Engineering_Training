@@ -10,9 +10,11 @@ import edu.example.express.service.ExpressService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/express/api/deliveryman")
+@CrossOrigin(origins = "*")
 public class DeliverymanController {
 
     @Resource
@@ -28,8 +30,35 @@ public class DeliverymanController {
         return new ResultBean<>(deliverymanService.getDeliverymanByPage(page, pageSize, factor));
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<?> getById(@RequestParam("id")Integer id){
+    @RequestMapping(method = RequestMethod.POST, value = "/login")
+    public ResultBean<?> login(@RequestParam("email")String email,
+                               @RequestParam("password")String password){
+        Deliveryman deliveryman = deliverymanService.getDeliverymanByEmail(email);
+        if (deliveryman != null && deliveryman.getPassword().equals(password)){
+            return new ResultBean<>("登录成功", "1");
+        } else {
+            return new ResultBean<>("邮箱或密码错误", "500");
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/register")
+    public ResultBean<?> register(@RequestBody(required=false) Deliveryman deliveryman){
+        Deliveryman dm = deliverymanService.getDeliverymanByEmail(deliveryman.getEmail());
+        if (dm == null){
+            LocalDate localDate = LocalDate.now();
+            deliveryman.setRegisterDate(localDate);
+            deliveryman.setDeliverymanId(deliverymanService.insertDeliveryman(deliveryman));
+            return new ResultBean<>(deliveryman);
+        } else {
+            return new ResultBean<>("该邮箱已被注册", "500");
+        }
+    }
+
+    /**
+     * 根据id查询
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    public ResultBean<?> getById(@PathVariable("id") Integer id) {
         return new ResultBean<>(deliverymanService.getDeliverymanById(id));
     }
 

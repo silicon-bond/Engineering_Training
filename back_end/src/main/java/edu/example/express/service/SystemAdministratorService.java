@@ -3,7 +3,6 @@ package edu.example.express.service;
 import edu.example.express.entity.*;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import sun.nio.ch.Net;
 
 /**
 * <p>
@@ -64,6 +63,8 @@ public interface SystemAdministratorService {
     Network getNetworkById(int id);
 
     Page<Network> getNetworkByPage(int page, int pageSize, String factor);
+
+    SystemAdministrator getSystemAdministratorByAccount(String account);
 
     /**
      * 模块三：对物流进行管理
