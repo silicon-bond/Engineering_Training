@@ -38,22 +38,14 @@ public class NetworkAdministratorController {
     @Resource
     private DeliverymanService deliverymanService;
 
-    /**
-     * 更新下个网点
-     */
-    @RequestMapping(method = RequestMethod.PUT)
-    public ResultBean<?> updateOutletIdInExpress(@RequestBody Express express,
-                                                   @RequestParam("outletId") Integer outletId) {
-        return new ResultBean<>(networkAdministratorService.updateOutletInExpress(express, outletId));
-    }
 
     /**
      * 给快递员派单
      */
-    @RequestMapping(method = RequestMethod.PUT)
-    public ResultBean<?> updateDeliveryIdInExpress(@RequestBody Express express,
-                                                   @RequestParam("deliveryId") Integer deliveryId) {
-        return new ResultBean<>(networkAdministratorService.updateDeliverymanInExpress(express, deliveryId));
+    @RequestMapping(method = RequestMethod.GET, value = "/{expressId}/{deliveryId}")
+    public ResultBean<?> updateDeliveryIdInExpress(@PathVariable("expressId") Integer expressId,
+                                                   @PathVariable("deliveryId") Integer deliveryId) {
+        return new ResultBean<>(networkAdministratorService.updateDeliverymanInExpress(expressId, deliveryId));
     }
 
     /**
