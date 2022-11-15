@@ -4,6 +4,8 @@ import edu.example.express.entity.VerificationCode;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.text.ParseException;
+
 /**
 * <p>
 *  服务类
@@ -69,6 +71,6 @@ public interface VerificationCodeService {
     public String generateVerificationCode();
     public void sendSimpleMail(String to,String title,String content);
 
-    boolean IsVerificationCode(VerificationCode verificationCode);
+    boolean IsVerificationCode(VerificationCode verificationCode) throws ParseException;
 
 }

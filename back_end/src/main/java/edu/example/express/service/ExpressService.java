@@ -74,4 +74,10 @@ public interface ExpressService {
     Page<Express> getExpressListByNetworkIdAndDate(Integer networkId, int page, int pageSize, LocalDate DateStart, LocalDate DateOver);
 
     Page<Express> getExpressListByDeliverymanId(Integer deliverymanId, int page, int pageSize);
+
+    //发货人手机号查找
+    Page<Express> getExpressListByDeliverPhoneNum(String DeliverPhoneNumber,int page, int pageSize);
+
+    //收货人手机号查找
+    Page<Express> getExpressListByReceiptPhoneNum(String ReceiptPhoneNumberr,int page, int pageSize);
 }

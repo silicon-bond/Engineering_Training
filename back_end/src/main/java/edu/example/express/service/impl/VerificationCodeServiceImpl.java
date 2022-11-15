@@ -14,6 +14,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import edu.example.express.exception.bizException.BizException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 /**
@@ -114,10 +117,12 @@ public class VerificationCodeServiceImpl extends ServiceImpl<VerificationCodeMap
     }
 
     @Override
-    public boolean IsVerificationCode(VerificationCode verificationCode) {
+    public boolean IsVerificationCode(VerificationCode verificationCode) throws ParseException {
         VerificationCode verificationCodeByEmail = getVerificationCodeByEmail(verificationCode.getEmail());
         if(verificationCode.getCode().equals(verificationCodeByEmail.getCode()))
+        {
             return true;
+        }
         return false;
     }
 
