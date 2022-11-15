@@ -65,4 +65,6 @@ public interface DeliverymanService {
     Page<Deliveryman> getDeliverymanByPage(int page, int pageSize, String factor);
 
     Page<Deliveryman> getDeliverymanByNetworkId(int page, int pageSize, int networkId);
+
+    Deliveryman getDeliverymanByEmail(String email);
 }
