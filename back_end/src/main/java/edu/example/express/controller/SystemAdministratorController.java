@@ -1,15 +1,12 @@
 package edu.example.express.controller;
 
 
-import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.example.express.entity.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import edu.example.express.entity.dto.ResultBean;
 import edu.example.express.service.SystemAdministratorService;
 import org.springframework.web.bind.annotation.RestController;
-import sun.nio.ch.Net;
 
 import javax.annotation.Resource;
 
@@ -25,6 +22,7 @@ import javax.annotation.Resource;
  */
 @RestController
 @RequestMapping("/express/api/system-administrator")
+@CrossOrigin(origins = "*")
 public class SystemAdministratorController {
 
     @Resource

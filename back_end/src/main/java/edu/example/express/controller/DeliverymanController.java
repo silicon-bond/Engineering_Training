@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/express/api/deliveryman")
+@CrossOrigin(origins = "*")
 public class DeliverymanController {
 
     @Resource
@@ -28,8 +29,12 @@ public class DeliverymanController {
         return new ResultBean<>(deliverymanService.getDeliverymanByPage(page, pageSize, factor));
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<?> getById(@RequestParam("id")Integer id){
+
+    /**
+     * 根据id查询
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
+    public ResultBean<?> getById(@PathVariable("id") Integer id) {
         return new ResultBean<>(deliverymanService.getDeliverymanById(id));
     }
 
