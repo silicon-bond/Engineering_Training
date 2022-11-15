@@ -10,6 +10,7 @@ import edu.example.express.service.ExpressService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/express/api/deliveryman")
@@ -37,6 +38,19 @@ public class DeliverymanController {
             return new ResultBean<>("登录成功", "1");
         } else {
             return new ResultBean<>("邮箱或密码错误", "500");
+        }
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/register")
+    public ResultBean<?> register(@RequestBody(required=false) Deliveryman deliveryman){
+        Deliveryman dm = deliverymanService.getDeliverymanByEmail(deliveryman.getEmail());
+        if (dm == null){
+            LocalDate localDate = LocalDate.now();
+            deliveryman.setRegisterDate(localDate);
+            deliveryman.setDeliverymanId(deliverymanService.insertDeliveryman(deliveryman));
+            return new ResultBean<>(deliveryman);
+        } else {
+            return new ResultBean<>("该邮箱已被注册", "500");
         }
     }
 
