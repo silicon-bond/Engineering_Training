@@ -167,48 +167,14 @@ public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministra
         return networkList;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @Override
+    public SystemAdministrator getSystemAdministratorByAccount(String account) {
+        log.info("正在查询systemAdministrator中account为{}的数据", account);
+        QueryWrapper<SystemAdministrator> queryWrapper =  new QueryWrapper<SystemAdministrator>().eq("account", account);
+        SystemAdministrator systemAdministrator = super.getOne(queryWrapper);
+        log.info("查询account为{}的systemAdministrator{}",account,(null == systemAdministrator?"无结果":"成功"));
+        return systemAdministrator;
+    }
 
     @Override
     public Page<SystemAdministrator> listSystemAdministratorsByPage(int page, int pageSize, String factor) {
