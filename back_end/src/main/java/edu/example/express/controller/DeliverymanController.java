@@ -29,6 +29,16 @@ public class DeliverymanController {
         return new ResultBean<>(deliverymanService.getDeliverymanByPage(page, pageSize, factor));
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/login")
+    public ResultBean<?> login(@RequestParam("email")String email,
+                               @RequestParam("password")String password){
+        Deliveryman deliveryman = deliverymanService.getDeliverymanByEmail(email);
+        if (deliveryman != null && deliveryman.getPassword().equals(password)){
+            return new ResultBean<>("登录成功", "1");
+        } else {
+            return new ResultBean<>("邮箱或密码错误", "500");
+        }
+    }
 
     /**
      * 根据id查询
