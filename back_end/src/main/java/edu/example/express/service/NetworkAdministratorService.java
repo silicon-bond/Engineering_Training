@@ -17,6 +17,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 public interface NetworkAdministratorService {
 
     /**
+     * 将网点物流列表里的某个快递单派单的网点更新为下一个网点
+     *
+     * @param express     当前快递列表中被选中的快递单
+     * @param outletId     下个网点Id
+     * @author wh
+     * @since 2022-11-15
+     */
+    int updateOutletInExpress(Express express, Integer outletId);
+
+    /**
      * 将网点物流列表里的某个快递单派单给一个指定的快递员
      *
      * @param express     当前快递列表中被选中的快递单

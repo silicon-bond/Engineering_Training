@@ -1,6 +1,7 @@
 package edu.example.express.controller;
 
 
+import edu.example.express.entity.Deliveryman;
 import edu.example.express.entity.Express;
 import edu.example.express.service.DeliverymanService;
 import edu.example.express.service.ExpressService;
@@ -36,6 +37,15 @@ public class NetworkAdministratorController {
 
     @Resource
     private DeliverymanService deliverymanService;
+
+    /**
+     * 更新下个网点
+     */
+    @RequestMapping(method = RequestMethod.PUT)
+    public ResultBean<?> updateOutletIdInExpress(@RequestBody Express express,
+                                                   @RequestParam("outletId") Integer outletId) {
+        return new ResultBean<>(networkAdministratorService.updateOutletInExpress(express, outletId));
+    }
 
     /**
      * 给快递员派单

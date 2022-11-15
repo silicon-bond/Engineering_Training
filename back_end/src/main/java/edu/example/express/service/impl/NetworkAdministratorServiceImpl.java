@@ -32,6 +32,14 @@ public class NetworkAdministratorServiceImpl extends ServiceImpl<NetworkAdminist
     ExpressService expressService;
 
     @Override
+    public int updateOutletInExpress(Express express, Integer outletId)
+    {
+        log.info("正在执行将物流ID={}的快递单中网点更新为下个id={}的网点",express.getExpressId(),outletId);
+        express.setDeliveryId(outletId);
+        return expressService.updateExpress(express);
+    }
+
+    @Override
     public int updateDeliverymanInExpress(Express express, Integer deliveryId)
     {
         log.info("正在执行将物流ID={}的快递单分配给快递员ID={}的快递员",express.getExpressId(),deliveryId);
