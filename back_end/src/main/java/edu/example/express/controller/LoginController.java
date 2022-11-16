@@ -10,6 +10,7 @@ import edu.example.express.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/express/api")
@@ -26,8 +27,9 @@ public class LoginController {
     private SystemAdministratorService systemAdministratorService;
 
     @RequestMapping(method = RequestMethod.POST, value = "/login")
-    public ResultBean login(@RequestParam("email")String email,
-                            @RequestParam("password")String password){
+    public ResultBean login(@RequestBody Map<String, Object> map){
+        String email = (String) map.get("email");
+        String password = (String) map.get("password"); 
         User user = userService.getUserByEmail(email);
         Deliveryman deliveryman = deliverymanService.getDeliverymanByEmail(email);
         SystemAdministrator systemAdministrator = systemAdministratorService.getSystemAdministratorByAccount(email);
