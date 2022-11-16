@@ -69,4 +69,17 @@ public class ExpressController {
     public ResultBean<?> updateById(@RequestBody Express express) {
         return new ResultBean<>(expressService.updateExpress(express));
     }
+
+
+    /**
+     * 根据物流状态&物流ID进行分页查询
+     */
+    @GetMapping("/listPageByIdAndState")
+    public ResultBean<?> listByPage2(@RequestParam(name = "page", defaultValue = "1") int page,
+                                    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                    @RequestParam(name = "factor", defaultValue = "") String factor,
+                                     @RequestParam(name = "id",defaultValue = "-1") int id,
+                                     @RequestParam(name = "state",defaultValue = "-1") int state) {
+        return new ResultBean<>(expressService.listExpresssPageByIdAndState(page, pageSize,factor,id,state));
+    }
 }

@@ -94,7 +94,7 @@ public class DeliverymanController {
             express.setState(state+1);
             if (state == 0){
                 express.setCollectId(deliverymanId);
-            } else if (state == 3) {
+            } else if (state == 2) {
                 express.setDeliveryId(deliverymanId);
             }
             return new ResultBean<>(expressService.updateExpress(express));
@@ -108,5 +108,21 @@ public class DeliverymanController {
                                            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
                                            @RequestParam("deliverymanId")Integer deliverymanId){
         return new ResultBean<>(expressService.getExpressListByDeliverymanId(deliverymanId, page, pageSize));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/expressById")
+    private ResultBean<?> getExpressById(@RequestParam(name = "expressId")Integer expressId){
+        return new ResultBean<>(expressService.getExpressById(expressId));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/completeDelivery")
+    private ResultBean<?> completeDelivery(@RequestParam(name = "expressId")Integer expressId){
+        Express express = expressService.getExpressById(expressId);
+        if (express != null && (express.getState() == 3 || express.getState() == 1)){
+            express.setState(express.getState() + 1);
+            return new ResultBean<>(expressService.updateExpress(express));
+        } else {
+            return new ResultBean<>("物流状态修改失败", "500");
+        }
     }
 }

@@ -3,12 +3,16 @@ package edu.example.express.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.example.express.entity.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import edu.example.express.entity.dto.ResultBean;
 import edu.example.express.service.SystemAdministratorService;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -27,6 +31,7 @@ public class SystemAdministratorController {
 
     @Resource
     private SystemAdministratorService systemAdministratorService;
+
 
     /**
      * 模块一：对用户，快递员，网点管理员的增删改查
@@ -49,7 +54,7 @@ public class SystemAdministratorController {
         return resultBean;
     }
 
-    @PutMapping("/person-management/updateUser")
+    @PutMapping("/person-management/update/1")
     public ResultBean UpdateUser(@RequestBody User user){
         int result = systemAdministratorService.updateUser(user);
         ResultBean resultBean = new ResultBean("用户修改成功","",result);
@@ -89,7 +94,7 @@ public class SystemAdministratorController {
         return resultBean;
     }
 
-    @PutMapping("/person-management/updateDeliveryman")
+    @PutMapping("/person-management/update/2")
     public ResultBean UpdateDeliveryman(@RequestBody Deliveryman deliveryman){
         int result = systemAdministratorService.updateDeliveryman(deliveryman);
         ResultBean resultBean = new ResultBean("快递员修改成功","",result);
@@ -129,7 +134,7 @@ public class SystemAdministratorController {
         return resultBean;
     }
 
-    @PutMapping("/person-management/updateNetworkAdministrator")
+    @PutMapping("/person-management/update/3")
     public ResultBean UpdateNetworkAdministrator(@RequestBody NetworkAdministrator networkAdministrator){
         int result = systemAdministratorService.updateNetworkAdministrator(networkAdministrator);
         ResultBean resultBean = new ResultBean("网点管理员修改成功","",result);
@@ -158,6 +163,8 @@ public class SystemAdministratorController {
      */
     @PostMapping("/network-management/addOneNetwork")
     public ResultBean<Network> addOneNetwork(@RequestBody Network network){
+        LocalDate localDate = LocalDate.now();
+        network.setRegisterDate(localDate);
         int result = systemAdministratorService.addOneNetwork(network);
         ResultBean resultBean = new ResultBean("网点增加成功","",result);
         return resultBean;
@@ -170,7 +177,7 @@ public class SystemAdministratorController {
         return resultBean;
     }
 
-    @PutMapping("/network-management/updateNetwork")
+    @PutMapping("/network-management/updateNetworkById")
     public ResultBean UpdateNetwork(@RequestBody Network network){
         int result = systemAdministratorService.updateNetwork(network);
         ResultBean resultBean = new ResultBean("网点修改成功","",result);
@@ -193,59 +200,53 @@ public class SystemAdministratorController {
         return resultBean;
     }
 
-    /**
-     * 模块三：对物流进行管理
-     */
 
 
 
-    /**
-     * 模块四：异常反馈处理
-     */
 
-
-
-    /**
-     * 模块五：公司资讯管理
-     */
-
-
-    @RequestMapping(method = RequestMethod.GET)
-    public ResultBean<?> listByPage(@RequestParam(name = "page", defaultValue = "1") int page,
-                                    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-                                    @RequestParam(name = "factor", defaultValue = "") String factor) {
-        return new ResultBean<>(systemAdministratorService.listSystemAdministratorsByPage(page, pageSize,factor));
+    @DeleteMapping("/deleteByIdAndRole")
+    public ResultBean deteleByIdAndRole(@RequestParam(name = "id", defaultValue = "-1") int id,
+                                        @RequestParam(name = "role", defaultValue = "-1") int role){
+        ResultBean resultBean = new ResultBean(systemAdministratorService.deleteByIdAndRole(id,role));
+        return resultBean;
     }
 
-    /**
-    * 根据id查询
-    */
-    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
-    public ResultBean<?> getById(@PathVariable("id") Integer id) {
-        return new ResultBean<>(systemAdministratorService.getSystemAdministratorById(id));
+    @GetMapping("/getPeopleByIdAndRole")
+    public ResultBean getPeopleByIdAndRole(@RequestParam(name = "id", defaultValue = "-1") int id,
+                                        @RequestParam(name = "role", defaultValue = "-1") int role,
+                                           @RequestParam(name = "page", defaultValue = "1") int page,
+                                           @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                           @RequestParam(name = "factor", defaultValue = "") String factor){
+        if (role == 1){
+            Class<User> userClass = null;
+            Page<User> userList = systemAdministratorService.getPeopleByIdAndRole(id,role,userClass,page,pageSize,factor);
+            return new ResultBean(userList);
+        }
+        if (role == 2){
+            Class<Deliveryman> deliverymanClass = null;
+            Page<Deliveryman> deliverymanList = systemAdministratorService.getPeopleByIdAndRole(id,role,deliverymanClass,page,pageSize,factor);
+            return new ResultBean(deliverymanList);
+        }
+        if (role == 3){
+            Class<NetworkAdministrator> networkAdministratorClass = null;
+            Page<NetworkAdministrator> networkAdministratorList = systemAdministratorService.getPeopleByIdAndRole(id,role,networkAdministratorClass,page,pageSize,factor);
+            return new ResultBean(networkAdministratorList);
+        }
+        return null;
     }
 
-    /**
-    * 新增
-    */
-    @RequestMapping(method = RequestMethod.POST)
-    public ResultBean<?> insert(@RequestBody SystemAdministrator systemAdministrator) {
-        return new ResultBean<>(systemAdministratorService.insertSystemAdministrator(systemAdministrator));
-    }
+    @GetMapping("/getAllPeople")
+    public ResultBean getAllPeople(@RequestParam(name = "page", defaultValue = "1") int page,
+                                   @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                   @RequestParam(name = "factor", defaultValue = "") String factor){
+        List list = new ArrayList();
+        list.add(systemAdministratorService.getUserByPage(page,pageSize,factor));
+        list.add(systemAdministratorService.getDeliverymanByPage(page,pageSize,factor));
+        list.add(systemAdministratorService.getNetworkAdministratorByPage(page,pageSize,factor));
 
-    /**
-    * 删除
-    */
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    public ResultBean<?> deleteById(@PathVariable("id") Integer id) {
-        return new ResultBean<>(systemAdministratorService.deleteSystemAdministratorById(id));
-    }
-
-    /**
-    * 修改
-    */
-    @RequestMapping(method = RequestMethod.PUT)
-    public ResultBean<?> updateById(@RequestBody SystemAdministrator systemAdministrator) {
-        return new ResultBean<>(systemAdministratorService.updateSystemAdministrator(systemAdministrator));
+        return new ResultBean(list);
     }
 }
+
+
+

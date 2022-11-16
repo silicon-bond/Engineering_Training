@@ -1,7 +1,6 @@
 package edu.example.express.service;
 
 import edu.example.express.entity.*;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
@@ -66,19 +65,11 @@ public interface SystemAdministratorService {
 
     SystemAdministrator getSystemAdministratorByAccount(String account);
 
-    /**
-     * 模块三：对物流进行管理
-     */
-
-    /**
-     * 模块四：异常反馈处理
-     */
-
-    /**
-     * 模块五：公司资讯管理
-     */
 
 
+    int deleteByIdAndRole(int id, int role);
+
+    <T> Page<T> getPeopleByIdAndRole(int id, int role,Class<T> tClass,int page,int pageSize,String factor);
 
 
 

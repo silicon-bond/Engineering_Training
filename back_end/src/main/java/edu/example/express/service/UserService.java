@@ -1,5 +1,6 @@
 package edu.example.express.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import edu.example.express.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -67,5 +68,7 @@ public interface UserService {
     int updateUser(User user);
 
     User getUserByEmail(String email);
+
+    Page<User> getUserListByQuerymapper(int page, int pageSize, String factor, QueryWrapper<User> queryWrapper);
 
 }

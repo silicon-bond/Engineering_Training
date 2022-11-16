@@ -39,6 +39,9 @@ public class Express extends Model<Express> {
     @TableField("network_id")
     private Integer networkId;
 
+    @TableField("deliver_name")
+    private String deliverName;
+
     @TableField("deliver_province")
     private String deliverProvince;
 
@@ -56,6 +59,9 @@ public class Express extends Model<Express> {
 
     @TableField("deliver_phone_number")
     private String deliverPhoneNumber;
+
+    @TableField("receipt_name")
+    private String receiptName;
 
     @TableField("receipt_province")
     private String receiptProvince;

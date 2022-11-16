@@ -5,7 +5,6 @@ import edu.example.express.mapper.SystemAdministratorMapper;
 import edu.example.express.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
@@ -26,13 +25,13 @@ import javax.annotation.Resource;
 public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministratorMapper, SystemAdministrator> implements SystemAdministratorService {
 
     @Resource
-    UserService userService;
+    UserServiceImpl userService;
 
     @Resource
-    DeliverymanService deliverymanService;
+    DeliverymanServiceImpl deliverymanService;
 
     @Resource
-    NetworkAdministratorService networkAdministratorService;
+    NetworkAdministratorServiceImpl networkAdministratorService;
 
     @Resource
     NetworkService networkService;
@@ -229,5 +228,55 @@ public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministra
             throw new BizException("更新失败[id=" + systemAdministrator.getSystemAdministratorId() + "]");
         }
     }
+
+
+    @Override
+    public int deleteByIdAndRole(int id, int role) {
+        log.info("要删除的角色{}，id：{}",role,id);
+        if (role == 1){
+            userService.deleteUserById(id);
+            return id;
+        }
+        if (role == 2){
+            deliverymanService.deleteDeliverymanById(id);
+            return id;
+        }
+        if (role == 3){
+            networkAdministratorService.deleteNetworkAdministratorById(id);
+            return id;
+        }
+        return -1;
+    }
+
+    @Override
+    public <T> Page<T> getPeopleByIdAndRole(int id, int role,Class<T> tClass, int page, int pageSize, String factor) {
+        log.info("要获取的角色{}，id：{}",role,id);
+        if (role == 1){
+            QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+            if (id != -1){
+                queryWrapper.eq("user_id",id);
+            }
+            Page<User> userPage = userService.getUserListByQuerymapper(page,pageSize,factor,queryWrapper);
+            return (Page<T>) userPage;
+        }
+        if (role == 2){
+            QueryWrapper<Deliveryman> queryWrapper = new QueryWrapper<>();
+            if (id != -1){
+                queryWrapper.eq("deliveryman_id",id);
+            }
+            Page<Deliveryman> deliverymanPage = deliverymanService.page(new Page<>(page,pageSize),queryWrapper);
+            return (Page<T>) deliverymanPage;
+        }
+        if (role == 3){
+            QueryWrapper<NetworkAdministrator> queryWrapper = new QueryWrapper<>();
+            if (id != -1){
+                queryWrapper.eq("network_administrator_id",id);
+            }
+            Page<NetworkAdministrator> networkAdministratorPage = networkAdministratorService.page(new Page<>(page,pageSize),queryWrapper);
+            return (Page<T>) networkAdministratorPage;
+        }
+        return null;
+    }
+
 
 }

@@ -47,7 +47,6 @@ public class User extends Model<User> {
 
     private String phoneNumber;
 
-
     @Override
     protected Serializable pkVal() {
         return this.userId;

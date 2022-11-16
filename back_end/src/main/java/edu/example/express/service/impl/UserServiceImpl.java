@@ -86,4 +86,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         log.info("查询email为{}的user{}",email,(null == user?"无结果":"成功"));
         return user;
     }
+
+    @Override
+    public Page<User> getUserListByQuerymapper(int page, int pageSize, String factor, QueryWrapper<User> queryWrapper) {
+        Page<User> userPage = super.page(new Page<>(page,pageSize),queryWrapper);
+        return userPage;
+    }
 }
