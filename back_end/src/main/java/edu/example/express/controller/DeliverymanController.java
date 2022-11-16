@@ -96,7 +96,7 @@ public class DeliverymanController {
             express.setState(state+1);
             if (state == 0){
                 express.setCollectId(deliverymanId);
-            } else if (state == 2) {
+            } else if (state == 3) {
                 express.setDeliveryId(deliverymanId);
             }
             return new ResultBean<>(expressService.updateExpress(express));
@@ -120,7 +120,7 @@ public class DeliverymanController {
     @RequestMapping(method = RequestMethod.GET, value = "/completeDelivery")
     private ResultBean<?> completeDelivery(@RequestParam(name = "expressId")Integer expressId){
         Express express = expressService.getExpressById(expressId);
-        if (express != null && (express.getState() == 3 || express.getState() == 1)){
+        if (express != null && (express.getState() == 4 || express.getState() == 1)){
             express.setState(express.getState() + 1);
             return new ResultBean<>(expressService.updateExpress(express));
         } else {
