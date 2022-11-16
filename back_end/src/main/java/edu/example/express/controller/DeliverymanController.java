@@ -44,15 +44,17 @@ public class DeliverymanController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/register")
     public ResultBean<?> register(@RequestBody(required=false) Deliveryman deliveryman){
-        Deliveryman dm = deliverymanService.getDeliverymanByEmail(deliveryman.getEmail());
-        if (dm == null){
-            LocalDate localDate = LocalDate.now();
-            deliveryman.setRegisterDate(localDate);
-            deliveryman.setDeliverymanId(deliverymanService.insertDeliveryman(deliveryman));
-            return new ResultBean<>(deliveryman);
-        } else {
+        Deliveryman dm1 = deliverymanService.getDeliverymanByEmail(deliveryman.getEmail());
+        Deliveryman dm2 = deliverymanService.getDeliverymanByPhoneNumber(deliveryman.getPhoneNumber());
+        if (dm1 != null)
             return new ResultBean<>("该邮箱已被注册", "500");
-        }
+        else if (dm2 != null)
+            return new ResultBean<>("该手机号已被绑定", "500");
+
+        LocalDate localDate = LocalDate.now();
+        deliveryman.setRegisterDate(localDate);
+        deliveryman.setDeliverymanId(deliverymanService.insertDeliveryman(deliveryman));
+        return new ResultBean<>(deliveryman);
     }
 
     /**
