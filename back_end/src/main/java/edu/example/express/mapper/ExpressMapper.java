@@ -24,5 +24,4 @@ import java.util.List;
 public interface ExpressMapper extends BaseMapper<Express> {
     @Select("select state_name from express_state where state_id = #{state_id}")
     String getExpressStateNameById(Integer state_id);
-
 }
