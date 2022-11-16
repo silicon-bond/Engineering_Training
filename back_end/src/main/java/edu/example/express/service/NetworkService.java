@@ -4,6 +4,8 @@ import edu.example.express.entity.Network;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.util.List;
+
 /**
 * <p>
 * 网点 服务类
@@ -79,5 +81,7 @@ public interface NetworkService {
     */
     int updateNetwork(Network network);
 
+
+    List<Network> getAllNetworks();
 
 }

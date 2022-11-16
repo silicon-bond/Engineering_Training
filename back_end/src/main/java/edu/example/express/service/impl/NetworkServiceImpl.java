@@ -10,6 +10,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import edu.example.express.exception.bizException.BizException;
 
+import java.util.List;
+
 /**
 * <p>
 * 网点 服务实现类
@@ -87,4 +89,9 @@ public class NetworkServiceImpl extends ServiceImpl<NetworkMapper, Network> impl
         return result;
     }
 
+    @Override
+    public List<Network> getAllNetworks() {
+        List<Network> networks = super.list();
+        return networks;
+    }
 }
