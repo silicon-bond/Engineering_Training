@@ -162,7 +162,7 @@ public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministra
 
     @Override
     public Page<Network> getNetworkByPage(int page, int pageSize, String factor) {
-        Page<Network> networkList = networkService.getNetworkByPage(page, pageSize, factor);
+        Page<Network> networkList = networkService.listNetworksByPage(page, pageSize, factor);
         return networkList;
     }
 

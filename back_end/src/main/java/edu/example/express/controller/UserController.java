@@ -103,7 +103,7 @@ public class UserController {
                                             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
                                             @RequestParam(name = "factor",defaultValue = "10") String factor){
 
-        return new ResultBean<>(networkService.getNetworkByPage(page,pageSize,factor));
+        return new ResultBean<>(networkService.listNetworksByPage(page,pageSize,factor));
     }
 
     @PostMapping("/addExpress")
