@@ -64,6 +64,8 @@ public interface SystemAdministratorService {
 
     Page<Network> getNetworkByPage(int page, int pageSize, String factor);
 
+    SystemAdministrator getSystemAdministratorByAccount(String account);
+
     /**
      * 模块三：对物流进行管理
      */

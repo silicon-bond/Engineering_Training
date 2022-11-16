@@ -1,6 +1,8 @@
 package edu.example.express.controller;
 
 
+import edu.example.express.entity.Deliveryman;
+import edu.example.express.entity.Express;
 import edu.example.express.service.DeliverymanService;
 import edu.example.express.service.ExpressService;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +38,16 @@ public class NetworkAdministratorController {
     @Resource
     private DeliverymanService deliverymanService;
 
+
+    /**
+     * 给快递员派单
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/{expressId}/{deliveryId}")
+    public ResultBean<?> updateDeliveryIdInExpress(@PathVariable("expressId") Integer expressId,
+                                                   @PathVariable("deliveryId") Integer deliveryId) {
+        return new ResultBean<>(networkAdministratorService.updateDeliverymanInExpress(expressId, deliveryId));
+    }
+
     /**
     * 查询分页数据
     */
@@ -45,10 +57,6 @@ public class NetworkAdministratorController {
                                     @RequestParam(name = "factor", defaultValue = "") String factor) {
         return new ResultBean<>(networkAdministratorService.getNetworkAdministratorByPage(page, pageSize,factor));
     }
-
-
-
-
 
     /**
     * 根据id查询

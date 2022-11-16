@@ -66,4 +66,6 @@ public interface UserService {
     */
     int updateUser(User user);
 
+    User getUserByEmail(String email);
+
 }

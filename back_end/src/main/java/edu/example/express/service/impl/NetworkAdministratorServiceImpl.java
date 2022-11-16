@@ -1,7 +1,11 @@
 package edu.example.express.service.impl;
 
+import edu.example.express.entity.Deliveryman;
+import edu.example.express.entity.Express;
 import edu.example.express.entity.NetworkAdministrator;
 import edu.example.express.mapper.NetworkAdministratorMapper;
+import edu.example.express.service.DeliverymanService;
+import edu.example.express.service.ExpressService;
 import edu.example.express.service.NetworkAdministratorService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -9,6 +13,8 @@ import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import edu.example.express.exception.bizException.BizException;
+
+import javax.annotation.Resource;
 
 /**
 * <p>
@@ -21,6 +27,18 @@ import edu.example.express.exception.bizException.BizException;
 @Slf4j
 @Service
 public class NetworkAdministratorServiceImpl extends ServiceImpl<NetworkAdministratorMapper, NetworkAdministrator> implements NetworkAdministratorService {
+
+    @Resource
+    ExpressService expressService;
+
+    @Override
+    public int updateDeliverymanInExpress(Integer expressId, Integer deliveryId)
+    {
+        log.info("正在执行将物流ID={}的快递单分配给快递员ID={}的快递员",expressId,deliveryId);
+        Express express = expressService.getExpressById(expressId);
+        express.setDeliveryId(deliveryId);
+        return expressService.updateExpress(express);
+    }
 
     @Override
     public Page<NetworkAdministrator> getNetworkAdministratorByPage(int page, int pageSize, String factor) {
@@ -76,4 +94,8 @@ public class NetworkAdministratorServiceImpl extends ServiceImpl<NetworkAdminist
         }
     }
 
+    @Override
+    public boolean save(NetworkAdministrator entity) {
+        return false;
+    }
 }

@@ -63,9 +63,9 @@ public class NetworkServiceImpl extends ServiceImpl<NetworkMapper, Network> impl
     @Override
     public Page<Network> getNetworkByPage(int page, int pageSize, String factor) {
         log.info("正在执行分页查询network: page = {} pageSize = {} factor = {}",page,pageSize,factor);
-        QueryWrapper<Network> queryWrapper =  new QueryWrapper<Network>().like("", factor);
+        QueryWrapper<Network> queryWrapper =  new QueryWrapper<Network>().like("network_name", factor);
         //TODO 这里需要自定义用于匹配的字段,并把wrapper传入下面的page方法
-        Page<Network> result = super.page(new Page<>(page, pageSize));
+        Page<Network> result = super.page(new Page<>(page, pageSize),queryWrapper);
         log.info("分页查询network完毕: 结果数 = {} ",result.getRecords().size());
         return result;
     }

@@ -76,4 +76,9 @@ public interface ExpressService {
     Page<Express> getExpressListByDeliverymanId(Integer deliverymanId, int page, int pageSize);
 
     Page<Express> listExpresssPageByIdAndState(int page, int pageSize, String factor, int id,int state);
+    //发货人手机号查找
+    Page<Express> getExpressListByDeliverPhoneNum(String DeliverPhoneNumber,int page, int pageSize);
+
+    //收货人手机号查找
+    Page<Express> getExpressListByReceiptPhoneNum(String ReceiptPhoneNumberr,int page, int pageSize);
 }
