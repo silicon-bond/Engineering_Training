@@ -41,6 +41,27 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
     }
 
     @Override
+    public Page<Express> getExpressByIdAndDeliverPhoneNumber(int page, int pageSize, int id, String deliver_phone_number){
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("deliver_phone_number", deliver_phone_number)
+                .eq("express_id", id);
+        //TODO 这里需要自定义用于匹配的字段,并把wrapper传入下面的page方法
+        Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
+        return result;
+    }
+
+
+    @Override
+    public Page<Express> getExpressByIdAndReceiptPhoneNumber(int page, int pageSize, int id, String receipt_phone_number){
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("receipt_phone_number", receipt_phone_number)
+                .eq("express_id", id);
+        //TODO 这里需要自定义用于匹配的字段,并把wrapper传入下面的page方法
+        Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
+        return result;
+    }
+
+    @Override
     public Express getExpressById(int id) {
         log.info("正在查询express中id为{}的数据",id);
         Express express = super.getById(id);
@@ -123,6 +144,23 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         log.info("正在查询express中NetworkId为{}且时间范围在{}和{}之间的数据", networkId, DateStart, DateOver);
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("network_id", networkId)
                 .between("order_date", DateStart, DateOver);
+        Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
+        return result;
+    }
+
+    @Override
+    public Page<Express> getExpressListByReceiptPhoneNumber(String receipt_phone_number, int page, int pageSize){
+        log.info("正在查询express中receipt_phone_number为{}数据", receipt_phone_number);
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("receipt_phone_number", receipt_phone_number);
+        Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
+        return result;
+    }
+    @Override
+    public Page<Express> getExpressListByDeliverPhoneNumber(String deliver_phone_number, int page, int pageSize){
+        log.info("正在查询express中deliver_phone_number为{}数据", deliver_phone_number);
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("deliver_phone_number", deliver_phone_number);
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;

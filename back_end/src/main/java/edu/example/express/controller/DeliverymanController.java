@@ -3,11 +3,13 @@ package edu.example.express.controller;
 
 import edu.example.express.entity.Deliveryman;
 import edu.example.express.entity.Express;
+import edu.example.express.entity.Network;
 import edu.example.express.entity.User;
 import edu.example.express.entity.dto.ResultBean;
 
 import edu.example.express.service.DeliverymanService;
 import edu.example.express.service.ExpressService;
+import edu.example.express.service.NetworkService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -23,6 +25,9 @@ public class DeliverymanController {
 
     @Resource
     private ExpressService expressService;
+
+    @Resource
+    private NetworkService networkService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResultBean<?> listByPage(@RequestParam(name = "page", defaultValue = "1") int page,
@@ -96,7 +101,7 @@ public class DeliverymanController {
             express.setState(state+1);
             if (state == 0){
                 express.setCollectId(deliverymanId);
-            } else if (state == 2) {
+            } else if (state == 3) {
                 express.setDeliveryId(deliverymanId);
             }
             return new ResultBean<>(expressService.updateExpress(express));
@@ -120,11 +125,16 @@ public class DeliverymanController {
     @RequestMapping(method = RequestMethod.GET, value = "/completeDelivery")
     private ResultBean<?> completeDelivery(@RequestParam(name = "expressId")Integer expressId){
         Express express = expressService.getExpressById(expressId);
-        if (express != null && (express.getState() == 3 || express.getState() == 1)){
+        if (express != null && (express.getState() == 4 || express.getState() == 1)){
             express.setState(express.getState() + 1);
             return new ResultBean<>(expressService.updateExpress(express));
         } else {
             return new ResultBean<>("物流状态修改失败", "500");
         }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/allNetworks")
+    private ResultBean<?> getAllNetworks(){
+        return new ResultBean<>(networkService.getAllNetworks());
     }
 }

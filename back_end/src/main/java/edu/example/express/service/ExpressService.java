@@ -38,6 +38,10 @@ public interface ExpressService {
     */
     Express getExpressById(int id);
 
+    Page<Express> getExpressByIdAndDeliverPhoneNumber(int page, int pageSize, int id, String deliver_phone_number);
+
+    Page<Express> getExpressByIdAndReceiptPhoneNumber(int page, int pageSize, int id, String receipt_phone_number);
+
 
     /**
     * 插入Express
@@ -70,6 +74,10 @@ public interface ExpressService {
     int updateExpress(Express express);
 
     Page<Express> getExpressListByNetworkId(Integer networkId, int page, int pageSize);
+
+    Page<Express> getExpressListByDeliverPhoneNumber(String deliver_phone_number, int page, int pageSize);
+
+    Page<Express> getExpressListByReceiptPhoneNumber(String receipt_phone_number, int page, int pageSize);
 
     Page<Express> getExpressListByNetworkIdAndDate(Integer networkId, int page, int pageSize, LocalDate DateStart, LocalDate DateOver);
 

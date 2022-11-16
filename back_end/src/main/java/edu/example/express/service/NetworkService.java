@@ -4,6 +4,8 @@ import edu.example.express.entity.Network;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
+import java.util.List;
+
 /**
 * <p>
 * 网点 服务类
@@ -25,6 +27,19 @@ public interface NetworkService {
     * @since 2022-11-16
     */
     Page<Network> listNetworksByPage(int page, int pageSize, String factor);
+
+
+    /**
+     * 分页查询Network
+     *
+     * @param page     当前页数
+     * @param pageSize 页的大小
+     * @param factor  搜索关键词
+     * @return 返回mybatis-plus的Page对象,其中records字段为符合条件的查询结果
+     * @author csk
+     * @since 2022-11-16
+     */
+    Page<Network> getNetworkByPage(int page, int pageSize, String factor);
 
     /**
     * 根据id查询Network
@@ -66,6 +81,7 @@ public interface NetworkService {
     */
     int updateNetwork(Network network);
 
-    public Page<Network> getNetworkByPage(int page, int pageSize, String factor);
+
+    List<Network> getAllNetworks();
 
 }
