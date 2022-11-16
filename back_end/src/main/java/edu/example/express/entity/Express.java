@@ -69,7 +69,7 @@ public class Express extends Model<Express> {
     @TableField("receipt_municipal")
     private String receiptMunicipal;
 
-    @TableField("receipt_province")
+    @TableField("receipt_country")
     private String receiptCountry;
 
     @TableField("receipt_street")
@@ -87,6 +87,7 @@ public class Express extends Model<Express> {
     @TableField("delivery_id")
     private Integer deliveryId;
 
+    @TableField("description")
     private String description;
 
     @TableField("orderer_id")

@@ -22,9 +22,10 @@ import edu.example.express.exception.bizException.BizException;
 @Service
 public class NetworkServiceImpl extends ServiceImpl<NetworkMapper, Network> implements NetworkService {
 
+
     @Override
     public Page<Network> listNetworksByPage(int page, int pageSize, String factor) {
-        log.info("正在执行分页查询network: page = {} pageSize = {} factor = {}",page,pageSize,factor);
+        log.info("正在执行分页查询network: page = {} pageSize = {}",page,pageSize);
         QueryWrapper<Network> queryWrapper =  new QueryWrapper<Network>().like("", factor);
         //TODO 这里需要自定义用于匹配的字段,并把wrapper传入下面的page方法
         Page<Network> result = super.page(new Page<>(page, pageSize));

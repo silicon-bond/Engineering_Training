@@ -37,6 +37,48 @@ public class ExpressController {
         return new ResultBean<>(expressService.listExpresssByPage(page, pageSize,factor));
     }
 
+    /**
+     * 查询分页数据
+     */
+    @RequestMapping(method = RequestMethod.GET, value = {"/deliverPhoneNumber"})
+    public ResultBean<?> listByDeliverPhoneNumber(@RequestParam(name = "page", defaultValue = "1") int page,
+                                    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                    @RequestParam(name = "phoneNumber", defaultValue = "") String phoneNumber) {
+        return new ResultBean<>(expressService.getExpressListByDeliverPhoneNumber(phoneNumber, page, pageSize));
+    }
+
+    /**
+     * 查询分页数据
+     */
+    @RequestMapping(method = RequestMethod.GET, value = {"/receiptPhoneNumber"})
+    public ResultBean<?> listByReceiptPhoneNumber(@RequestParam(name = "page", defaultValue = "1") int page,
+                                                  @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                                  @RequestParam(name = "phoneNumber", defaultValue = "") String phoneNumber) {
+        return new ResultBean<>(expressService.getExpressListByReceiptPhoneNumber(phoneNumber, page, pageSize));
+    }
+
+    /**
+     * 查询分页数据
+     */
+    @RequestMapping(method = RequestMethod.GET, value = {"/receiptPhoneNumber/id"})
+    public ResultBean<?> listByReceiptPhoneNumberAndId(@RequestParam(name = "page", defaultValue = "1") int page,
+                                                  @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                                  @RequestParam(name = "phoneNumber", defaultValue = "") String phoneNumber,
+                                                       @RequestParam(name = "id", defaultValue = "") int id) {
+        return new ResultBean<>(expressService.getExpressByIdAndReceiptPhoneNumber(page, pageSize, id, phoneNumber));
+    }
+
+    /**
+     * 查询分页数据
+     */
+    @RequestMapping(method = RequestMethod.GET, value = {"/deliverPhoneNumber/id"})
+    public ResultBean<?> listByDeliverPhoneNumberAndId(@RequestParam(name = "page", defaultValue = "1") int page,
+                                                  @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                                  @RequestParam(name = "phoneNumber", defaultValue = "") String phoneNumber,
+                                                       @RequestParam(name = "id", defaultValue = "") int id) {
+        return new ResultBean<>(expressService.getExpressByIdAndDeliverPhoneNumber(page, pageSize, id, phoneNumber));
+    }
+
 
     /**
     * 根据id查询
@@ -82,4 +124,6 @@ public class ExpressController {
                                      @RequestParam(name = "state",defaultValue = "-1") int state) {
         return new ResultBean<>(expressService.listExpresssPageByIdAndState(page, pageSize,factor,id,state));
     }
+
+
 }

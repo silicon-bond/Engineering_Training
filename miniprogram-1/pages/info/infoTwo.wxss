@@ -1,0 +1,101 @@
+/* pages/info/infoTwo.wxss */.containerBox{
+  display: flex;
+  flex-direction:column;
+  margin: 0 auto;
+  width: 710rpx;
+  height: 800rpx;
+  border: 1rpx solid #c2bfbb;
+  border-radius: 2rpx;
+  box-shadow: 5rpx 5rpx 5rpx rgba(0, 0, 0, 0.15);
+  background-color: #fff;
+  margin-bottom: 15rpx;
+  margin-top: 15rpx;
+}
+.containerBox-infoOne{
+  height: 15%;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1rpx solid #c2bfbb;
+}
+.containerBox-infoOne-png{
+  margin: 10rpx;
+  width: 75rpx;
+  height: 75rpx;
+}
+.containerBox-infoOne-text{
+  margin-top: 20rpx;
+  font-size: larger;
+}
+.containerBox-infoTwo{
+  height: 30%;
+  border-bottom: 1rpx solid #c2bfbb;
+}
+.containerBox-infoTwo-text{
+  background-color: #fff;
+  border-radius: 8rpx;
+  margin: 0 auto;  
+  font-size: 35rpx;
+  color: #1d1c1c;
+  padding-left: 15rpx;
+  margin-top: 20rpx;
+  margin-bottom: 10rpx;
+}
+.containerBox-infoTwo-number{
+  padding-left: 15rpx;
+  background-color: #fff;
+  border-radius: 8rpx;
+  margin: 0 auto;
+  font-size: 35rpx;
+  color: #1d1c1c;
+  margin-top: 35rpx;
+  margin-bottom: 10rpx;
+}
+.containerBox-infoThree{
+  border-bottom: 1rpx solid #c2bfbb;
+  height: 10%;
+  display: flex;
+  flex-direction: row;
+}
+.containerBox-infoThree-provice{
+  background-color: #fff;
+  border-radius: 8rpx;
+  margin: 0 auto;
+  padding-left: 10rpx;
+  font-size: 30rpx;
+  color: #1d1c1c;
+}
+.containerBox-infoThree-city{
+  background-color: #fff;
+  border-radius: 8rpx;
+  margin: 0 auto;
+  padding-left: 10rpx;
+  font-size: 30rpx;
+  color: #1d1c1c;
+}
+.containerBox-infoThree-country{
+  background-color: #fff;
+  border-radius: 8rpx;
+  margin: 0 auto;
+  padding-left: 10rpx;
+  font-size: 30rpx;
+  color: #1d1c1c;
+}
+.containerBox-infoThree-street{
+  background-color: #fff;
+  border-radius: 8rpx;
+  margin: 0 auto;
+  padding-left: 10rpx;
+  font-size: 30rpx;
+  color: #1d1c1c;
+}
+.containerBox-infoFour{
+  border-bottom: 1rpx solid #c2bfbb;
+  height: 45%;
+}
+.containerBox-infoFour-text{
+  background-color: #fff;
+  margin: 10rpx;
+  border-radius: 8rpx;
+  font-size: 35rpx;
+  color: #1d1c1c;
+}

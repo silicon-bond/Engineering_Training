@@ -1,0 +1,33 @@
+<view class="containerBox">
+  <view class="containerBox-info" bindtap="toInfo">
+    <image class="containerBox-info-img" src="../../resources/baoguo_lanshou_o.png"></image>
+    <view class="containerBox-info-text">
+      <view class="containerBox-info-text-name">{{infoDeliver.deliver_name}}</view>
+      <view class="containerBox-info-text-place">{{infoDeliver.deliver_phone_number}}</view>
+    </view>
+  </view>
+  <view class="containerBox-info" bindtap="toInfoTwo">
+    <image class="containerBox-info-img" src="../../resources/baoguo_shouhuo_o.png"></image>
+    <view class="containerBox-info-text">
+      <view class="containerBox-info-text-name">{{infoReceipt.receipt_name}}</view>
+      <view class="containerBox-info-text-place">{{infoReceipt.receipt_phone_number}}</view>
+    </view>
+  </view>
+</view>
+<view class="containerDescription">
+  <view class="containerDescription-info">
+    <view class="containerDescription-info-label">物品信息</view>
+    <textarea type="text" class="containerDescription-info-input" placeholder="请输入物品的描述信息"></textarea>
+  </view>
+  <view class="containerDescription-info">
+    <view class="containerDescription-info-label">
+    <picker  bindchange="bindPickerChange" value="{{index}}" range="{{networks}}" range-key="{{'networkName'}}">
+    <view >
+      请选择寄件网点：{{checkedNetwork.networkName}}
+    </view>
+    </picker>
+    </view>
+    
+  </view>
+</view>
+<button type="primary" bindtap="sendExpress">下单</button>

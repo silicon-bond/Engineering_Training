@@ -1,0 +1,27 @@
+<view class="containerBox">
+  <view class="containerBox-infoOne">
+  <image class="containerBox-infoOne-png" src="../../resources/baoguo_shouhuo_o.png"></image>
+  <view class="containerBox-infoOne-text">收件人</view>
+  </view>
+
+  <view class="containerBox-infoTwo">
+    <input value="{{info.receipt_name}}"  data-is-obj="1" data-obj-name="info" data-field-name="receipt_name" bindinput="setInputValue" class="containerBox-infoTwo-text" placeholder="请输入收件人姓名"></input>
+    <input value="{{info.receipt_phone_number}}"  data-is-obj="1" data-obj-name="info" data-field-name="receipt_phone_number" bindinput="setInputValue" class="containerBox-infoTwo-number" placeholder="请输入收件人手机号码" type="number"></input>
+  </view>
+
+  <view class="containerBox-infoThree" >
+    <view>
+  <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+    <view class="picker">
+      请选择收件人地址：{{region[0]}}，{{region[1]}}，{{region[2]}}
+    </view>
+  </picker>
+  </view>
+  </view>
+
+  <view class="containerBox-infoFour">
+  <input value="{{info.receipt_street}}"  data-is-obj="1" data-obj-name="info" data-field-name="receipt_street" bindinput="setInputValue" class="containerBox-infoThree-country" placeholder="请输入收件人的街道信息"></input>
+  <textarea value="{{info.receipt_detail_address}}"  data-is-obj="1" data-obj-name="info" data-field-name="receipt_detail_address" bindinput="setInputValue" class="containerBox-infoFour-text" placeholder="请输入收件人的详细地址"></textarea>
+  </view>
+</view>
+<button type="primary" bindtap="backToD">确定</button>
