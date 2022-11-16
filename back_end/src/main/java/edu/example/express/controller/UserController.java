@@ -3,10 +3,12 @@ package edu.example.express.controller;
 
 import edu.example.express.entity.Express;
 import edu.example.express.entity.User;
+import edu.example.express.entity.VerificationCode;
 import edu.example.express.entity.dto.ResultBean;
 import edu.example.express.service.ExpressService;
 import edu.example.express.service.NetworkService;
 import edu.example.express.service.UserService;
+import edu.example.express.service.VerificationCodeService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -35,6 +37,8 @@ public class UserController {
 
     @Resource
     private NetworkService networkService;
+
+    private VerificationCodeService verificationCodeService;
 
     /**
     * 查询分页数据
@@ -104,14 +108,77 @@ public class UserController {
 
     @PostMapping("/addExpress")
     public ResultBean<?> addExpress(@RequestParam(name = "express")Express express){
-        expressService.insertExpress(express);
-        return new ResultBean<>();
+        ResultBean<Object> result = new ResultBean<>();
+        int flag = expressService.insertExpress(express);
+        if(flag > 0)
+            result.setMessage("添加成功");
+
+        return result;
     }
 
     @PostMapping("/deleteExpress")
     public ResultBean<?> deleteExpress(@RequestParam(name = "id")int id){
-        expressService.deleteExpressById(id);
-        return new ResultBean<>();
+        ResultBean<Object> result = new ResultBean<>();
+        int flag = expressService.deleteExpressById(id);
+        if(flag > 0)
+            result.setMessage("删除成功");
+
+        return result;
+    }
+
+    @PostMapping("/Register")
+    public  ResultBean<?> Register(@RequestParam(name = "nikename")String name,
+                                   @RequestParam(name = "email")String email,
+                                   @RequestParam(name = "password")String password,
+                                   @RequestParam(name = "captcha")String captche
+                                   ){
+        ResultBean<Object> result = new ResultBean<>();
+        VerificationCode code = new VerificationCode();
+        code.setEmail(email);
+        code.setCode(captche);
+        Boolean flag = verificationCodeService.IsVerificationCode(code);
+        if(!flag){
+            result.setMessage("验证码错误");
+            return result;
+        }
+        User user = new User();
+        user.setUsername(name);
+        user.setEmail(email);
+        user.setPassword(password);
+
+
+        if(userService.insertUser(user)>0){
+            result.setMessage("注册成功");
+        }
+
+        return  result;
+
+    }
+
+    @PostMapping("/Forgetpassword")
+    public  ResultBean<?> Forgetpassword(@RequestParam(name = "email")String email,
+                                   @RequestParam(name = "password")String password,
+                                   @RequestParam(name = "captcha")String captche
+                                                                                ){
+        ResultBean<Object> result = new ResultBean<>();
+        VerificationCode code = new VerificationCode();
+        code.setCode(captche);
+        code.setEmail(email);
+        Boolean flag = verificationCodeService.IsVerificationCode(code);
+        if(!flag){
+            result.setMessage("验证码错误");
+            return result;
+        }
+        User user = userService.getUserByEmail(email);
+
+        user.setPassword(password);
+
+        if(userService.updateUser(user)>0){
+            result.setMessage("修改成功");
+        }
+
+        return  result;
+
     }
 
 

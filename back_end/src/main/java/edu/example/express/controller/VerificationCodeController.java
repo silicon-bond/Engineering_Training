@@ -1,6 +1,7 @@
 package edu.example.express.controller;
 
 
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import edu.example.express.entity.dto.ResultBean;
 import edu.example.express.service.VerificationCodeService;
@@ -71,23 +72,25 @@ public class VerificationCodeController {
 //    }
 
     @GetMapping("/{email}")
+    @Async
     public ResultBean<?> getVerificationCode(@PathVariable("email") String email) throws ParseException {
         ResultBean<Object> result = new ResultBean<>();
-        VerificationCode verificationCodeByEmail = verificationCodeService.getVerificationCodeByEmail(email);
-        if(verificationCodeByEmail != null)
-        {
-            String code = verificationCodeService.generateVerificationCode();
-            String title = "Express APP";
-            String content = "您的验证码为：" + code;
-            verificationCodeService.sendSimpleMail(email,title,content);
-            verificationCodeByEmail.setCode(code);
-            verificationCodeService.updateVerificationCode(verificationCodeByEmail);
-            result.setCode("200");
-            result.setMessage("发送成功");
-        }else{
-            result.setCode("100");
-            result.setMessage("无效邮箱");
+        VerificationCode verificationCode = new VerificationCode();
+
+        verificationCode.setEmail(email);
+
+        String code = verificationCodeService.generateVerificationCode();
+        String title = "Express APP";
+        String content = "您的验证码为：" + code;
+//        verificationCodeService.sendSimpleMail(email,title,content);
+        verificationCode.setCode(code);
+        result.setCode("200");
+        result.setMessage("发送成功");
+        if(verificationCodeService.getVerificationCodeByEmail(email) != null){
+            verificationCodeService.updateVerificationCode(verificationCode);
+            return result;
         }
+        verificationCodeService.insertVerificationCode(verificationCode);
         return result;
     }
 

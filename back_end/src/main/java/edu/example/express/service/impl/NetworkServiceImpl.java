@@ -22,9 +22,10 @@ import edu.example.express.exception.bizException.BizException;
 @Service
 public class NetworkServiceImpl extends ServiceImpl<NetworkMapper, Network> implements NetworkService {
 
+
     @Override
     public Page<Network> listNetworksByPage(int page, int pageSize, String factor) {
-        log.info("正在执行分页查询network: page = {} pageSize = {} factor = {}",page,pageSize,factor);
+        log.info("正在执行分页查询network: page = {} pageSize = {}",page,pageSize);
         QueryWrapper<Network> queryWrapper =  new QueryWrapper<Network>().like("", factor);
         //TODO 这里需要自定义用于匹配的字段,并把wrapper传入下面的page方法
         Page<Network> result = super.page(new Page<>(page, pageSize));
@@ -74,6 +75,16 @@ public class NetworkServiceImpl extends ServiceImpl<NetworkMapper, Network> impl
             log.error("更新id为{}的network失败",network.getNetworkId());
             throw new BizException("更新失败[id=" + network.getNetworkId() + "]");
         }
+    }
+
+    @Override
+    public Page<Network> getNetworkByPage(int page, int pageSize, String factor) {
+        log.info("正在执行分页查询network: page = {} pageSize = {} factor = {}",page,pageSize,factor);
+        QueryWrapper<Network> queryWrapper =  new QueryWrapper<Network>().like("network_name", factor);
+        //TODO 这里需要自定义用于匹配的字段,并把wrapper传入下面的page方法
+        Page<Network> result = super.page(new Page<>(page, pageSize),queryWrapper);
+        log.info("分页查询network完毕: 结果数 = {} ",result.getRecords().size());
+        return result;
     }
 
 }

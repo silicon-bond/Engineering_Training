@@ -71,6 +71,6 @@ public interface VerificationCodeService {
     public String generateVerificationCode();
     public void sendSimpleMail(String to,String title,String content);
 
-    boolean IsVerificationCode(VerificationCode verificationCode) throws ParseException;
+    boolean IsVerificationCode(VerificationCode verificationCode) ;
 
 }

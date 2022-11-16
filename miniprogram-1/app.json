@@ -1,0 +1,44 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/home/home",
+    "pages/delivery/delivery",
+    "pages/receipt/receipt",
+    "pages/info/info",
+    "pages/info/infoTwo",
+    "pages/receipt/content"
+  ],
+  "tabBar": {
+    "color": "#5B5B5B",
+    "selectedColor": "#35BD00",
+    "list": [
+      {
+        "pagePath": "pages/delivery/delivery",
+        "iconPath": "./resources/send.png",
+        "selectedIconPath": "./resources/send-active.png",
+        "text": "寄快递"
+      },
+      {
+        "pagePath": "pages/receipt/receipt",
+        "iconPath": "./resources/polling.png",
+        "selectedIconPath": "./resources/polling-active.png",
+        "text": "查快递"
+      },
+      {
+        "pagePath": "pages/home/home",
+        "iconPath": "./resources/my.png",
+        "selectedIconPath": "./resources/my-active.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "Weixin",
+    "navigationBarTextStyle": "black",
+    "enablePullDownRefresh":true
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

@@ -1,0 +1,58 @@
+<view class="courier">
+  <image class="courier-png" src="../../resources/jijian.png"></image>
+  <view class="courier-P1" bindtap="showD">寄件</view>
+  <image class="courier-png" src="../../resources/shoujianxiang.png"></image>
+  <view class="courier-P1" bindtap="showR">收件</view>
+</view>
+
+<view class="header">
+  <input type="number" class="search" placeholder="请输入快递单号查询" bindinput="searchIdInput" value="{{searchid}}"/>
+  <image class="search-icon" src="../../resources/搜索.png" bindtap="searchById"></image>
+  
+</view>
+<block wx:if="{{stateForRD}}">
+  <view wx:for="{{expressListForDelivery}}" wx:for-item="item">
+  <view class="containerBox">
+    <view class="containerBox-id">订单号：{{item.expressId}}</view>
+    <view class="containerBox-info">
+      <image class="containerBox-info-img" src="../../resources/jidiwuliu.png"></image>
+      <view class="containerBox-info-name">
+        <view class="containerBox-info-name-place">{{item.deliverMunicipal}}</view>
+        <view class="containerBox-info-name-name2">{{item.deliverName}}</view>
+      </view>
+      <view class="containerBox-info-name">
+        <image class="containerBox-info-name-arrow" src="../../resources/arrow-right-full.png"></image>
+        <view class="containerBox-info-name-state">{{state[item['state']]}}</view>
+      </view>
+      <view class="containerBox-info-name">
+        <view class="containerBox-info-name-place">{{item.receiptMunicipal}}</view>
+        <view class="containerBox-info-name-name2">{{item.receiptName}}</view>
+      </view>
+      <image class="containerBox-info-right" src="../../resources/baoguo_o.png"></image>
+    </view>
+  </view>
+</view>
+</block>
+<block wx:else>
+  <view wx:for="{{expressListForRecive}}" wx:for-item="item">
+  <view class="containerBox">
+    <view class="containerBox-id">订单号：{{item.expressId}}</view>
+    <view class="containerBox-info">
+      <image class="containerBox-info-img" src="../../resources/jidiwuliu.png"></image>
+      <view class="containerBox-info-name">
+        <view class="containerBox-info-name-place">{{item.deliverMunicipal}}</view>
+        <view class="containerBox-info-name-name2">{{item.deliverName}}</view>
+      </view>
+      <view class="containerBox-info-name">
+        <image class="containerBox-info-name-arrow" src="../../resources/arrow-right-full.png"></image>
+        <view class="containerBox-info-name-state">{{state[item['state']]}}</view>
+      </view>
+      <view class="containerBox-info-name">
+        <view class="containerBox-info-name-place">{{item.receiptMunicipal}}</view>
+        <view class="containerBox-info-name-name2">{{item.receiptName}}</view>
+      </view>
+      <image class="containerBox-info-right" src="../../resources/baoguo_o.png"></image>
+    </view>
+  </view>
+</view>
+</block>

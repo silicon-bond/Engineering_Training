@@ -1,0 +1,27 @@
+<view class="containerBox">
+  <view class="containerBox-infoOne">
+  <image class="containerBox-infoOne-png" src="../../resources/baoguo_lanshou_o.png"></image>
+  <view class="containerBox-infoOne-text">寄件人</view>
+  </view>
+
+  <view class="containerBox-infoTwo">
+    <input class="containerBox-infoTwo-text" value="{{info.deliver_name}}"  data-is-obj="1" data-obj-name="info" data-field-name="deliver_name" bindinput="setInputValue"  placeholder="请输入寄件人姓名" ></input>
+    <input value="{{info.deliver_phone_number}}"  data-is-obj="1" data-obj-name="info" data-field-name="deliver_phone_number" bindinput="setInputValue" class="containerBox-infoTwo-number" placeholder="请输入寄件人手机号码" type="number"></input>
+  </view>
+
+  <view class="containerBox-infoThree" >
+  <view>
+  <picker mode="region" bindchange="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+    <view class="picker">
+      请选择寄件人地址：{{region[0]}}，{{region[1]}}，{{region[2]}}
+    </view>
+  </picker>
+  </view>
+  </view>
+
+  <view class="containerBox-infoFour">
+    <input value="{{info.deliver_street}}"  data-is-obj="1" data-obj-name="info" data-field-name="deliver_street" bindinput="setInputValue" class="containerBox-infoThree-country" placeholder="请输入寄件人的街道信息"></input>
+  <textarea value="{{info.deliver_detail_address}}"  data-is-obj="1" data-obj-name="info" data-field-name="deliver_detail_address" bindinput="setInputValue"  class="containerBox-infoFour-text" placeholder="请输入寄件人的详细地址"></textarea>
+  </view>
+</view>
+<button type="primary" bindtap="backToD">确定</button>
