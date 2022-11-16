@@ -5,6 +5,9 @@ import edu.example.express.mapper.ExpressMapper;
 import edu.example.express.service.ExpressService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.groovy.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +27,9 @@ import java.time.LocalDate;
 @Slf4j
 @Service
 public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> implements ExpressService {
+    @Autowired
+    ExpressMapper expressMapper;
+
     @Override
     public Page<Express> listExpresssByPage(int page, int pageSize, String factor) {
         log.info("正在执行分页查询express: page = {} pageSize = {} factor = {}",page,pageSize,factor);
@@ -103,6 +109,24 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         log.info("正在查询express中NetworkId为{}且时间范围在{}和{}之间的数据", networkId, DateStart, DateOver);
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("network_id", networkId)
                 .between("order_date", DateStart, DateOver);
+        Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
+        return result;
+    }
+
+    @Override
+    public Page<Express> listExpresssPageByIdAndState(int page, int pageSize, String factor, int id, int state) {
+        String state_name = expressMapper.getExpressStateNameById(id);
+        log.info("正在查询express中id为{},或者订单状态id为{},订单状态为{}的数据", id, state,state_name);
+
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>();
+        if (id != -1){
+            queryWrapper.eq("express_id",id);
+        }
+        if (state != -1){
+            queryWrapper.eq("state", state);
+        }
+
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;

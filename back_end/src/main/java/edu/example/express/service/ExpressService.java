@@ -74,4 +74,6 @@ public interface ExpressService {
     Page<Express> getExpressListByNetworkIdAndDate(Integer networkId, int page, int pageSize, LocalDate DateStart, LocalDate DateOver);
 
     Page<Express> getExpressListByDeliverymanId(Integer deliverymanId, int page, int pageSize);
+
+    Page<Express> listExpresssPageByIdAndState(int page, int pageSize, String factor, int id,int state);
 }
