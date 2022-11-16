@@ -90,4 +90,13 @@ public class DeliverymanServiceImpl extends ServiceImpl<DeliverymanMapper,Delive
         log.info("查询email为{}的deliveryman{}",email,(null == deliveryman?"无结果":"成功"));
         return deliveryman;
     }
+
+    @Override
+    public Deliveryman getDeliverymanByPhoneNumber(String phoneNumber) {
+        log.info("正在查询deliveryman中phoneNumber为{}的数据", phoneNumber);
+        QueryWrapper<Deliveryman> queryWrapper =  new QueryWrapper<Deliveryman>().eq("phone_number", phoneNumber);
+        Deliveryman deliveryman = super.getOne(queryWrapper);
+        log.info("查询phoneNumber为{}的deliveryman{}",phoneNumber,(null == deliveryman?"无结果":"成功"));
+        return deliveryman;
+    }
 }
