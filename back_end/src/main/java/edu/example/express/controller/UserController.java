@@ -38,6 +38,7 @@ public class UserController {
     @Resource
     private NetworkService networkService;
 
+    @Resource
     private VerificationCodeService verificationCodeService;
 
     /**
@@ -101,9 +102,9 @@ public class UserController {
     @GetMapping("/getNetWorkByName")
     public ResultBean<?> getNetWorkByFactor(@RequestParam(name = "page", defaultValue = "1") int page,
                                             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-                                            @RequestParam(name = "factor",defaultValue = "10") String factor){
+                                            @RequestParam(name = "factor", defaultValue = "") String factor){
 
-        return new ResultBean<>(networkService.listNetworksByPage(page,pageSize,factor));
+        return new ResultBean<>(networkService.getNetworkByPage(page,pageSize,factor));
     }
 
     @PostMapping("/addExpress")

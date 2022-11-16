@@ -28,7 +28,7 @@ public class VerificationCode extends Model<VerificationCode> {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "email", type = IdType.AUTO)
+    @TableId(value = "email")
     private String email;
 
     private String code;
