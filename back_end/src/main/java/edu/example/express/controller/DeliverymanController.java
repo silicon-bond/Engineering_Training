@@ -3,11 +3,13 @@ package edu.example.express.controller;
 
 import edu.example.express.entity.Deliveryman;
 import edu.example.express.entity.Express;
+import edu.example.express.entity.Network;
 import edu.example.express.entity.User;
 import edu.example.express.entity.dto.ResultBean;
 
 import edu.example.express.service.DeliverymanService;
 import edu.example.express.service.ExpressService;
+import edu.example.express.service.NetworkService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -23,6 +25,9 @@ public class DeliverymanController {
 
     @Resource
     private ExpressService expressService;
+
+    @Resource
+    private NetworkService networkService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResultBean<?> listByPage(@RequestParam(name = "page", defaultValue = "1") int page,
@@ -126,5 +131,10 @@ public class DeliverymanController {
         } else {
             return new ResultBean<>("物流状态修改失败", "500");
         }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/allNetworks")
+    private ResultBean<?> getAllNetworks(){
+        return new ResultBean<>(networkService.getAllNetworks());
     }
 }
