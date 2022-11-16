@@ -109,4 +109,9 @@ public class DeliverymanController {
                                            @RequestParam("deliverymanId")Integer deliverymanId){
         return new ResultBean<>(expressService.getExpressListByDeliverymanId(deliverymanId, page, pageSize));
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/expressById")
+    private ResultBean<?> getExpressById(@RequestParam(name = "expressId")Integer expressId){
+        return new ResultBean<>(expressService.getExpressById(expressId));
+    }
 }
