@@ -87,7 +87,7 @@ public class VerificationCodeServiceImpl extends ServiceImpl<VerificationCodeMap
     public String updateVerificationCode(VerificationCode verificationCode) {
         log.info("正在更新id为{}的verificationCode",verificationCode.getEmail());
         if (super.updateById(verificationCode)) {
-            log.info("更新d为{}的verificationCode成功",verificationCode.getEmail());
+            log.info("更新id为{}的verificationCode成功",verificationCode.getEmail());
             return verificationCode.getEmail();
         } else {
             log.error("更新id为{}的verificationCode失败",verificationCode.getEmail());
@@ -117,7 +117,7 @@ public class VerificationCodeServiceImpl extends ServiceImpl<VerificationCodeMap
     }
 
     @Override
-    public boolean IsVerificationCode(VerificationCode verificationCode) throws ParseException {
+    public boolean IsVerificationCode(VerificationCode verificationCode) {
         VerificationCode verificationCodeByEmail = getVerificationCodeByEmail(verificationCode.getEmail());
         if(verificationCode.getCode().equals(verificationCodeByEmail.getCode()))
         {

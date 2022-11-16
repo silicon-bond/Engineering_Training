@@ -66,4 +66,6 @@ public interface NetworkService {
     */
     int updateNetwork(Network network);
 
+    public Page<Network> getNetworkByPage(int page, int pageSize, String factor);
+
 }
