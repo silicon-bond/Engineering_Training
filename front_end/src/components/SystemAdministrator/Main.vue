@@ -32,10 +32,6 @@
             <i class="el-icon-reading"></i>
             <span slot="title">意见箱管理</span>
           </el-menu-item>
-          <el-menu-item index="/system/personalCenter">
-            <i class="el-icon-message"></i>
-            <span slot="title">个人中心</span>
-          </el-menu-item>
         </el-menu>
       </div>
       <div id="rightBox">
@@ -71,7 +67,6 @@ export default {
       if (key === "/system/personList") this.$router.push('/system/personList')
       if (key === "/system/branchList") this.$router.push('/system/branchList')
       if (key === "/system/adviceList") this.$router.push('/system/adviceList')
-      if (key === "/system/personalCenter") this.$router.push('/system/personalCenter')
     },
     logout(){
       localStorage.clear();
