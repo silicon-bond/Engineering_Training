@@ -2,17 +2,42 @@
   <div>
     <div id="messagebox">
       <p id="logintopic">注册</p>
-      <el-form :model="information" :rules="rules" ref="information">
-        <el-form-item prop="account">
+      <div id="charactorBox">
+        <el-radio v-model="charactor" label="1">用户</el-radio>
+        <el-radio v-model="charactor" label="2">快递员</el-radio>
+      </div>
+      <el-form :model="information" :rules="Rules" ref="information">
+        <el-form-item prop="email">
           <el-input
-            id="account"
+            id="email"
             prefix-icon="el-icon-user"
             size="large"
-            placeholder="请输入用户名"
+            placeholder="请输入邮箱"
             clearable
             required
-            v-model="information.account"
+            v-model="information.email"
           ></el-input>
+        </el-form-item>
+        <el-form-item prop="phone">
+          <el-input
+            id="phone"
+            prefix-icon="el-icon-user"
+            size="large"
+            placeholder="请输入手机号"
+            clearable
+            required
+            v-model="information.phone"
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="branch" v-if="charactor==='2'">
+          <el-select v-model="information.branch" placeholder="请选择所属网点" style="width: 100%">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item prop="pwd">
           <el-input
@@ -57,14 +82,37 @@ export default {
       }
     };
     return{
+      options: [{
+        value: '选项1',
+        label: '福州网点'
+      }, {
+        value: '选项2',
+        label: '厦门网点'
+      }, {
+        value: '选项3',
+        label: '莆田网点'
+      }, {
+        value: '选项4',
+        label: '漳州网点'
+      }, {
+        value: '选项5',
+        label: '泉州网点'
+      }],
+
+      charactor:'1',
       information:{
-        account: '',
+        email:'',
+        phone: '',
         pwd:'',
         twicePwd:'',
+        branch:''
       },
-      rules:{
-        account:[
-          {required: true, message: '账号不能为空', trigger: ['blur', 'change']}
+      Rules:{
+        email:[
+          {required: true, message: '邮箱不能为空', trigger: ['blur', 'change']}
+        ],
+        phone:[
+          {required: true, message: '手机号不能为空', trigger: ['blur', 'change']}
         ],
         pwd:[
           {required: true, message: '密码不能为空', trigger: 'blur'},
@@ -72,6 +120,9 @@ export default {
         ],
         twicePwd: [
           {validator: validatePass2, trigger: 'blur'}
+        ],
+        branch:[
+          {required: true, message: '所属网点不能为空', trigger: ['blur', 'change']}
         ]
       },
     }
@@ -83,30 +134,36 @@ export default {
 
     register(message){
       let userMessage = {
-        name:this.information.account,
-        pwd:this.information.pwd
+
       }
       this.$refs[message].validate((valid) => {
         if (valid) {
-          this.$axios({
-            method: 'post',
-            headers: {
-              'Content-type': 'application/json;charset=UTF-8'
-            },
-            data: JSON.stringify(userMessage),
-            url: 'http://localhost:8081/javaee1_war_exploded/register/user',
-          }).then((response) => {          //这里使用了ES6的语法
-            console.log(response.data.data)
-            if (response.data.code === '200'){
-              alert("注册成功")
-              this.$router.push('/login/login')
-            }else {
-              alert("用户名已被占用")
-              this.$router.go(0)
-            }
-          }).catch((error) => {
-            console.log(error)       //请求失败返回的数据
-          })
+          if (this.charactor==='1'){
+            alert('注册用户成功')
+          }
+          else{
+            alert('注册快递员成功')
+          }
+
+          // this.$axios({
+          //   method: 'post',
+          //   headers: {
+          //     'Content-type': 'application/json;charset=UTF-8'
+          //   },
+          //   data: JSON.stringify(userMessage),
+          //   url: 'http://localhost:8081/javaee1_war_exploded/register/user',
+          // }).then((response) => {          //这里使用了ES6的语法
+          //   console.log(response.data.data)
+          //   if (response.data.code === '200'){
+          //     alert("注册成功")
+          //     this.$router.push('/login/login')
+          //   }else {
+          //     alert("用户名已被占用")
+          //     this.$router.go(0)
+          //   }
+          // }).catch((error) => {
+          //   console.log(error)       //请求失败返回的数据
+          // })
         } else {
           console.log('error !!');
           return false;
@@ -118,9 +175,13 @@ export default {
 </script>
 
 <style scoped>
+#charactorBox{
+  margin-left: 25%;
+  margin-bottom: 10px;
+}
 #messagebox{
   position: absolute;
-  top: 15%;
+  top: 7%;
   bottom: 10%;
   left: 20%;
   right: 20%;

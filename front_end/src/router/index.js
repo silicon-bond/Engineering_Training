@@ -35,8 +35,11 @@ const SystemMain = () => import('../components/SystemAdministrator/Main')
 const SystemAdviceList = () => import('../components/SystemAdministrator/AdviceList')
 const SystemBranchList = () => import('../components/SystemAdministrator/BranchList')
 const SystemLogisticsList = () => import('../components/SystemAdministrator/LogisticsList')
-const SystemPersonalCenter = () => import('../components/SystemAdministrator/PersonalCenter')
 const SystemPersonList = () => import('../components/SystemAdministrator/PersonList')
+
+
+const a = () => import('../components/1/Main')
+const b = () => import('../components/1/Notice')
 
 //1.安装插件
 Vue.use(Router)
@@ -46,6 +49,20 @@ const routes = [
   {
     path: '',
     redirect :'/login'
+  },
+  {
+    path: '/1',
+    component: a,
+    children: [
+      {
+        path: '',
+        redirect: '/1/Notice'
+      },
+      {
+        path: '/1/Notice',
+        component:b
+      }
+    ]
   },
   {//注册登录
     path: '/login',
@@ -171,10 +188,6 @@ const routes = [
       {
         path: '/system/adviceList',
         component:SystemAdviceList
-      },
-      {
-        path: '/system/personalCenter',
-        component:SystemPersonalCenter
       },
       {
         path: '/system/personList',

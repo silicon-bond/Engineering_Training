@@ -23,15 +23,28 @@
     <el-divider></el-divider>
     <el-dialog title="物流详情" :visible.sync="dialogDetail">
 
-      <div>
-        订单编号：<p id="detailId">{{ detail.id }}</p>
-        <p id="detailSender">{{ detail.sender }}</p>
-        <p id="detailRecipient">{{ detail.recipient}}</p>
-        <p id="detailState">{{ detail.state }}</p>
-        <p id="detailDeliveryTime">{{ detail.deliveryTime }}</p>
-        <p id="detailArrivalTime">{{ detail.arrivalTime }}</p>
+      <div id="detailBox">
+        <el-form ref="detail" :model="detail" label-width="80px">
+          <el-form-item label="订单编号">
+            <el-input v-model="detail.id" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="寄件人">
+            <el-input v-model="detail.sender" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="收件人">
+            <el-input v-model="detail.recipient" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="状态">
+            <el-input v-model="detail.state" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="发货时间">
+            <el-input v-model="detail.deliveryTime" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="送达时间">
+            <el-input v-model="detail.arrivalTime" readonly></el-input>
+          </el-form-item>
+        </el-form>
       </div>
-
     </el-dialog>
     <div id="table">
       <el-table :data="tableData"
@@ -236,5 +249,9 @@ export default {
   width: 25%;
   margin-left: 4%;
   margin-right: 1%;
+}
+#detailBox{
+  margin-left: 6%;
+  margin-right: 9%;
 }
 </style>
