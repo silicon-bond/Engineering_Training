@@ -15,7 +15,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/express/api")
 @CrossOrigin(origins = "*")
-public class LoginController {
+public class PublicController {
 
     @Resource
     private UserService userService;
