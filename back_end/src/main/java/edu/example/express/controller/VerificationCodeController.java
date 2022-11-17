@@ -82,7 +82,7 @@ public class VerificationCodeController {
         String code = verificationCodeService.generateVerificationCode();
         String title = "Express APP";
         String content = "您的验证码为：" + code;
-//        verificationCodeService.sendSimpleMail(email,title,content);
+        verificationCodeService.sendSimpleMail(email,title,content);
         verificationCode.setCode(code);
         result.setCode("200");
         result.setMessage("发送成功");
