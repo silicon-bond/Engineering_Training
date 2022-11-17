@@ -15,7 +15,7 @@
         <div id="searchContent">
           <el-input  v-model="searchContent" placeholder="请输入快递单号"></el-input>
         </div>
-        <el-button type="primary">搜索</el-button>
+        <el-button type="primary" @click="searchpackage()">搜索</el-button>
       </div>
     </div>
     <el-divider></el-divider>
@@ -38,8 +38,8 @@
 
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="text" @click="lookClick(scope.$index,scope.row)" class="button" icon="el-icon-view">送达</el-button>
-            <el-button size="mini" type="text" @click="handleEdit(scope.$index,scope.row)" v-if="scope.row.state !== 1"class="button" icon="el-icon-delete">删除</el-button>
+            <el-button size="mini" type="text" @click="sendover(scope.$index,scope.row)" class="button" icon="el-icon-view">送达</el-button>
+<!--            <el-button size="mini" type="text" @click="handleEdit(scope.$index,scope.row)" v-if="scope.row.state !== 1"class="button" icon="el-icon-delete">删除</el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -76,65 +76,17 @@ export default {
       searchContent:'',
       tableCol: [
         //{prop: "id", label: "id"},
-        {prop: "id", label: "订单编号"},
-        {prop: "sender", label: "寄件人"},
-        {prop: "recipient", label: "收件人"},
-        {prop: "weight", label: "重量/kg"},
+        {prop: "expressId", label: "订单编号"},
+        {prop: "deliverName", label: "寄件人"},
+        {prop: "receiptName", label: "收件人"},
+        {prop: "deliverDetailAddress", label: "详细地址"},
         {prop: "state", label: "物流状态"},
         {prop: "type", label: "物品类型"},
       ],
       tableData: [
-        {
-          id:1,
-          sender:'小松',
-          recipient:'小明',
-          weight:'001',
-          state:'运输中',
-          type:'日用品'
-        },
-        {
-          id:2,
-          sender:'小松',
-          recipient:'小明',
-          weight:'001',
-          state:'运输中',
-          type:'日用品'
-        },
-        {
-          id:3,
-          sender:'小松',
-          recipient:'小明',
-          weight:'001',
-          state:'运输中',
-          type:'日用品'
-        },
-        {
-          id:4,
-          sender:'小松',
-          recipient:'小明',
-          weight:'002',
-          state:'运输中',
-          type:'日用品'
-        },
-        {
-          id:5,
-          sender:'小松',
-          recipient:'小明',
-          weight:'001',
-          state:'运输中',
-          type:'日用品'
-        },
-        {
-          id:6,
-          sender:'小松',
-          recipient:'小明',
-          weight:'003',
-          state:'运输中',
-          type:'日用品'
-        },
+
 
       ],
-
       pagesize: 5,
       //当前页码
       currentPage: 1,
@@ -151,15 +103,72 @@ export default {
     handleCurrentChange: function(val) {
       this.currentPage = val;
     },
+    searchpackage(){
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        // data: JSON.stringify(info),
+        url: 'http://8.130.39.140:8080/express/api/deliveryman/expressById/?expressId='+this.searchContent,
+      }).then((response) => {          //这里使用了ES6的语法
+        // console.log(response.data.data)
+        if (response.data.code==='1') {
+          this.tableData=[]
+          this.tableData.push(response.data.data)
+          console.log(this.tableData)
+          // this.totalCount = response.data.data.total
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
 
-    lookClick(index,row) {
+    sendover(index,row) {
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        // data: JSON.stringify(info),
+        url: 'http://8.130.39.140:8080/express/api/deliveryman/completeDelivery/?expressId='+row.expressId,
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+        if (response.data.code==='1') {
+          // this.tableData = response.data.data
+          // this.totalCount = response.data.data.total
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
 
+    querySearch() {
+      // let info = {
+      //   pn:pageNum
+      // }
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        // data: JSON.stringify(info),
+        url: 'http://8.130.39.140:8080/express/api/deliveryman/myExpressList/?deliverymanId=1',
+      }).then((response) => {          //这里使用了ES6的语法
+        // console.log(response.data.data)
+        if (response.data.code==='1') {
+          this.tableData = response.data.data.records
+          // this.totalCount = response.data.data.total
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
 
   },
 
   created () {
-
+    this.querySearch()
   }
 }
 </script>
