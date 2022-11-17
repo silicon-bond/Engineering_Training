@@ -2,7 +2,7 @@
   <div>
     <div id="head">
       <span id="title">用户端</span>
-      <el-button style="padding:10px" id="exit" @click="logout" type="warning">注销<i class="el-icon-guide el-icon--right"></i></el-button>
+      <el-button id="exit" @click="logout">注销</el-button>
     </div>
     <div id="main">
       <div id="sidebar">
@@ -83,6 +83,8 @@ export default {
 <style scoped>
 
 * {
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
 }
 

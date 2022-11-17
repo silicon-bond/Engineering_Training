@@ -19,6 +19,8 @@
       </div>
     </div>
     <el-divider></el-divider>
+    <h3 id="tableTitle">物流信息列表</h3>
+    <el-divider></el-divider>
     <el-dialog title="物流详情" :visible.sync="dialogDetail">
 
       <div id="detailBox">
