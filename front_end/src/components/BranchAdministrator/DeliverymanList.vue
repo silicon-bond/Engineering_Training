@@ -34,8 +34,6 @@
       </div>
     </div>
     <el-divider></el-divider>
-    <h3 id="tableTitle">快递员信息列表</h3>
-    <el-divider></el-divider>
     <div id="table">
       <el-table :data="tableData"
                 stripe
