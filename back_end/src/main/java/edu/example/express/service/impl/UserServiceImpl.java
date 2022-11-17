@@ -88,6 +88,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public User getUserByPhoneNumber(String phoneNumber) {
+        log.info("正在查询user中phoneNumber为{}的数据", phoneNumber);
+        QueryWrapper<User> queryWrapper =  new QueryWrapper<User>().eq("phone_number", phoneNumber);
+        User user = super.getOne(queryWrapper);
+        log.info("查询phoneNumber为{}的user{}",phoneNumber,(null == user?"无结果":"成功"));
+        return user;
+    }
+
+    @Override
     public Page<User> getUserListByQuerymapper(int page, int pageSize, String factor, QueryWrapper<User> queryWrapper) {
         Page<User> userPage = super.page(new Page<>(page,pageSize),queryWrapper);
         return userPage;

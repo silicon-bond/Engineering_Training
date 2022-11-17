@@ -69,6 +69,8 @@ public interface UserService {
 
     User getUserByEmail(String email);
 
+    User getUserByPhoneNumber(String phoneNumber);
+
     Page<User> getUserListByQuerymapper(int page, int pageSize, String factor, QueryWrapper<User> queryWrapper);
 
 }
