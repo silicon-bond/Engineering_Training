@@ -110,7 +110,8 @@ public class DeliverymanController {
             } else if (state == 3) {
                 express.setDeliveryId(deliverymanId);
             }
-            return new ResultBean<>(expressService.updateExpress(express));
+            expressService.updateExpress(express);
+            return new ResultBean<>(express);
         } else {
             return new ResultBean<>("物流状态修改失败", "500");
         }
@@ -133,7 +134,8 @@ public class DeliverymanController {
         Express express = expressService.getExpressById(expressId);
         if (express != null && (express.getState() == 4 || express.getState() == 1)){
             express.setState(express.getState() + 1);
-            return new ResultBean<>(expressService.updateExpress(express));
+            expressService.updateExpress(express);
+            return new ResultBean<>(express);
         } else {
             return new ResultBean<>("物流状态修改失败", "500");
         }
