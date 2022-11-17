@@ -66,17 +66,18 @@ export default {
               'Content-type': 'application/json;charset=UTF-8'
             },
             data: JSON.stringify(userMessage),
-            url: 'http://localhost:8081/express/api/login',
+            url: 'http://8.130.39.140:8081/express/api/login',
           }).then((response) => {          //这里使用了ES6的语法
-            alert(response)
-            // if (response.data.code === '200'){
-            //   alert('登录成功！');
-            //   localStorage.setItem('id',response.data.data.id)
-            //   localStorage.setItem('account',response.data.data.name)
-            //   this.$router.push('/user')
-            // } else {
-            //   alert('用户名或密码错误!');
-            // }
+            console.log(response.data)
+            if (response.data.message === "success"){
+              alert('登录成功！');
+
+              localStorage.setItem('id',response.data.data.id)
+              localStorage.setItem('account',response.data.data.name)
+              this.$router.push('/user')
+            } else {
+              alert('用户名或密码错误!');
+            }
           }).catch((error) => {
             console.log(error)       //请求失败返回的数据
           })

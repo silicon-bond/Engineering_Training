@@ -180,7 +180,7 @@ export default {
                 'Content-type': 'application/json;charset=UTF-8'
               },
               data: JSON.stringify(userMessage),
-              url: 'http://localhost:8081/express/user/Register',
+              url: 'http://8.130.39.140:8081/express/user/Register',
             }).then((response) => {          //这里使用了ES6的语法
               console.log(response.data.data)
               // if (response.data.code === '200'){
@@ -214,7 +214,7 @@ export default {
                 'Content-type': 'application/json;charset=UTF-8'
               },
               data: JSON.stringify(deliverymanMessage),
-              url: 'http://localhost:8081/express/api/deliveryman/register',
+              url: 'http://8.130.39.140:8081/express/api/deliveryman/register',
             }).then((response) => {          //这里使用了ES6的语法
               console.log(response.data.data)
               // if (response.data.code === '200'){

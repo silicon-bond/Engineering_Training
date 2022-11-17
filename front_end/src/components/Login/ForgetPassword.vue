@@ -31,15 +31,16 @@
         </el-form-item>
         <el-form-item prop="valicode">
           <el-input
-            id="valicode"
+            style="width: 65%;float: left;border-radius: 4px 0 0 4px"
+            id="valicodebox"
             prefix-icon="el-icon-lock"
             size="large"
             placeholder="请输入验证码"
             required
             v-model="information.valicode"
           ></el-input>
+          <el-button @click="sendyzm" id="sendyzm" type="primary" >获取验证码</el-button>
         </el-form-item>
-        <el-button @click="sendyzm" id="sendyzm" type="primary" >发送验证码</el-button>
         <el-form-item prop="newPwd">
           <el-input
             id="newPwd"
@@ -92,7 +93,7 @@ export default {
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
-        url: 'http://localhost:8081/express/api/user/Captcha/'+this.information.email,
+        url: 'http://8.130.39.140:8081/express/api/user/Captcha/'+this.information.email,
       }).then((response) => {          //这里使用了ES6的语法
         // if (response.data.code === '200'){
         //   alert('登录成功！');
@@ -120,7 +121,7 @@ export default {
               'Content-type': 'application/json;charset=UTF-8'
             },
             data: JSON.stringify(userMessage),
-            url: 'http://localhost:8081/express/user/Forgetpassword',
+            url: 'http://8.130.39.140:8081/express/user/Forgetpassword',
           }).then((response) => {          //这里使用了ES6的语法
             console.log(response.data.data)
             // if (response.data.code === '200'){
@@ -144,6 +145,10 @@ export default {
 </script>
 
 <style scoped>
+#sendyzm{
+  width: 35%;
+  float: right;
+}
 #messagebox{
   position: absolute;
   top: 15%;
