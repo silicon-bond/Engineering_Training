@@ -5,6 +5,7 @@ import edu.example.express.entity.SystemAdministrator;
 import edu.example.express.entity.User;
 import edu.example.express.entity.dto.ResultBean;
 import edu.example.express.service.DeliverymanService;
+import edu.example.express.service.NetworkService;
 import edu.example.express.service.SystemAdministratorService;
 import edu.example.express.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,9 @@ public class PublicController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private NetworkService networkService;
 
     @Resource
     private DeliverymanService deliverymanService;
@@ -42,6 +46,11 @@ public class PublicController {
         } else {
             return new ResultBean<>("邮箱/账号或密码错误", "500");
         }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/allNetworks")
+    private ResultBean<?> getAllNetworks(){
+        return new ResultBean<>(networkService.getAllNetworks());
     }
 
 }

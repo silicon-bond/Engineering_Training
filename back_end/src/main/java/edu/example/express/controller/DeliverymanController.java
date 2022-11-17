@@ -132,9 +132,4 @@ public class DeliverymanController {
             return new ResultBean<>("物流状态修改失败", "500");
         }
     }
-
-    @RequestMapping(method = RequestMethod.GET, value = "/allNetworks")
-    private ResultBean<?> getAllNetworks(){
-        return new ResultBean<>(networkService.getAllNetworks());
-    }
 }
