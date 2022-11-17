@@ -1,6 +1,7 @@
 package edu.example.express.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.example.express.entity.Express;
 import edu.example.express.entity.RegisterUserBean;
 import edu.example.express.entity.User;
@@ -113,7 +114,7 @@ public class UserController {
         ResultBean<Object> result = new ResultBean<>();
         LocalDateTime orderTime = LocalDateTime.now();
         express.setOrderDate(orderTime);
-
+        express.setState(0);//状态置为未揽件
         int flag = expressService.insertExpress(express);
         if(flag > 0)
             result.setMessage("添加成功");
@@ -121,7 +122,7 @@ public class UserController {
         return result;
     }
 
-    @PostMapping("/deleteExpress")
+    @GetMapping("/deleteExpress")
     public ResultBean<?> deleteExpress(@RequestParam(name = "id")int id){
         ResultBean<Object> result = new ResultBean<>();
         int flag = expressService.deleteExpressById(id);
@@ -183,6 +184,18 @@ public class UserController {
         }
 
         return  result;
+
+    }
+    @GetMapping("/getExpressByStateAndID")
+    public ResultBean<?> getExpressByStateAndID(@RequestParam(name = "page", defaultValue = "1") int page,
+                                                @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                                @RequestParam( name = "state",defaultValue = "-1") int state,
+                                                @RequestParam( name = "id",defaultValue = "-1") int id,
+                                                @RequestParam(name="phoneNum",defaultValue = "-1")String phoneNum
+    ){
+        Page<Express> expressListByStateAndId = expressService.getExpressListByStateAndId(page, pageSize, state, id, phoneNum);
+        ResultBean<Object> result = new ResultBean<>(expressListByStateAndId);
+        return result;
 
     }
 

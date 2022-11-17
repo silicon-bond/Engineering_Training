@@ -114,14 +114,14 @@ export default {
   methods:{
     submitForm(message){
       let mailMessage = {
-        deliver_name:this.Form.senderName,
-        deliver_phone_number:this.Form.senderTelephone,
-        deliver_detail_address:this.Form.senderAddress,
+        deliverName:this.Form.senderName,
+        deliverPhoneNumber:this.Form.senderTelephone,
+        deliverDetailAddress:this.Form.senderAddress,
         description:this.Form.note,
-        receipt_name:this.Form.recipientName,
-        receipt_phone_number:this.Form.recipientTelephone,
-        receipt_detail_address:this.Form.recipientAddress,
-        network_id:this.Form.value
+        receiptName:this.Form.recipientName,
+        receiptPhoneNumber:this.Form.recipientTelephone,
+        receiptDetailAddress:this.Form.recipientAddress,
+        networkId:this.Form.value
       }
       this.$refs[message].validate((valid) => {
         if (valid) {

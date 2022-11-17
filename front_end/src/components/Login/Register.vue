@@ -150,7 +150,7 @@ export default {
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
-        url: 'http://localhost:8081/express/api/user/Captcha/'+this.information.email,
+        url: 'http://8.130.39.140:8081/express/api/user/Captcha/'+this.information.email,
       }).then((response) => {          //这里使用了ES6的语法
         // if (response.data.code === '200'){
         //   alert('登录成功！');

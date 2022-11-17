@@ -208,9 +208,6 @@ export default {
       this.detail.state = row.state
       this.editDetail = true
     },
-    deleteClick(){
-
-    },
     editSubmit(){
 
     },
@@ -223,8 +220,9 @@ export default {
         },
         url: 'http://8.130.39.140:8081/express/api/express?page='+pageNum+'&pageSize='+this.pagesize,
       }).then((response) => {          //这里使用了ES6的语法
-        console.log(response.data.data.records)
+        console.log(response.data.data)
         this.tableData = response.data.data.records
+        this.totalCount = response.data.data.total
         // if (response.data.code==='200') {
         //   this.result = response.data.data.list
         //   this.totalCount = response.data.data.total
@@ -239,10 +237,27 @@ export default {
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
-        url: 'http://8.130.39.140:8081/express/api/express/listPageByIdAndState?page='+this.currentPage+'&pageSize='+this.pagesize+'&id='+this.value+'&state='+this.content,
+        url: 'http://8.130.39.140:8081/express/api/express/listPageByIdAndState?page='+this.currentPage+'&pageSize='+this.pagesize+'&id='+this.searchContent+'&state='+this.value,
       }).then((response) => {          //这里使用了ES6的语法
         console.log(response.data)
         this.tableData = response.data.data.records
+        // if (response.data.code==='200') {
+        //   this.result = response.data.data.list
+        //   this.totalCount = response.data.data.total
+        // }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
+    deleteClick(index,row){
+      this.$axios({
+        method: 'delete',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/express/'+row.expressId,
+      }).then((response) => {          //这里使用了ES6的语法
+        this.querySearch(this.currentPage)
         // if (response.data.code==='200') {
         //   this.result = response.data.data.list
         //   this.totalCount = response.data.data.total

@@ -15,6 +15,7 @@ import edu.example.express.exception.bizException.BizException;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
+import java.util.function.Consumer;
 
 /**
 * <p>
@@ -190,6 +191,40 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("state", state);
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
+        return result;
+    }
+
+//    @Override
+//    public Page<Express> getExpressListByStateAndId(int page, int pageSize, Integer state, Integer id, String phoneNum) {
+//        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>();
+////        if(state != -1)
+////            queryWrapper.eq("state",state);
+////        if(id !=-1)
+////            queryWrapper.eq("express_id",id);
+//
+//        if(state != -1)
+//        queryWrapper.eq("deliver_phone_number",phoneNum).eq("state",state).eq("express_id",id)
+//                .or()
+//                .eq("receipt_phone_number",phoneNum).eq("state",state).eq("express_id",id);
+//        Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+//        return result;
+//    }
+//}
+
+
+    @Override
+    public Page<Express> getExpressListByStateAndId(int page, int pageSize, Integer state, Integer id, String phoneNum) {
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>();
+        if(state != -1)
+            queryWrapper.eq("state",state);
+        if(id !=-1)
+            queryWrapper.eq("express_id",id);
+
+        queryWrapper.and(QueryWrapper -> QueryWrapper.eq("deliver_phone_number",phoneNum).or().eq("receipt_phone_number",phoneNum));
+        Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+
+
+
         return result;
     }
 }
