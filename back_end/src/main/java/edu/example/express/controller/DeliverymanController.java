@@ -10,6 +10,7 @@ import edu.example.express.entity.dto.ResultBean;
 import edu.example.express.service.DeliverymanService;
 import edu.example.express.service.ExpressService;
 import edu.example.express.service.NetworkService;
+import edu.example.express.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -28,6 +29,9 @@ public class DeliverymanController {
 
     @Resource
     private NetworkService networkService;
+
+    @Resource
+    private UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResultBean<?> listByPage(@RequestParam(name = "page", defaultValue = "1") int page,
@@ -51,9 +55,11 @@ public class DeliverymanController {
     public ResultBean<?> register(@RequestBody(required=false) Deliveryman deliveryman){
         Deliveryman dm1 = deliverymanService.getDeliverymanByEmail(deliveryman.getEmail());
         Deliveryman dm2 = deliverymanService.getDeliverymanByPhoneNumber(deliveryman.getPhoneNumber());
-        if (dm1 != null)
+        User user1 = userService.getUserByEmail(deliveryman.getEmail());
+        User user2 = userService.getUserByPhoneNumber(deliveryman.getPhoneNumber());
+        if (dm1 != null || user1 != null)
             return new ResultBean<>("该邮箱已被注册", "500");
-        else if (dm2 != null)
+        else if (dm2 != null || user2 != null)
             return new ResultBean<>("该手机号已被绑定", "500");
 
         LocalDate localDate = LocalDate.now();
