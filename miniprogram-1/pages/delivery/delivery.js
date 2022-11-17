@@ -59,7 +59,7 @@ Page({
             console.log('用户点击确定')
             let localDate = util.formatTime(new Date())
             wx.request({
-              url: 'http://localhost:8080/express/api/express',
+              url: 'http://8.130.39.140:8081/express/api/express',
               data:{
                 orderDate:localDate,
                 state:0,
@@ -150,13 +150,13 @@ Page({
     })
     var that = this
     wx.request({
-      url: 'http://localhost:8080/express/api/network',
+      url: 'http://8.130.39.140:8081/express/api/allNetworks',
       method: 'GET',
       success: function (res) {
         console.log(res);
         that.setData({
-          networks:res.data.data.records,
-          checkedNetwork:res.data.data.records[0]
+          networks:res.data.data,
+          checkedNetwork:res.data.data[0]
         });
       },
       fail: function (res) {
