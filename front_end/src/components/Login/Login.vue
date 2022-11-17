@@ -109,7 +109,7 @@ export default {
 }
 #logintopic{
   text-align: center;
-  font-size: 40px;
+  font-size: 30px;
   color: #616161;
   margin-top: 20px;
   margin-bottom: 20px;

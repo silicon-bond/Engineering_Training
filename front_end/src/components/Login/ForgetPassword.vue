@@ -39,9 +39,10 @@
             required
             v-model="information.valicode"
           ></el-input>
-          <el-button @click="sendyzm" id="sendyzm" type="primary" >获取验证码</el-button>
+          <el-button @click="sendyzm" id="sendyzm" type="primary" style="font-size: 8px; padding-left: 2px; padding-right: 2px">{{yanzhenma}}</el-button>
+          <div style="clear:both;"></div>
         </el-form-item>
-        <el-form-item prop="newPwd">
+        <el-form-item style="margin-bottom: 3px" prop="newPwd">
           <el-input
             id="newPwd"
             prefix-icon="el-icon-lock"
@@ -53,6 +54,8 @@
           ></el-input>
         </el-form-item>
       </el-form>
+      <el-button type="text" id="toLoginbtn" @click="toLogin">已有账号</el-button>
+      <div style="clear:both;"></div>
       <el-button type="primary" id="editConfirmbtn" @click="editConfirm('information')">确认修改</el-button>
     </div>
   </div>
@@ -63,6 +66,7 @@ export default {
   name: "ForgetPassword",
   data(){
     return{
+      yanzhenma:'获取验证码',
       information:{
         email:'',
         valicode: '',
@@ -145,10 +149,16 @@ export default {
 </script>
 
 <style scoped>
-#sendyzm{
-  width: 35%;
-  float: right;
+#editConfirmbtn {
+  width: 100%;
 }
+
+#sendyzm{
+  float: right;
+  width: 30%;
+}
+
+
 #messagebox{
   position: absolute;
   top: 15%;
@@ -159,7 +169,7 @@ export default {
 }
 #logintopic{
   text-align: center;
-  font-size: 40px;
+  font-size: 30px;
   color: #616161;
   margin-top: 0;
   margin-bottom: 20px;
@@ -167,9 +177,11 @@ export default {
 #pwd{
   padding-top: 20px;
 }
+
 #registerbtn{
   width: 100%
 }
+
 #toLoginbtn{
   float: right;
 }

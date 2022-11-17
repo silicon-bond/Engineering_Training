@@ -60,6 +60,7 @@ export default {
   text-shadow: 5px 5px 5px #7090af;
 }
 #loginbox{
+  box-sizing: border-box;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -68,6 +69,7 @@ export default {
   transform: translate(0, -50%);
   background-color: #f1f1f1;
   box-shadow: 2px 2px 5px #909090;
+  overflow: auto;
 }
 
 </style>

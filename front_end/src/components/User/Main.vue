@@ -81,6 +81,13 @@ export default {
 </script>
 
 <style scoped>
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 #head{
   position: absolute;
   width: 100%;
@@ -96,7 +103,7 @@ export default {
 }
 #main{
   position: absolute;
-  height: 100%;
+  height: calc(100% - 70px);
   width: 100%;
   top: 70px;
   bottom: 0;
@@ -116,10 +123,11 @@ export default {
 #right{
   position: absolute;
   width: 80%;
-  top: 15px;
-  bottom: 0;
+  top: 3%;
+  bottom: 3%;
   right: 1%;
   background-color: white;
+  overflow: auto;
 }
 #exit{
   float: right;

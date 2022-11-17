@@ -32,6 +32,7 @@
         <el-form-item prop="yzm">
           <el-input
             id="yzm"
+            style="width: 65%;float: left;border-radius: 4px 0 0 4px"
             prefix-icon="el-icon-user"
             size="large"
             placeholder="请输入验证码"
@@ -39,8 +40,12 @@
             required
             v-model="information.yzm"
           ></el-input>
+          <el-button type="primary" @click="sendyzm" style=" float: right; width: 30%;font-size: 8px; padding-left: 2px; padding-right: 2px">
+            发送验证码
+          </el-button>
+          <div style="clear:both;"></div>
         </el-form-item>
-        <el-button type="primary" @click="sendyzm">发送验证码</el-button>
+
         <el-form-item prop="branch" v-if="charactor==='2'">
           <el-select v-model="information.branch" placeholder="请选择所属网点" style="width: 100%">
             <el-option
@@ -254,7 +259,7 @@ export default {
 }
 #logintopic{
   text-align: center;
-  font-size: 40px;
+  font-size: 30px;
   color: #616161;
   margin-top: 0;
   margin-bottom: 20px;
@@ -263,9 +268,20 @@ export default {
   padding-top: 20px;
 }
 #registerbtn{
+  margin-top: 20px;
   width: 100%
 }
 #toLoginbtn{
   float: right;
 }
+
+.el-form {
+  height: 49%;
+  overflow: auto;
+}
+
+.el-form-item {
+  margin-bottom: 12px;
+}
+
 </style>

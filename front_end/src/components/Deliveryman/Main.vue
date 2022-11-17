@@ -80,6 +80,12 @@ export default {
 </script>
 
 <style scoped>
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
 #head{
   position: absolute;
   width: 100%;
@@ -95,30 +101,31 @@ export default {
 }
 #main{
   position: absolute;
+  height: calc(100% - 70px);
   width: 100%;
   top: 70px;
   bottom: 0;
 }
 #sidebar{
   position: absolute;
-  top: 0;
-  bottom: 0;
   width: 18%;
+  height: 100%;
   overflow: hidden;
   background-color: #545c64;
-}
-#right{
-  position: absolute;
-  width: 80%;
-  top: 15px;
-  bottom: 0;
-  right: 1%;
-  background-color: white;
 }
 #rightBox{
   width: 100%;
   height: 100%;
   background-color: #e2e2e2;
+}
+#right{
+  position: absolute;
+  width: 80%;
+  top: 3%;
+  bottom: 3%;
+  right: 1%;
+  background-color: white;
+  overflow: auto;
 }
 #exit{
   float: right;
