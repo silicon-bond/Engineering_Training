@@ -202,16 +202,13 @@ export default {
 
     },
     querySearch(pageNum) {
-      let message = {
-        email: "1234@qq.com",
-        password:''
-      }
+
       this.$axios({
         method: 'get',
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
-        url: 'http://8.130.39.140:8080/express/api/deliveryman/expressList?page=1&pageSize=10&networkId=1',
+        url: 'http://localhost:8081/express/user/getExpress/ByReceiptPhoneNum?page=1&pageSize=5&ReceiptPhoneNumberr=13959616517',
       }).then((response) => {          //这里使用了ES6的语法
         console.log(response)
         // if (response.data.code==='200') {

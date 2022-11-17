@@ -17,6 +17,9 @@
           <el-form-item label="详细地址" prop="senderAddress">
             <el-input v-model="Form.senderAddress" placeholder="请输入寄件人地址"></el-input>
           </el-form-item>
+          <el-form-item label="备注" prop="note">
+            <el-input v-model="Form.note" placeholder="请输入备注信息"></el-input>
+          </el-form-item>
         </el-form>
       </div>
       <el-divider></el-divider>
@@ -48,14 +51,14 @@
           <el-select filterable v-model="Form.value" placeholder="请选择网点">
             <el-option
               v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+              :key="item.networkId"
+              :label="item.networkName"
+              :value="item.networkId">
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('Rules')" id="submibtn">提交</el-button>
+          <el-button type="primary" @click="submitForm('Rules3')" id="submibtn">提交</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -68,22 +71,7 @@ export default {
   data(){
     return{
       labelPosition:'left',
-      options: [{
-        value: '选项1',
-        label: '福州网点'
-      }, {
-        value: '选项2',
-        label: '厦门网点'
-      }, {
-        value: '选项3',
-        label: '莆田网点'
-      }, {
-        value: '选项4',
-        label: '泉州网点'
-      }, {
-        value: '选项5',
-        label: '漳州网点'
-      }],
+      options: [],
       Form: {
         senderName:'',
         senderTelephone:'',
@@ -92,6 +80,7 @@ export default {
         recipientTelephone:'',
         recipientAddress:'',
         value:'',
+        note:'',
       },
 
       Rules: {
@@ -114,21 +103,77 @@ export default {
           { required: true, message: '请输入收件人地址', trigger: 'blur' }
         ],
         value:[
-          { required: true, message: '请输入收件人地址', trigger: 'blur' }
-        ]
+          { required: true, message: '请选择网点', trigger: 'blur' }
+        ],
+        note:[
+          { required: true, message: '请输入备注信息', trigger: 'blur' }
+        ],
       },
     }
   },
   methods:{
     submitForm(message){
-      this.$refs['Rules2'].validate((valid) => {
+      let mailMessage = {
+        deliver_name:this.Form.senderName,
+        deliver_phone_number:this.Form.senderTelephone,
+        deliver_detail_address:this.Form.senderAddress,
+        description:this.Form.note,
+        receipt_name:this.Form.recipientName,
+        receipt_phone_number:this.Form.recipientTelephone,
+        receipt_detail_address:this.Form.recipientAddress,
+        network_id:this.Form.value
+      }
+      this.$refs[message].validate((valid) => {
         if (valid) {
-          alert('aaaa')
+          this.$axios({
+            method: 'post',
+            headers: {
+              'Content-type': 'application/json;charset=UTF-8'
+            },
+            data: JSON.stringify(mailMessage),
+            url: 'http://localhost:8081/express/user/addExpress',
+          }).then((response) => {          //这里使用了ES6的语法
+            console.log(response.data.data)
+            // if (response.data.code === '200'){
+            //   alert("注册成功")
+            //   this.$router.push('/login/login')
+            // }else {
+            //   alert("用户名已被占用")
+            //   this.$router.go(0)
+            // }
+          }).catch((error) => {
+            console.log(error)       //请求失败返回的数据
+          })
         } else {
+          console.log('error !!');
           return false;
         }
       });
-    }
+    },
+    getAllBranch(){
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://localhost:8081/express/api/allNetworks',
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data.data)
+        this.options = response.data.data
+        // if (response.data.code === '200'){
+        //   alert("注册成功")
+        //   this.$router.push('/login/login')
+        // }else {
+        //   alert("用户名已被占用")
+        //   this.$router.go(0)
+        // }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
+  },
+  created() {
+    this.getAllBranch()
   }
 }
 </script>

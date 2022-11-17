@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -32,7 +33,7 @@ public class Express extends Model<Express> {
 
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @TableField("order_date")
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
 
     private Integer state;
 
