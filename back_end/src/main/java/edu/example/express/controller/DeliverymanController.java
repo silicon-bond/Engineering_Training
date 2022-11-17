@@ -144,8 +144,10 @@ public class DeliverymanController {
     @RequestMapping(method = RequestMethod.GET, value = "/expressState")
     private ResultBean<?> getExpressByState(@RequestParam(name = "page", defaultValue = "1") int page,
                                             @RequestParam(name = "pageSize", defaultValue = "10")int pageSize,
-                                            @RequestParam("state")Integer state){
+                                            @RequestParam("state")Integer state,
+                                            @RequestParam("networkId")Integer networkId,
+                                            @RequestParam(name = "deliverymanId", required = false)Integer deliverymanId){
 
-        return new ResultBean<>(expressService.getExpressListByState(page, pageSize, state));
+        return new ResultBean<>(expressService.getExpressListByStateAndDeliverymanId(page, pageSize, state, networkId, deliverymanId));
     }
 }
