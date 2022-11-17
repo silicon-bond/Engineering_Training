@@ -29,6 +29,18 @@
             v-model="information.phone"
           ></el-input>
         </el-form-item>
+        <el-form-item prop="yzm">
+          <el-input
+            id="yzm"
+            prefix-icon="el-icon-user"
+            size="large"
+            placeholder="请输入验证码"
+            clearable
+            required
+            v-model="information.yzm"
+          ></el-input>
+        </el-form-item>
+        <el-button type="primary" @click="sendyzm">发送验证码</el-button>
         <el-form-item prop="branch" v-if="charactor==='2'">
           <el-select v-model="information.branch" placeholder="请选择所属网点" style="width: 100%">
             <el-option
@@ -105,7 +117,8 @@ export default {
         phone: '',
         pwd:'',
         twicePwd:'',
-        branch:''
+        branch:'',
+        yzm:'',
       },
       Rules:{
         email:[
@@ -131,39 +144,54 @@ export default {
     toLogin(){
       this.$router.push('/login/login')
     },
-
+    sendyzm(){
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://localhost:8081/express/api/user/Captcha/'+this.information.email,
+      }).then((response) => {          //这里使用了ES6的语法
+        // if (response.data.code === '200'){
+        //   alert('登录成功！');
+        //   localStorage.setItem('id',response.data.data.id)
+        //   localStorage.setItem('account',response.data.data.name)
+        //   this.$router.push('/user')
+        // } else {
+        //   alert('用户名或密码错误!');
+        // }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
     register(message){
       let userMessage = {
-
+        phoneNum:this.information.phone.toString(),
+        email:this.information.email.toString(),
+        password:this.information.pwd.toString(),
+        captcha:this.information.yzm.toString()
       }
       this.$refs[message].validate((valid) => {
         if (valid) {
-          if (this.charactor==='1'){
-            alert('注册用户成功')
-          }
-          else{
-            alert('注册快递员成功')
-          }
-
-          // this.$axios({
-          //   method: 'post',
-          //   headers: {
-          //     'Content-type': 'application/json;charset=UTF-8'
-          //   },
-          //   data: JSON.stringify(userMessage),
-          //   url: 'http://localhost:8081/javaee1_war_exploded/register/user',
-          // }).then((response) => {          //这里使用了ES6的语法
-          //   console.log(response.data.data)
-          //   if (response.data.code === '200'){
-          //     alert("注册成功")
-          //     this.$router.push('/login/login')
-          //   }else {
-          //     alert("用户名已被占用")
-          //     this.$router.go(0)
-          //   }
-          // }).catch((error) => {
-          //   console.log(error)       //请求失败返回的数据
-          // })
+          this.$axios({
+            method: 'post',
+            headers: {
+              'Content-type': 'application/json;charset=UTF-8'
+            },
+            data: JSON.stringify(userMessage),
+            url: 'http://localhost:8081/express/user/Register',
+          }).then((response) => {          //这里使用了ES6的语法
+            console.log(response.data.data)
+            // if (response.data.code === '200'){
+            //   alert("注册成功")
+            //   this.$router.push('/login/login')
+            // }else {
+            //   alert("用户名已被占用")
+            //   this.$router.go(0)
+            // }
+          }).catch((error) => {
+            console.log(error)       //请求失败返回的数据
+          })
         } else {
           console.log('error !!');
           return false;

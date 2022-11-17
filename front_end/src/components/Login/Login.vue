@@ -55,8 +55,8 @@ export default {
   methods: {
     login(message){
       let userMessage = {
-        email: '123456@qq.com',
-        password:'123456'
+        email: this.information.email,
+        password:this.information.pwd
       }
       this.$refs[message].validate((valid) => {
         if (valid) {
@@ -66,7 +66,7 @@ export default {
               'Content-type': 'application/json;charset=UTF-8'
             },
             data: JSON.stringify(userMessage),
-            url: 'http://8.130.39.140:8080/express/api/login',
+            url: 'http://localhost:8081/express/api/login',
           }).then((response) => {          //这里使用了ES6的语法
             alert(response)
             // if (response.data.code === '200'){

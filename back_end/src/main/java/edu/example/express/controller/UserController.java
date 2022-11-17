@@ -2,6 +2,7 @@ package edu.example.express.controller;
 
 
 import edu.example.express.entity.Express;
+import edu.example.express.entity.RegisterUserBean;
 import edu.example.express.entity.User;
 import edu.example.express.entity.VerificationCode;
 import edu.example.express.entity.dto.ResultBean;
@@ -25,7 +26,7 @@ import java.time.LocalDate;
  * @version v1.0
  */
 @RestController
-@RequestMapping("/express/api/user")
+@RequestMapping("/express/user")
 @CrossOrigin(origins = "*")
 public class UserController {
 
@@ -128,24 +129,26 @@ public class UserController {
     }
 
     @PostMapping("/Register")
-    public  ResultBean<?> Register(@RequestParam(name = "nikename")String name,
-                                   @RequestParam(name = "email")String email,
-                                   @RequestParam(name = "password")String password,
-                                   @RequestParam(name = "captcha")String captche
+    public  ResultBean<?> Register(@RequestBody RegisterUserBean userBean
                                    ){
         ResultBean<Object> result = new ResultBean<>();
         VerificationCode code = new VerificationCode();
-        code.setEmail(email);
-        code.setCode(captche);
+        code.setEmail(userBean.getEmail());
+        code.setCode(userBean.getCaptcha());
+        User user = new User();
+        User userTemp = userService.getUserByEmail(userBean.getEmail());
+        if(userTemp != null){
+            result.setMessage("用户已注册");
+            return result;
+        }
         Boolean flag = verificationCodeService.IsVerificationCode(code);
         if(!flag){
             result.setMessage("验证码错误");
             return result;
         }
-        User user = new User();
-        user.setUsername(name);
-        user.setEmail(email);
-        user.setPassword(password);
+        user.setPhoneNumber(userBean.getPhoneNum());
+        user.setEmail(userBean.getEmail());
+        user.setPassword(userBean.getPassword());
 
 
         if(userService.insertUser(user)>0){
