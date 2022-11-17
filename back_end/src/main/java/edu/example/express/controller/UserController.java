@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 /**
@@ -110,6 +111,9 @@ public class UserController {
     @PostMapping("/addExpress")
     public ResultBean<?> addExpress(@RequestBody Express express){
         ResultBean<Object> result = new ResultBean<>();
+        LocalDateTime orderTime = LocalDateTime.now();
+        express.setOrderDate(orderTime);
+
         int flag = expressService.insertExpress(express);
         if(flag > 0)
             result.setMessage("添加成功");
