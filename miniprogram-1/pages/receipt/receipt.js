@@ -62,7 +62,7 @@ Page({
     }else{
       if(this.data.stateForRD){
       wx.request({
-        url: 'http://localhost:8080/express/api/express/deliverPhoneNumber/id?phoneNumber='+that.data.userInfo['phoneNumber']+'&id='+that.data.searchid,
+        url: 'http://8.130.39.140:8081/express/api/express/deliverPhoneNumber/id?phoneNumber='+that.data.userInfo['phoneNumber']+'&id='+that.data.searchid,
         method: 'GET',
         success: function (res) {
           console.log(res);
@@ -77,7 +77,7 @@ Page({
       })
     }else{
       wx.request({
-        url: 'http://localhost:8080/express/api/express/receiptPhoneNumber/id?phoneNumber='+that.data.userInfo['phoneNumber']+'&id='+that.data.searchid,
+        url: 'http://8.130.39.140:8081/express/api/express/receiptPhoneNumber/id?phoneNumber='+that.data.userInfo['phoneNumber']+'&id='+that.data.searchid,
         method: 'GET',
         success: function (res) {
           console.log(res);
@@ -117,7 +117,7 @@ Page({
           userInfo:res.data
         })
         wx.request({
-          url: 'http://localhost:8080/express/api/express/deliverPhoneNumber?page=1&pageSize=4&phoneNumber='+that.data.userInfo['phoneNumber'],
+          url: 'http://8.130.39.140:8081/express/api/express/deliverPhoneNumber?page=1&pageSize=4&phoneNumber='+that.data.userInfo['phoneNumber'],
           method: 'GET',
           success: function (res) {
             console.log(res);
@@ -131,7 +131,7 @@ Page({
           }
         })
         wx.request({
-          url: 'http://localhost:8080/express/api/express/receiptPhoneNumber?page=1&pageSize=4&phoneNumber='+that.data.userInfo['phoneNumber'],
+          url: 'http://8.130.39.140:8081/express/api/express/receiptPhoneNumber?page=1&pageSize=4&phoneNumber='+that.data.userInfo['phoneNumber'],
           method: 'GET',
           success: function (res) {
             console.log(res);
@@ -184,7 +184,7 @@ Page({
     var that = this
     if(that.data.stateForRD){
       wx.request({
-      url: 'http://localhost:8080/express/api/express/deliverPhoneNumber?page=1&pageSize=4&phoneNumber='+that.data.userInfo['phoneNumber'],
+      url: 'http://8.130.39.140:8081/express/api/express/deliverPhoneNumber?page=1&pageSize=4&phoneNumber='+that.data.userInfo['phoneNumber'],
       method: 'GET',
       success: function (res) {
         console.log(res);
@@ -200,7 +200,7 @@ Page({
     })
     }else{
       wx.request({
-      url: 'http://localhost:8080/express/api/express/receiptPhoneNumber?page=1&pageSize=4&phoneNumber='+that.data.userInfo['phoneNumber'],
+      url: 'http://8.130.39.140:8081/express/api/express/receiptPhoneNumber?page=1&pageSize=4&phoneNumber='+that.data.userInfo['phoneNumber'],
       method: 'GET',
       success: function (res) {
         console.log(res);
@@ -225,7 +225,7 @@ Page({
     var that = this
     if(this.data.stateForRD){
       wx.request({
-        url: 'http://localhost:8080/express/api/express/deliverPhoneNumber?page='+that.data.pageD+'&pageSize=4&phoneNumber='+that.data.userInfo['phoneNumber'],
+        url: 'http://8.130.39.140:8081/express/api/express/deliverPhoneNumber?page='+that.data.pageD+'&pageSize=4&phoneNumber='+that.data.userInfo['phoneNumber'],
         method: 'GET',
         success: function (res) {
           console.log(res);
@@ -241,7 +241,7 @@ Page({
       })
     }else{
       wx.request({
-        url: 'http://localhost:8080/express/api/express/receiptPhoneNumber?page=1&pageSize=4&phoneNumber='+that.data.userInfo['phoneNumber'],
+        url: 'http://8.130.39.140:8081/express/api/express/receiptPhoneNumber?page=1&pageSize=4&phoneNumber='+that.data.userInfo['phoneNumber'],
         method: 'GET',
         success: function (res) {
           console.log(res);

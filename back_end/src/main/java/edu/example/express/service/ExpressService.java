@@ -3,6 +3,7 @@ package edu.example.express.service;
 import edu.example.express.entity.Express;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDate;
 
@@ -90,5 +91,10 @@ public interface ExpressService {
     //收货人手机号查找
     Page<Express> getExpressListByReceiptPhoneNum(String ReceiptPhoneNumberr,int page, int pageSize);
 
-    Page<Express> getExpressListByStateAndDeliverymanId(int page, int pageSize, Integer state, Integer networkId,Integer deliverymanId);
+    Page<Express> getExpressListByState(int page, int pageSize, Integer state);
+
+    Page<Express> getExpressListByStateAndId(int page,int pageSize,Integer state,Integer id, String phoneNum);
+
+    Page<Express> getExpressListByStateAndDeliverymanId(int page, int pageSize, Integer state, Integer networkId, Integer deliverymanId);
+
 }

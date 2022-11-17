@@ -1,6 +1,7 @@
 package edu.example.express.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.example.express.entity.Express;
 import edu.example.express.entity.RegisterUserBean;
 import edu.example.express.entity.User;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 /**
@@ -88,13 +90,12 @@ public class UserController {
     @GetMapping("/getExpress/ByReceiptPhoneNum")
     public ResultBean<?> getExpressBygetExpressListByReceiptPhoneNum(@RequestParam(name = "page", defaultValue = "1") int page,
                                                                      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-                                                                     @RequestParam(name = "networkId", defaultValue = "") int NetworkId,
                                                                      @RequestParam(name = "ReceiptPhoneNumberr", defaultValue = "") String ReceiptPhoneNumberr) {
         return new ResultBean<>(expressService.getExpressListByReceiptPhoneNum(ReceiptPhoneNumberr, page, pageSize));
     }
 
     @GetMapping("/getExpress/ByDeliverPhoneNum")
-    public ResultBean<?> getExpressBygetExpressListByReceiptPhoneNum(@RequestParam(name = "page", defaultValue = "1") int page,
+    public ResultBean<?> getExpressBygetExpressListByDeliverPhoneNum(@RequestParam(name = "page", defaultValue = "1") int page,
                                                                      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
                                                                      @RequestParam(name = "DeliverPhoneNum",defaultValue = "") String DeliverPhoneNum) {
         return new ResultBean<>(expressService.getExpressListByReceiptPhoneNum(DeliverPhoneNum, page, pageSize));
@@ -109,8 +110,11 @@ public class UserController {
     }
 
     @PostMapping("/addExpress")
-    public ResultBean<?> addExpress(@RequestParam(name = "express")Express express){
+    public ResultBean<?> addExpress(@RequestBody Express express){
         ResultBean<Object> result = new ResultBean<>();
+        LocalDateTime orderTime = LocalDateTime.now();
+        express.setOrderDate(orderTime);
+        express.setState(0);//状态置为未揽件
         int flag = expressService.insertExpress(express);
         if(flag > 0)
             result.setMessage("添加成功");
@@ -118,7 +122,7 @@ public class UserController {
         return result;
     }
 
-    @PostMapping("/deleteExpress")
+    @GetMapping("/deleteExpress")
     public ResultBean<?> deleteExpress(@RequestParam(name = "id")int id){
         ResultBean<Object> result = new ResultBean<>();
         int flag = expressService.deleteExpressById(id);
@@ -160,28 +164,38 @@ public class UserController {
     }
 
     @PostMapping("/Forgetpassword")
-    public  ResultBean<?> Forgetpassword(@RequestParam(name = "email")String email,
-                                   @RequestParam(name = "password")String password,
-                                   @RequestParam(name = "captcha")String captche
+    public  ResultBean<?> Forgetpassword(@RequestBody RegisterUserBean userBean
                                                                                 ){
         ResultBean<Object> result = new ResultBean<>();
         VerificationCode code = new VerificationCode();
-        code.setCode(captche);
-        code.setEmail(email);
+        code.setCode(userBean.getCaptcha());
+        code.setEmail(userBean.getEmail());
         Boolean flag = verificationCodeService.IsVerificationCode(code);
         if(!flag){
             result.setMessage("验证码错误");
             return result;
         }
-        User user = userService.getUserByEmail(email);
+        User user = userService.getUserByEmail(userBean.getEmail());
 
-        user.setPassword(password);
+        user.setPassword(userBean.getPassword());
 
         if(userService.updateUser(user)>0){
             result.setMessage("修改成功");
         }
 
         return  result;
+
+    }
+    @GetMapping("/getExpressByStateAndID")
+    public ResultBean<?> getExpressByStateAndID(@RequestParam(name = "page", defaultValue = "1") int page,
+                                                @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                                @RequestParam( name = "state",defaultValue = "-1") int state,
+                                                @RequestParam( name = "id",defaultValue = "-1") int id,
+                                                @RequestParam(name="phoneNum",defaultValue = "-1")String phoneNum
+    ){
+        Page<Express> expressListByStateAndId = expressService.getExpressListByStateAndId(page, pageSize, state, id, phoneNum);
+        ResultBean<Object> result = new ResultBean<>(expressListByStateAndId);
+        return result;
 
     }
 

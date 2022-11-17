@@ -24,7 +24,11 @@ Page({
   logIn:function(){
     var that = this
     wx.request({
-      url: 'http://localhost:8080/express/api/login?email='+this.data.userEmail+'&password='+this.data.userPassword,
+      url: 'http://8.130.39.140:8081/express/api/login',
+      data:{
+        email:this.data.userEmail,
+        password:this.data.userPassword
+      },
       method: 'POST',
       success: function (res) {
         console.log(res);

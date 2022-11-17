@@ -15,7 +15,7 @@
         <div id="searchContent">
           <el-input  v-model="searchContent" placeholder="请输入快递单号"></el-input>
         </div>
-        <el-button type="primary">搜索</el-button>
+        <el-button type="primary" @click="searchByfactor">搜索</el-button>
       </div>
     </div>
     <el-divider></el-divider>
@@ -34,7 +34,16 @@
           align="center"
           show-overflow-tooltip>
         </el-table-column>
-
+        <el-table-column label="物流状态" align="center">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.state===0">未揽件</el-tag>
+            <el-tag v-if="scope.row.state===1">已揽件</el-tag>
+            <el-tag v-if="scope.row.state===2">运输中</el-tag>
+            <el-tag v-if="scope.row.state===3">待派送</el-tag>
+            <el-tag v-if="scope.row.state===4">派送中</el-tag>
+            <el-tag v-if="scope.row.state===5">已送达</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" type="text" @click="lookClick(scope.$index,scope.row)" class="button">查看</el-button>
@@ -129,83 +138,34 @@ export default {
       lookDetail: false,
       editDetail: false,
       options: [{
-        value: '选项1',
+        value: '0',
         label: '未揽件'
       }, {
-        value: '选项2',
+        value: '1',
         label: '已揽件'
       }, {
-        value: '选项3',
+        value: '2',
         label: '运输中'
       }, {
-        value: '选项4',
-        label: '未派送'
+        value: '3',
+        label: '待派送'
       }, {
-        value: '选项5',
-        label: '已送达'
+        value: '4',
+        label: '派送中'
+      }, {
+          value: '5',
+          label: '已送达'
       }],
       value: '',
       searchContent:'',
       tableCol: [
-        //{prop: "id", label: "id"},
-        {prop: "id", label: "订单编号"},
-        {prop: "sender", label: "寄件人"},
-        {prop: "recipient", label: "收件人"},
-        {prop: "deliveryTime", label: "发货时间"},
-        {prop: "state", label: "物流状态"},
-        {prop: "arrivalTime", label: "预计到达时间"},
+        {prop: "expressId", label: "订单编号"},
+        {prop: "deliverName", label: "寄件人"},
+        {prop: "receiptName", label: "收件人"},
+        {prop: "orderDate", label: "下单时间"},
       ],
 
       tableData: [
-        {
-          id:1,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:2,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:3,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:4,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:5,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:6,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-
       ],
 
       nId: '1',
@@ -248,9 +208,6 @@ export default {
       this.detail.state = row.state
       this.editDetail = true
     },
-    deleteClick(){
-
-    },
     editSubmit(){
 
     },
@@ -261,9 +218,11 @@ export default {
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
-        url: 'http://8.130.39.140:8080/express/api/express?page='+pageNum+'&pageSize='+this.pagesize,
+        url: 'http://8.130.39.140:8081/express/api/express?page='+pageNum+'&pageSize='+this.pagesize,
       }).then((response) => {          //这里使用了ES6的语法
-        console.log(response)
+        console.log(response.data.data)
+        this.tableData = response.data.data.records
+        this.totalCount = response.data.data.total
         // if (response.data.code==='200') {
         //   this.result = response.data.data.list
         //   this.totalCount = response.data.data.total
@@ -272,6 +231,41 @@ export default {
         console.log(error)       //请求失败返回的数据
       })
     },
+    searchByfactor(){
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/express/listPageByIdAndState?page='+this.currentPage+'&pageSize='+this.pagesize+'&id='+this.searchContent+'&state='+this.value,
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+        this.tableData = response.data.data.records
+        // if (response.data.code==='200') {
+        //   this.result = response.data.data.list
+        //   this.totalCount = response.data.data.total
+        // }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
+    deleteClick(index,row){
+      this.$axios({
+        method: 'delete',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/express/'+row.expressId,
+      }).then((response) => {          //这里使用了ES6的语法
+        this.querySearch(this.currentPage)
+        // if (response.data.code==='200') {
+        //   this.result = response.data.data.list
+        //   this.totalCount = response.data.data.total
+        // }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    }
   },
   created() {
     this.querySearch(this.currentPage)

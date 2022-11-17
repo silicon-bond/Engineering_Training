@@ -20,13 +20,17 @@ spring:
     username: 1376060367@qq.com   #邮箱账号
     password: rbxzohuzgcpcicjj       #邮箱授权码
     default-encoding: utf-8    #默认编码
+    port: 465
     properties:
       mail:
         smtp:
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
           auth=true:
           starttls:
             enable: true
             required: true
+
 
 
 server:

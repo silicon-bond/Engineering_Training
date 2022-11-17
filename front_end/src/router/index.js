@@ -11,7 +11,6 @@ const Register = () => import('../components/Login/Register')
 const Login = () => import('../components/Login/Login')
 const LoginBox = () => import('../components/Login/LoginBox')
 const ForgetPassword = () => import('../components/Login/ForgetPassword')
-const Validate = () => import('../components/Login/Validate')
 //用户端
 const UserMain = () => import('../components/User/Main')
 const UserLogisticsList = () => import('../components/User/LogisticsList')
@@ -69,10 +68,6 @@ const routes = [
       {
         path: '/login/forgetPassword',
         component:ForgetPassword
-      },
-      {
-        path: '/login/validate',
-        component:Validate
       },
     ]
   },

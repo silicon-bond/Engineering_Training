@@ -95,19 +95,19 @@ export default {
     };
     return{
       options: [{
-        value: '选项1',
+        value: '1',
         label: '福州网点'
       }, {
-        value: '选项2',
+        value: '2',
         label: '厦门网点'
       }, {
-        value: '选项3',
+        value: '3',
         label: '莆田网点'
       }, {
-        value: '选项4',
+        value: '4',
         label: '漳州网点'
       }, {
-        value: '选项5',
+        value: '5',
         label: '泉州网点'
       }],
 
@@ -150,7 +150,7 @@ export default {
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
-        url: 'http://localhost:8081/express/api/user/Captcha/'+this.information.email,
+        url: 'http://8.130.39.140:8081/express/api/user/Captcha/'+this.information.email,
       }).then((response) => {          //这里使用了ES6的语法
         // if (response.data.code === '200'){
         //   alert('登录成功！');
@@ -165,38 +165,75 @@ export default {
       })
     },
     register(message){
-      let userMessage = {
-        phoneNum:this.information.phone.toString(),
-        email:this.information.email.toString(),
-        password:this.information.pwd.toString(),
-        captcha:this.information.yzm.toString()
-      }
-      this.$refs[message].validate((valid) => {
-        if (valid) {
-          this.$axios({
-            method: 'post',
-            headers: {
-              'Content-type': 'application/json;charset=UTF-8'
-            },
-            data: JSON.stringify(userMessage),
-            url: 'http://localhost:8081/express/user/Register',
-          }).then((response) => {          //这里使用了ES6的语法
-            console.log(response.data.data)
-            // if (response.data.code === '200'){
-            //   alert("注册成功")
-            //   this.$router.push('/login/login')
-            // }else {
-            //   alert("用户名已被占用")
-            //   this.$router.go(0)
-            // }
-          }).catch((error) => {
-            console.log(error)       //请求失败返回的数据
-          })
-        } else {
-          console.log('error !!');
-          return false;
+      if (this.charactor==='1'){//用户注册
+        let userMessage = {
+          phoneNum:this.information.phone.toString(),
+          email:this.information.email.toString(),
+          password:this.information.pwd.toString(),
+          captcha:this.information.yzm.toString()
         }
-      });
+        this.$refs[message].validate((valid) => {
+          if (valid) {
+            this.$axios({
+              method: 'post',
+              headers: {
+                'Content-type': 'application/json;charset=UTF-8'
+              },
+              data: JSON.stringify(userMessage),
+              url: 'http://8.130.39.140:8081/express/user/Register',
+            }).then((response) => {          //这里使用了ES6的语法
+              console.log(response.data.data)
+              // if (response.data.code === '200'){
+              //   alert("注册成功")
+              //   this.$router.push('/login/login')
+              // }else {
+              //   alert("用户名已被占用")
+              //   this.$router.go(0)
+              // }
+            }).catch((error) => {
+              console.log(error)       //请求失败返回的数据
+            })
+          } else {
+            console.log('error !!');
+            return false;
+          }
+        });
+      }else {//快递员注册
+        let deliverymanMessage = {
+          phoneNumber:this.information.phone.toString(),
+          email:this.information.email.toString(),
+          password:this.information.pwd.toString(),
+          networkId:this.information.branch.toString(),
+          captcha:this.information.yzm.toString()
+        }
+        this.$refs[message].validate((valid) => {
+          if (valid) {
+            this.$axios({
+              method: 'post',
+              headers: {
+                'Content-type': 'application/json;charset=UTF-8'
+              },
+              data: JSON.stringify(deliverymanMessage),
+              url: 'http://8.130.39.140:8081/express/api/deliveryman/register',
+            }).then((response) => {          //这里使用了ES6的语法
+              console.log(response.data.data)
+              // if (response.data.code === '200'){
+              //   alert("注册成功")
+              //   this.$router.push('/login/login')
+              // }else {
+              //   alert("用户名已被占用")
+              //   this.$router.go(0)
+              // }
+            }).catch((error) => {
+              console.log(error)       //请求失败返回的数据
+            })
+          } else {
+            console.log('error !!');
+            return false;
+          }
+        });
+      }
+
     },
   }
 }
