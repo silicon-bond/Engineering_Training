@@ -15,11 +15,9 @@
         <div id="searchContent">
           <el-input  v-model="searchContent" placeholder="请输入快递单号"></el-input>
         </div>
-        <el-button type="primary" @click="searchByfactor">搜索</el-button>
+        <el-button type="primary" @click="searchByfactor(currentPage)">搜索</el-button>
       </div>
     </div>
-    <el-divider></el-divider>
-    <h3 id="tableTitle">物流信息列表</h3>
     <el-divider></el-divider>
     <div id="table">
       <el-table :data="tableData"
@@ -46,9 +44,9 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="text" @click="lookClick(scope.$index,scope.row)" class="button">查看</el-button>
-            <el-button size="mini" type="text" @click="editClick(scope.$index,scope.row)" class="button">编辑</el-button>
-            <el-button size="mini" type="text" @click="deleteClick(scope.$index,scope.row)" class="button">删除</el-button>
+            <el-button size="mini" type="text" @click="look(scope.row)" class="button">查看</el-button>
+            <el-button size="mini" type="text" @click="edit(scope.row)" class="button">编辑</el-button>
+            <el-button size="mini" type="text" @click="deleteClick(scope.row)" class="button">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -66,24 +64,35 @@
     <el-dialog title="物流详情" :visible.sync="lookDetail">
 
       <div id="detailBox">
-        <el-form ref="detail" :model="detail" label-width="80px">
+        <el-form ref="detail" :model="detail" label-width="110px">
           <el-form-item label="订单编号">
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
           <el-form-item label="寄件人">
             <el-input v-model="detail.sender" readonly></el-input>
           </el-form-item>
+          <el-form-item label="寄件人电话号码">
+            <el-input v-model="detail.senderNumber" readonly></el-input>
+          </el-form-item>
           <el-form-item label="收件人">
             <el-input v-model="detail.recipient" readonly></el-input>
           </el-form-item>
-          <el-form-item label="状态">
-            <el-input v-model="detail.state" readonly></el-input>
+          <el-form-item label="收件人电话号码">
+            <el-input v-model="detail.recipientNumber" readonly></el-input>
           </el-form-item>
+          <el-form-item label="状态">
+            <el-select v-model="detail.state" disabled style="width: 100%">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
           <el-form-item label="发货时间">
             <el-input v-model="detail.deliveryTime" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="送达时间">
-            <el-input v-model="detail.arrivalTime" readonly></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -92,28 +101,37 @@
     <el-dialog title="编辑物流信息" :visible.sync="editDetail">
 
       <div id="editBox">
-        <el-form ref="detail" :model="detail" label-width="80px">
+        <el-form ref="detail" :model="detail" label-width="180px">
           <el-form-item label="订单编号">
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
           <el-form-item label="寄件人">
             <el-input v-model="detail.sender"></el-input>
           </el-form-item>
+          <el-form-item label="寄件人电话号码">
+            <el-input v-model="detail.senderNumber"></el-input>
+          </el-form-item>
           <el-form-item label="收件人">
             <el-input v-model="detail.recipient"></el-input>
           </el-form-item>
+          <el-form-item label="收件人电话号码">
+            <el-input v-model="detail.recipientNumber"></el-input>
+          </el-form-item>
           <el-form-item label="状态">
-            <el-input v-model="detail.state"></el-input>
+            <el-select v-model="detail.state" style="width: 100%">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="发货时间">
-            <el-input v-model="detail.deliveryTime"></el-input>
-          </el-form-item>
-          <el-form-item label="送达时间">
-            <el-input v-model="detail.arrivalTime"></el-input>
+            <el-input v-model="detail.deliveryTime" readonly></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="editSubmit">确认</el-button>
-            <el-button>取消</el-button>
+            <el-button type="primary" @click="editClick">确认</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -129,7 +147,9 @@ export default {
       detail: {
         id:'',
         sender:'',
+        senderNumber:'',
         recipient:'',
+        recipientNumber:'',
         deliveryTime:'',
         state:'',
         arrivalTime:''
@@ -138,25 +158,26 @@ export default {
       lookDetail: false,
       editDetail: false,
       options: [{
-        value: '0',
+        value: 0,
         label: '未揽件'
       }, {
-        value: '1',
+        value: 1,
         label: '已揽件'
       }, {
-        value: '2',
+        value: 2,
         label: '运输中'
       }, {
-        value: '3',
+        value: 3,
         label: '待派送'
       }, {
-        value: '4',
+        value: 4,
         label: '派送中'
       }, {
-          value: '5',
+          value: 5,
           label: '已送达'
       }],
       value: '',
+      value2:'',
       searchContent:'',
       tableCol: [
         {prop: "expressId", label: "订单编号"},
@@ -167,7 +188,7 @@ export default {
 
       tableData: [
       ],
-
+      resultStatus:'1',
       nId: '1',
       nname: '',
       content: '',
@@ -185,30 +206,55 @@ export default {
   methods: {
     handleCurrentChange: function(val) {
       this.currentPage = val;
-      this.querySearch(this.currentPage);
+      if (this.resultStatus === '1'){
+        this.querySearch(this.currentPage);
+      }
+      else{
+        this.searchByfactor(this.currentPage);
+      }
+
     },
 
 
-    lookClick(index,row) {
-      this.detail.id = row.id
-      this.detail.sender = row.sender
-      this.detail.recipient = row.recipient
-      this.detail.arrivalTime = row.arrivalTime
-      this.detail.deliveryTime = row.deliveryTime
+    look(row) {
+      this.detail.id = row.expressId
+      this.detail.sender = row.deliverName
+      this.detail.senderNumber = row.deliverPhoneNumber
+      this.detail.recipient = row.receiptName
+      this.detail.recipientNumber = row.receiptPhoneNumber
+      this.detail.deliveryTime = row.orderDate
       this.detail.state = row.state
       this.lookDetail = true
 
     },
-    editClick(index,row){
-      this.detail.id = row.id
-      this.detail.sender = row.sender
-      this.detail.recipient = row.recipient
-      this.detail.arrivalTime = row.arrivalTime
-      this.detail.deliveryTime = row.deliveryTime
+    edit(row){
+      this.detail.id = row.expressId
+      this.detail.sender = row.deliverName
+      this.detail.senderNumber = row.deliverPhoneNumber
+      this.detail.recipient = row.receiptName
+      this.detail.recipientNumber = row.receiptPhoneNumber
+      this.detail.deliveryTime = row.orderDate
       this.detail.state = row.state
       this.editDetail = true
     },
-    editSubmit(){
+    editClick(){
+      this.$confirm('确定提交此修改?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.editSubmit()
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消修改'
+        });
+      });
+    },
+    editSubmit(){//未实现
+
+
+
 
     },
     querySearch(pageNum) {
@@ -231,16 +277,19 @@ export default {
         console.log(error)       //请求失败返回的数据
       })
     },
-    searchByfactor(){
+    searchByfactor(pageNum){
+      this.resultStatus='2'
+      this.currentPage=1
       this.$axios({
         method: 'get',
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
-        url: 'http://8.130.39.140:8081/express/api/express/listPageByIdAndState?page='+this.currentPage+'&pageSize='+this.pagesize+'&id='+this.searchContent+'&state='+this.value,
+        url: 'http://8.130.39.140:8081/express/api/express/listPageByIdAndState?page='+pageNum+'&pageSize='+this.pagesize+'&id='+this.searchContent+'&state='+this.value,
       }).then((response) => {          //这里使用了ES6的语法
         console.log(response.data)
         this.tableData = response.data.data.records
+        this.totalCount = response.data.data.total
         // if (response.data.code==='200') {
         //   this.result = response.data.data.list
         //   this.totalCount = response.data.data.total
@@ -249,7 +298,22 @@ export default {
         console.log(error)       //请求失败返回的数据
       })
     },
-    deleteClick(index,row){
+    deleteClick(row){
+      this.$confirm('确定删除此物流?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteConfirm(row)
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    deleteConfirm(row) {
       this.$axios({
         method: 'delete',
         headers: {

@@ -11,8 +11,6 @@
       </div>
     </div>
     <el-divider></el-divider>
-    <h3 id="tableTitle">网点管理员列表</h3>
-    <el-divider></el-divider>
     <div id="table">
       <el-table :data="tableData"
                 stripe
