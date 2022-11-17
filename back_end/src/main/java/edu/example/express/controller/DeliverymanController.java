@@ -1,16 +1,10 @@
 package edu.example.express.controller;
 
 
-import edu.example.express.entity.Deliveryman;
-import edu.example.express.entity.Express;
-import edu.example.express.entity.Network;
-import edu.example.express.entity.User;
+import edu.example.express.entity.*;
 import edu.example.express.entity.dto.ResultBean;
 
-import edu.example.express.service.DeliverymanService;
-import edu.example.express.service.ExpressService;
-import edu.example.express.service.NetworkService;
-import edu.example.express.service.UserService;
+import edu.example.express.service.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -32,6 +26,9 @@ public class DeliverymanController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private AbnormalFeedbackService abnormalFeedbackService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResultBean<?> listByPage(@RequestParam(name = "page", defaultValue = "1") int page,
@@ -149,5 +146,12 @@ public class DeliverymanController {
                                             @RequestParam(name = "deliverymanId", required = false)Integer deliverymanId){
 
         return new ResultBean<>(expressService.getExpressListByStateAndDeliverymanId(page, pageSize, state, networkId, deliverymanId));
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/feedback")
+    private ResultBean<?> feedback(@RequestBody(required = false) AbnormalFeedback feedback){
+        feedback.setFeedbackDate(LocalDate.now());
+        feedback.setState(0);
+        return new ResultBean<>(abnormalFeedbackService.insertAbnormalFeedback(feedback));
     }
 }
