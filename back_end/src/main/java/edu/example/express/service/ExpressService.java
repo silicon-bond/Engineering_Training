@@ -89,4 +89,6 @@ public interface ExpressService {
 
     //收货人手机号查找
     Page<Express> getExpressListByReceiptPhoneNum(String ReceiptPhoneNumberr,int page, int pageSize);
+
+    Page<Express> getExpressListByState(int page, int pageSize, Integer state);
 }

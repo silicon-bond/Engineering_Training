@@ -183,4 +183,13 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;
     }
+
+    @Override
+    public Page<Express> getExpressListByState(int page, int pageSize, Integer state) {
+        log.info("正在查询express中state为{}的数据",state);
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("state", state);
+        Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
+        return result;
+    }
 }

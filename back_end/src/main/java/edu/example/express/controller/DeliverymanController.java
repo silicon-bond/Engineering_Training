@@ -140,4 +140,12 @@ public class DeliverymanController {
             return new ResultBean<>("物流状态修改失败", "500");
         }
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/expressState")
+    private ResultBean<?> getExpressByState(@RequestParam(name = "page", defaultValue = "1") int page,
+                                            @RequestParam(name = "pageSize", defaultValue = "10")int pageSize,
+                                            @RequestParam("state")Integer state){
+
+        return new ResultBean<>(expressService.getExpressListByState(page, pageSize, state));
+    }
 }
