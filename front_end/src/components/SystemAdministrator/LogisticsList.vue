@@ -24,8 +24,7 @@
     <div id="table">
       <el-table :data="tableData"
                 stripe
-                style="width: 100%"
-                :header-cell-style="headeRowClass">
+                style="width: 100%">
         <el-table-column
           v-for="(item,i) in tableCol"
           :key="i"
@@ -254,7 +253,28 @@ export default {
     },
     editSubmit(){
 
-    }
+    },
+    querySearch(pageNum) {
+
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8080/express/api/express?page='+pageNum+'&pageSize='+this.pagesize,
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response)
+        // if (response.data.code==='200') {
+        //   this.result = response.data.data.list
+        //   this.totalCount = response.data.data.total
+        // }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
+  },
+  created() {
+    this.querySearch(this.currentPage)
   }
 }
 </script>

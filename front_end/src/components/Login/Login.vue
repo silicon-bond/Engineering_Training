@@ -5,13 +5,13 @@
       <el-form :model="information" :rules="rules" ref="information">
         <el-form-item prop="account">
           <el-input
-            id="account"
+            id="email"
             prefix-icon="el-icon-user"
             size="large"
-            placeholder="请输入用户名"
+            placeholder="请输入邮箱"
             clearable
             required
-            v-model="information.account"
+            v-model="information.email"
           ></el-input>
         </el-form-item>
         <el-form-item prop="pwd">
@@ -39,12 +39,12 @@ export default {
   data(){
     return{
       information:{
-        account: '',
+        email: '',
         pwd:''
       },
       rules:{
-        account:[
-          {required: true, message: '账号不能为空', trigger: ['blur', 'change']}
+        email:[
+          {required: true, message: '邮箱不能为空', trigger: ['blur', 'change']}
         ],
         pwd:[
           {required: true, message: '密码不能为空',trigger: ['blur', 'change']}
@@ -55,8 +55,8 @@ export default {
   methods: {
     login(message){
       let userMessage = {
-        name: this.information.account,
-        pwd: this.information.pwd
+        email: '123456@qq.com',
+        password:'123456'
       }
       this.$refs[message].validate((valid) => {
         if (valid) {
@@ -66,16 +66,17 @@ export default {
               'Content-type': 'application/json;charset=UTF-8'
             },
             data: JSON.stringify(userMessage),
-            url: 'http://localhost:8081/javaee1_war_exploded/login/user',
+            url: 'http://8.130.39.140:8080/express/api/login',
           }).then((response) => {          //这里使用了ES6的语法
-            if (response.data.code === '200'){
-              alert('登录成功！');
-              localStorage.setItem('id',response.data.data.id)
-              localStorage.setItem('account',response.data.data.name)
-              this.$router.push('/user')
-            } else {
-              alert('用户名或密码错误!');
-            }
+            alert(response)
+            // if (response.data.code === '200'){
+            //   alert('登录成功！');
+            //   localStorage.setItem('id',response.data.data.id)
+            //   localStorage.setItem('account',response.data.data.name)
+            //   this.$router.push('/user')
+            // } else {
+            //   alert('用户名或密码错误!');
+            // }
           }).catch((error) => {
             console.log(error)       //请求失败返回的数据
           })

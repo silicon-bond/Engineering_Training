@@ -20,10 +20,24 @@
             <i class="el-icon-chat-line-square"></i>
             <span slot="title">物流信息管理</span>
           </el-menu-item>
-          <el-menu-item index="/system/personList">
-            <i class="el-icon-chat-line-square"></i>
-            <span slot="title">人员管理</span>
-          </el-menu-item>
+          <el-submenu index="/system/personList">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>人员管理</span>
+            </template>
+            <el-menu-item index="/system/userList">
+              <i class="el-icon-chat-line-square"></i>
+              <span slot="title">用户管理</span>
+            </el-menu-item>
+            <el-menu-item index="/system/deliverymanList">
+              <i class="el-icon-chat-line-square"></i>
+              <span slot="title">快递员管理</span>
+            </el-menu-item>
+            <el-menu-item index="/system/branchAdminList">
+              <i class="el-icon-chat-line-square"></i>
+              <span slot="title">网点管理员管理</span>
+            </el-menu-item>
+          </el-submenu>
           <el-menu-item index="/system/branchList">
             <i class="el-icon-chat-line-square"></i>
             <span slot="title">网点管理</span>
@@ -64,7 +78,9 @@ export default {
     handleSelect(key, keyPath){
       console.log(key, keyPath);
       if (key === "/system/logistics") this.$router.push('/system/logistics')
-      if (key === "/system/personList") this.$router.push('/system/personList')
+      if (key === "/system/userList") this.$router.push('/system/userList')
+      if (key === "/system/deliverymanList") this.$router.push('/system/deliverymanList')
+      if (key === "/system/branchAdminList") this.$router.push('/system/branchAdminList')
       if (key === "/system/branchList") this.$router.push('/system/branchList')
       if (key === "/system/adviceList") this.$router.push('/system/adviceList')
     },

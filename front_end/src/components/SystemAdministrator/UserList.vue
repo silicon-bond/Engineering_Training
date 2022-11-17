@@ -1,17 +1,17 @@
 <template>
   <div>
     <div>
-      <h2 id="searchTitle">网点查询</h2>
+      <h2 id="searchTitle">用户查询</h2>
       <div id="search">
         <div id="searchContent">
-          <el-input  v-model="searchContent" placeholder="请输入网点名"></el-input>
+          <el-input  v-model="searchContent" placeholder="请输入手机号"></el-input>
         </div>
         <el-button type="primary">搜索</el-button>
-        <el-button id="addUserbtn" type="primary">添加网点</el-button>
+        <el-button id="addUserbtn" type="primary">添加用户</el-button>
       </div>
     </div>
     <el-divider></el-divider>
-    <h3 id="tableTitle">网点列表</h3>
+    <h3 id="tableTitle">用户列表</h3>
     <el-divider></el-divider>
     <div id="table">
       <el-table :data="tableData"
@@ -46,7 +46,7 @@
       layout="prev, pager, next"
       :total="totalCount">
     </el-pagination>
-    <el-dialog title="网点详情" :visible.sync="lookDetail">
+    <el-dialog title="用户详情" :visible.sync="lookDetail">
 
       <div id="detailBox">
         <el-form ref="detail" :model="detail" label-width="80px">
@@ -72,7 +72,7 @@
       </div>
     </el-dialog>
 
-    <el-dialog title="编辑网点信息" :visible.sync="editDetail">
+    <el-dialog title="编辑用户信息" :visible.sync="editDetail">
 
       <div id="editBox">
         <el-form ref="detail" :model="detail" label-width="80px">
@@ -106,7 +106,7 @@
 
 <script>
 export default {
-  name: "branchList",
+  name: "UserList",
   data() {
     return {
       detail: {
