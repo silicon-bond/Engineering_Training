@@ -88,13 +88,12 @@ public class UserController {
     @GetMapping("/getExpress/ByReceiptPhoneNum")
     public ResultBean<?> getExpressBygetExpressListByReceiptPhoneNum(@RequestParam(name = "page", defaultValue = "1") int page,
                                                                      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-                                                                     @RequestParam(name = "networkId", defaultValue = "") int NetworkId,
                                                                      @RequestParam(name = "ReceiptPhoneNumberr", defaultValue = "") String ReceiptPhoneNumberr) {
         return new ResultBean<>(expressService.getExpressListByReceiptPhoneNum(ReceiptPhoneNumberr, page, pageSize));
     }
 
     @GetMapping("/getExpress/ByDeliverPhoneNum")
-    public ResultBean<?> getExpressBygetExpressListByReceiptPhoneNum(@RequestParam(name = "page", defaultValue = "1") int page,
+    public ResultBean<?> getExpressBygetExpressListByDeliverPhoneNum(@RequestParam(name = "page", defaultValue = "1") int page,
                                                                      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
                                                                      @RequestParam(name = "DeliverPhoneNum",defaultValue = "") String DeliverPhoneNum) {
         return new ResultBean<>(expressService.getExpressListByReceiptPhoneNum(DeliverPhoneNum, page, pageSize));
@@ -109,7 +108,7 @@ public class UserController {
     }
 
     @PostMapping("/addExpress")
-    public ResultBean<?> addExpress(@RequestParam(name = "express")Express express){
+    public ResultBean<?> addExpress(@RequestBody Express express){
         ResultBean<Object> result = new ResultBean<>();
         int flag = expressService.insertExpress(express);
         if(flag > 0)
@@ -160,22 +159,20 @@ public class UserController {
     }
 
     @PostMapping("/Forgetpassword")
-    public  ResultBean<?> Forgetpassword(@RequestParam(name = "email")String email,
-                                   @RequestParam(name = "password")String password,
-                                   @RequestParam(name = "captcha")String captche
+    public  ResultBean<?> Forgetpassword(@RequestBody RegisterUserBean userBean
                                                                                 ){
         ResultBean<Object> result = new ResultBean<>();
         VerificationCode code = new VerificationCode();
-        code.setCode(captche);
-        code.setEmail(email);
+        code.setCode(userBean.getCaptcha());
+        code.setEmail(userBean.getEmail());
         Boolean flag = verificationCodeService.IsVerificationCode(code);
         if(!flag){
             result.setMessage("验证码错误");
             return result;
         }
-        User user = userService.getUserByEmail(email);
+        User user = userService.getUserByEmail(userBean.getEmail());
 
-        user.setPassword(password);
+        user.setPassword(userBean.getPassword());
 
         if(userService.updateUser(user)>0){
             result.setMessage("修改成功");
