@@ -1,6 +1,7 @@
 package edu.example.express.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import java.time.LocalDate;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -27,17 +28,23 @@ public class AbnormalFeedback extends Model<AbnormalFeedback> {
     @TableId(value = "abnormal_feedback_id", type = IdType.AUTO)
     private Integer abnormalFeedbackId;
 
+    @TableField(value = "feedback_date")
     private LocalDate feedbackDate;
 
-    private Integer provider;
+    @TableField(value = "provider_phone_number")
+    private String providerPhoneNumber;
 
-    private Integer type;
+    private String title;
 
     private Integer state;
 
-    private Integer principal;
+    @TableField(value = "principal_id")
+    private Integer principalId;
 
     private String description;
+
+    @TableField(value = "network_id")
+    private Integer networkId;
 
 
     @Override
