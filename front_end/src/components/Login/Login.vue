@@ -3,7 +3,7 @@
     <div id="messagebox">
       <p id="logintopic">登录</p>
       <el-form :model="information" :rules="rules" ref="information">
-        <el-form-item prop="account">
+        <el-form-item prop="email">
           <el-input
             id="email"
             prefix-icon="el-icon-user"
@@ -47,7 +47,7 @@ export default {
           {required: true, message: '邮箱不能为空', trigger: ['blur', 'change']}
         ],
         pwd:[
-          {required: true, message: '密码不能为空',trigger: ['blur', 'change']}
+          {required: true, message: '密码不能为空', trigger: ['blur', 'change']}
         ]
       },
     }
@@ -70,19 +70,53 @@ export default {
           }).then((response) => {          //这里使用了ES6的语法
             console.log(response.data)
             if (response.data.message === "success"){
-              alert('登录成功！');
+              this.$message({
+                showClose: true,
+                message: '登陆成功，跳转中...',
+                type: 'success'
+              });
 
-              localStorage.setItem('id',response.data.data.id)
-              localStorage.setItem('account',response.data.data.name)
-              this.$router.push('/user')
+              localStorage.setItem('userinfo_kuaidi',JSON.stringify(response.data.data))
+
+              setTimeout(() => {
+                if (response.data.data.userId != undefined) {
+                  this.$router.push('/user')
+                } else if (response.data.data.deliverymanId != undefined) {
+                  this.$router.push('/deliveryman')
+                } else if (response.data.data.networkAdministratorId != undefined) {
+                  this.$router.push('/branch')
+                } else {
+                  this.$router.push('/system')
+                }
+              }, 2000)
+
+              // if (response.data.data.userId)
+
+              // var user = JSON.parse(localStorage.getItem("userinfo_kuaidi"))
+              // this.$router.push('/user')
             } else {
-              alert('用户名或密码错误!');
+              this.$message({
+                showClose: true,
+                message: '用户名密码错误',
+                type: 'error'
+              });
             }
           }).catch((error) => {
-            console.log(error)       //请求失败返回的数据
+            console.log(error)
+            this.$message({
+                showClose: true,
+                message: '网络出了点问题',
+                type: 'error'
+            });
+                 //请求失败返回的数据
           })
         } else {
           console.log('error login!!');
+          // this.$message({
+          //       showClose: true,
+          //       message: '有信息未填写',
+          //       type: 'error'
+          // });
           return false;
         }
       });

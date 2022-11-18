@@ -127,6 +127,7 @@ export default {
 
     },
     querySearch() {
+      console.log('querySearch123');
       // let info = {
       //   pn:pageNum
       // }
@@ -136,7 +137,7 @@ export default {
           'Content-type': 'application/json;charset=UTF-8'
         },
         // data: JSON.stringify(info),
-        url: 'http://8.130.39.140:8080/express/api/deliveryman/expressList/?networkId=1',
+        url: 'http://8.130.39.140:8081/express/api/deliveryman/expressList/?page=1&pageSize=2&networkId=1',
       }).then((response) => {          //这里使用了ES6的语法
         console.log(response.data.data)
         if (response.data.code==='1') {

@@ -145,14 +145,16 @@ export default {
       // let info = {
       //   pn:pageNum
       // }
+      console.log(345);
       this.$axios({
         method: 'get',
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
         // data: JSON.stringify(info),
-        url: 'http://localhost:8080/express/api/network-administrator/getDeliveryman?page=1&pageSize=10&networkId=3',
+        url: 'http://8.130.39.140:8081/express/api/network-administrator/getDeliveryman?page=1&pageSize=10&networkId=3',
       }).then((response) => {          //这里使用了ES6的语法
+      console.log(123);
         console.log(response.data)
         if (response.data.code==='1') {
           this.tableData = response.data.data.records
@@ -166,6 +168,7 @@ export default {
   },
 
   created () {
+    console.log(123123);
     this.querySearch()
   }
 }
