@@ -1,8 +1,8 @@
 <view class="header">
   <image class="header-portrait" src="../../resources/xiaochou.png"></image>
   <view class="header-text">
-    <view class="header-name">小丑一只</view>
-    <view class="header-intro">还没有你的个性签名哦</view>
+    <view class="header-name">用户{{userInfo.userId}}</view>
+    <view class="header-intro">欢迎使用快递服务</view>
   </view>
 </view>
 <view class="info">
@@ -16,12 +16,12 @@
       </view>
     </view>
   </view>
-  <view class="courier">
+  <view bindtap="exit" class="courier">
     <view class="courier-P1">
       <image class="courier-P1-portrait" src="../../resources/tuichudenglu.png"></image>
       <view class="courier-P1-text">
         <view class="courier-P1-info">
-          <view class="courier-P1-name">推出登录</view>
+          <view  class="courier-P1-name">退出登录</view>
         </view>
       </view>
     </view>
