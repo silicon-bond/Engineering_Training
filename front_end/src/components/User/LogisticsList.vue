@@ -15,7 +15,7 @@
         <div id="searchContent">
           <el-input  v-model="searchContent" placeholder="请输入快递单号"></el-input>
         </div>
-        <el-button type="primary" @click="searchByfactor">搜索</el-button>
+        <el-button type="primary" @click="searchClick">搜索</el-button>
       </div>
     </div>
     <el-divider></el-divider>
@@ -24,24 +24,34 @@
     <el-dialog title="物流详情" :visible.sync="dialogDetail">
 
       <div id="detailBox">
-        <el-form ref="detail" :model="detail" label-width="80px">
+        <el-form ref="detail" :model="detail" label-width="115px">
           <el-form-item label="订单编号">
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
           <el-form-item label="寄件人">
             <el-input v-model="detail.sender" readonly></el-input>
           </el-form-item>
+          <el-form-item label="寄件人电话号码">
+            <el-input v-model="detail.senderNumber" readonly></el-input>
+          </el-form-item>
           <el-form-item label="收件人">
             <el-input v-model="detail.recipient" readonly></el-input>
           </el-form-item>
+          <el-form-item label="收件人电话号码">
+            <el-input v-model="detail.recipientNumber" readonly></el-input>
+          </el-form-item>
           <el-form-item label="状态">
-            <el-input v-model="detail.state" readonly></el-input>
+            <el-select v-model="detail.state" style="width: 100%" disabled>
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label="发货时间">
             <el-input v-model="detail.deliveryTime" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="送达时间">
-            <el-input v-model="detail.arrivalTime" readonly></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -99,28 +109,30 @@ export default {
       detail: {
         id:'',
         sender:'',
+        senderNumber:'',
         recipient:'',
+        recipientNumber:'',
         deliveryTime:'',
         state:'',
         arrivalTime:''
       },
       options: [{
-        value: '0',
+        value: 0,
         label: '未揽件'
       }, {
-        value: '1',
+        value: 1,
         label: '已揽件'
       }, {
-        value: '2',
+        value: 2,
         label: '运输中'
       }, {
-        value: '3',
+        value: 3,
         label: '待派送'
       },{
-        value: '4',
+        value: 4,
         label: '派送中'
       }, {
-        value: '5',
+        value: 5,
         label: '已送达'
       }],
       value: '',
@@ -133,7 +145,7 @@ export default {
       ],
       tableData: [
       ],
-
+      resultStatus:'1',
       pagesize: 5,
       //当前页码
       currentPage: 1,
@@ -149,14 +161,21 @@ export default {
 
     handleCurrentChange: function(val) {
       this.currentPage = val;
+      if (this.resultStatus === '1'){
+        this.querySearch(this.currentPage);
+      }
+      else{
+        this.searchByfactor(this.currentPage);
+      }
     },
 
     lookClick(index,row) {
-      this.detail.id = row.id
-      this.detail.sender = row.sender
-      this.detail.recipient = row.recipient
-      this.detail.arrivalTime = row.arrivalTime
-      this.detail.deliveryTime = row.deliveryTime
+      this.detail.id = row.expressId
+      this.detail.sender = row.deliverName
+      this.detail.senderNumber = row.deliverPhoneNumber
+      this.detail.recipient = row.receiptName
+      this.detail.recipientNumber = row.receiptPhoneNumber
+      this.detail.deliveryTime = row.orderDate
       this.detail.state = row.state
       this.dialogDetail = true
 
@@ -167,32 +186,30 @@ export default {
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
-        url: 'http://8.130.39.140:8081/express/user/getExpress/ByReceiptPhoneNum?page=1&pageSize=5&ReceiptPhoneNumberr=1388886666',
+        url: 'http://8.130.39.140:8081/express/user/getExpress/ByReceiptPhoneNum?page='+pageNum+'&pageSize='+this.pagesize+'&ReceiptPhoneNumberr=12345678911',
       }).then((response) => {          //这里使用了ES6的语法
-        console.log(response.data)
         this.tableData = response.data.data.records
-        // if (response.data.code==='200') {
-        //   this.result = response.data.data.list
-        //   this.totalCount = response.data.data.total
-        // }
+        this.totalCount = response.data.data.total
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })
     },
-    searchByfactor(){
+    searchClick(){
+      this.resultStatus='2'
+      this.currentPage=1
+      this.searchByfactor(this.currentPage)
+    },
+    searchByfactor(pageNum){
       this.$axios({
         method: 'get',
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
-        url: 'http://localhost:8081/express/user/getExpressByStateAndID?page='+this.currentPage+'&pageSize='+this.pagesize+'&id='+this.searchContent+'&state='+this.value+'&phoneNum=1388886666',
+        url: 'http://8.130.39.140:8081/express/user/getExpressByStateAndID?page='+pageNum+'&pageSize='+this.pagesize+'&id='+this.searchContent+'&state='+this.value+'&phoneNum=12345678911',
       }).then((response) => {          //这里使用了ES6的语法
-        console.log(response.data)
         this.tableData = response.data.data.records
-        // if (response.data.code==='200') {
-        //   this.result = response.data.data.list
-        //   this.totalCount = response.data.data.total
-        // }
+        this.totalCount = response.data.data.total
+
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })

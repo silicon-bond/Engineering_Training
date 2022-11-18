@@ -24,10 +24,6 @@
             <i class="el-icon-reading"></i>
             <span slot="title">我要寄件</span>
           </el-menu-item>
-          <el-menu-item index="/user/personalCenter" >
-            <i class="el-icon-reading"></i>
-            <span slot="title">个人中心</span>
-          </el-menu-item>
           <el-menu-item index="/user/advice">
             <i class="el-icon-message"></i>
             <span slot="title">意见箱</span>

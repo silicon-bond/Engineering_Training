@@ -15,7 +15,7 @@
         <div id="searchContent">
           <el-input  v-model="searchContent" placeholder="请输入快递单号"></el-input>
         </div>
-        <el-button type="primary" @click="searchByfactor(currentPage)">搜索</el-button>
+        <el-button type="primary" @click="searchClick">搜索</el-button>
       </div>
     </div>
     <el-divider></el-divider>
@@ -44,7 +44,6 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="text" @click="look(scope.row)" class="button">查看</el-button>
             <el-button size="mini" type="text" @click="edit(scope.row)" class="button">编辑</el-button>
             <el-button size="mini" type="text" @click="deleteClick(scope.row)" class="button">删除</el-button>
           </template>
@@ -61,47 +60,10 @@
       layout="prev, pager, next"
       :total="totalCount">
     </el-pagination>
-    <el-dialog title="物流详情" :visible.sync="lookDetail">
-
-      <div id="detailBox">
-        <el-form ref="detail" :model="detail" label-width="110px">
-          <el-form-item label="订单编号">
-            <el-input v-model="detail.id" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="寄件人">
-            <el-input v-model="detail.sender" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="寄件人电话号码">
-            <el-input v-model="detail.senderNumber" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="收件人">
-            <el-input v-model="detail.recipient" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="收件人电话号码">
-            <el-input v-model="detail.recipientNumber" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="状态">
-            <el-select v-model="detail.state" disabled style="width: 100%">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item label="发货时间">
-            <el-input v-model="detail.deliveryTime" readonly></el-input>
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-dialog>
-
     <el-dialog title="编辑物流信息" :visible.sync="editDetail">
 
       <div id="editBox">
-        <el-form ref="detail" :model="detail" label-width="180px">
+        <el-form ref="detail" :model="detail" label-width="115px">
           <el-form-item label="订单编号">
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
@@ -155,7 +117,6 @@ export default {
         arrivalTime:''
       },
       dialogFormVisible: false,
-      lookDetail: false,
       editDetail: false,
       options: [{
         value: 0,
@@ -215,18 +176,6 @@ export default {
 
     },
 
-
-    look(row) {
-      this.detail.id = row.expressId
-      this.detail.sender = row.deliverName
-      this.detail.senderNumber = row.deliverPhoneNumber
-      this.detail.recipient = row.receiptName
-      this.detail.recipientNumber = row.receiptPhoneNumber
-      this.detail.deliveryTime = row.orderDate
-      this.detail.state = row.state
-      this.lookDetail = true
-
-    },
     edit(row){
       this.detail.id = row.expressId
       this.detail.sender = row.deliverName
@@ -258,7 +207,6 @@ export default {
 
     },
     querySearch(pageNum) {
-
       this.$axios({
         method: 'get',
         headers: {
@@ -266,20 +214,18 @@ export default {
         },
         url: 'http://8.130.39.140:8081/express/api/express?page='+pageNum+'&pageSize='+this.pagesize,
       }).then((response) => {          //这里使用了ES6的语法
-        console.log(response.data.data)
         this.tableData = response.data.data.records
         this.totalCount = response.data.data.total
-        // if (response.data.code==='200') {
-        //   this.result = response.data.data.list
-        //   this.totalCount = response.data.data.total
-        // }
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })
     },
-    searchByfactor(pageNum){
+    searchClick(){
       this.resultStatus='2'
       this.currentPage=1
+      this.searchByfactor(this.currentPage)
+    },
+    searchByfactor(pageNum){
       this.$axios({
         method: 'get',
         headers: {
@@ -287,13 +233,8 @@ export default {
         },
         url: 'http://8.130.39.140:8081/express/api/express/listPageByIdAndState?page='+pageNum+'&pageSize='+this.pagesize+'&id='+this.searchContent+'&state='+this.value,
       }).then((response) => {          //这里使用了ES6的语法
-        console.log(response.data)
         this.tableData = response.data.data.records
         this.totalCount = response.data.data.total
-        // if (response.data.code==='200') {
-        //   this.result = response.data.data.list
-        //   this.totalCount = response.data.data.total
-        // }
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })

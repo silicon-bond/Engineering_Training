@@ -16,9 +16,9 @@
             <el-select v-model="ruleForm.branch" placeholder="请选择网点">
               <el-option
                 v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :key="item.networkId"
+                :label="item.networkName"
+                :value="item.networkId">
               </el-option>
             </el-select>
           </el-form-item>
@@ -39,22 +39,7 @@ export default {
   data(){
     return{
       labelPosition:'left',
-      options: [{
-        value: '选项1',
-        label: '福州网点'
-      }, {
-        value: '选项2',
-        label: '厦门网点'
-      }, {
-        value: '选项3',
-        label: '泉州网点'
-      }, {
-        value: '选项4',
-        label: '莆田网点'
-      }, {
-        value: '选项5',
-        label: '漳州网点'
-      }],
+      options: [],
       ruleForm: {
         title:'',
         content:'',
@@ -77,12 +62,39 @@ export default {
     submitForm(message){
       this.$refs[message].validate((valid) => {
         if (valid) {
-
+          this.$axios({
+            method: 'get',
+            headers: {
+              'Content-type': 'application/json;charset=UTF-8'
+            },
+            url: 'http://localhost:8081/express/user/FeedBack?title='+this.ruleForm.title+'&description='+this.ruleForm.content+'&phoneNum=12345678911&networkId='+this.ruleForm.branch,
+          }).then((response) => {          //这里使用了ES6的语法
+            alert('发表意见成功')
+            this.$router.go(0)
+          }).catch((error) => {
+            console.log(error)       //请求失败返回的数据
+          })
         } else {
           return false;
         }
       });
     },
+    getAllBranch(){
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/allNetworks',
+      }).then((response) => {          //这里使用了ES6的语法
+        this.options = response.data.data
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
+  },
+  created() {
+    this.getAllBranch()
   }
 }
 </script>

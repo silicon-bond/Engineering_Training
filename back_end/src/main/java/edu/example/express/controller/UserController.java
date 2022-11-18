@@ -2,20 +2,15 @@ package edu.example.express.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import edu.example.express.entity.Express;
-import edu.example.express.entity.RegisterUserBean;
-import edu.example.express.entity.User;
-import edu.example.express.entity.VerificationCode;
+import edu.example.express.entity.*;
 import edu.example.express.entity.dto.ResultBean;
-import edu.example.express.service.ExpressService;
-import edu.example.express.service.NetworkService;
-import edu.example.express.service.UserService;
-import edu.example.express.service.VerificationCodeService;
+import edu.example.express.service.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 
 /**
@@ -43,6 +38,11 @@ public class UserController {
 
     @Resource
     private VerificationCodeService verificationCodeService;
+
+
+    @Resource
+    private AbnormalFeedbackService abnormalFeedbackService;
+
 
     /**
     * 查询分页数据
@@ -112,7 +112,7 @@ public class UserController {
     @PostMapping("/addExpress")
     public ResultBean<?> addExpress(@RequestBody Express express){
         ResultBean<Object> result = new ResultBean<>();
-        LocalDateTime orderTime = LocalDateTime.now();
+        LocalDateTime orderTime = LocalDateTime.now().plus(60*60*8, ChronoUnit.SECONDS);;
         express.setOrderDate(orderTime);
         express.setState(0);//状态置为未揽件
         int flag = expressService.insertExpress(express);
@@ -197,6 +197,32 @@ public class UserController {
         ResultBean<Object> result = new ResultBean<>(expressListByStateAndId);
         return result;
 
+    }
+
+
+    @GetMapping("/FeedBack")
+    public ResultBean<?> deliverFeedback(@RequestParam(name = "title") String title,
+                                         @RequestParam(name = "description") String description,
+                                         @RequestParam( name = "phoneNum") String phoneNum ,
+                                        @RequestParam( name = "networkId") int networkId){
+        AbnormalFeedback feedback = new AbnormalFeedback();
+        LocalDate localDate = LocalDate.now();
+        feedback.setFeedbackDate(localDate);
+        feedback.setTitle(title);
+        feedback.setDescription(description);
+        feedback.setProviderPhoneNumber(phoneNum);
+        feedback.setNetworkId(networkId);
+
+        int i = abnormalFeedbackService.insertAbnormalFeedback(feedback);
+
+        ResultBean<Object> result = new ResultBean<>();
+
+        if(i > 0){
+            result.setMessage("反馈成功");
+            return result;
+        }
+        result.setMessage("反馈失败");
+        return result;
     }
 
 

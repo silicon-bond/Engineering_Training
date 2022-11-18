@@ -27,7 +27,6 @@
 
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="text" @click="lookClick(scope.$index,scope.row)" class="button">查看</el-button>
             <el-button size="mini" type="text" @click="editClick(scope.$index,scope.row)" class="button">编辑</el-button>
             <el-button size="mini" type="text" @click="deleteClick(scope.$index,scope.row)" class="button">删除</el-button>
           </template>
@@ -44,52 +43,26 @@
       layout="prev, pager, next"
       :total="totalCount">
     </el-pagination>
-    <el-dialog title="用户详情" :visible.sync="lookDetail">
-
-      <div id="detailBox">
-        <el-form ref="detail" :model="detail" label-width="80px">
-          <el-form-item label="订单编号">
-            <el-input v-model="detail.id" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="寄件人">
-            <el-input v-model="detail.sender" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="收件人">
-            <el-input v-model="detail.recipient" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="状态">
-            <el-input v-model="detail.state" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="发货时间">
-            <el-input v-model="detail.deliveryTime" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="送达时间">
-            <el-input v-model="detail.arrivalTime" readonly></el-input>
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-dialog>
-
     <el-dialog title="编辑用户信息" :visible.sync="editDetail">
 
       <div id="editBox">
         <el-form ref="detail" :model="detail" label-width="80px">
-          <el-form-item label="订单编号">
+          <el-form-item label="用户编号">
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
-          <el-form-item label="寄件人">
+          <el-form-item label="邮箱">
             <el-input v-model="detail.sender"></el-input>
           </el-form-item>
-          <el-form-item label="收件人">
+          <el-form-item label="地址">
             <el-input v-model="detail.recipient"></el-input>
           </el-form-item>
-          <el-form-item label="状态">
+          <el-form-item label="联系电话">
             <el-input v-model="detail.state"></el-input>
           </el-form-item>
-          <el-form-item label="发货时间">
+          <el-form-item label="注册时间">
             <el-input v-model="detail.deliveryTime"></el-input>
           </el-form-item>
-          <el-form-item label="送达时间">
+          <el-form-item label="密码">
             <el-input v-model="detail.arrivalTime"></el-input>
           </el-form-item>
           <el-form-item>
@@ -116,70 +89,19 @@ export default {
         arrivalTime:''
       },
       dialogFormVisible: false,
-      lookDetail: false,
       editDetail: false,
 
       searchContent:'',
       tableCol: [
         //{prop: "id", label: "id"},
-        {prop: "id", label: "订单编号"},
-        {prop: "sender", label: "寄件人"},
-        {prop: "recipient", label: "收件人"},
-        {prop: "deliveryTime", label: "发货时间"},
-        {prop: "state", label: "物流状态"},
-        {prop: "arrivalTime", label: "预计到达时间"},
+        {prop: "userId", label: "用户编号"},
+        {prop: "email", label: "邮箱"},
+        {prop: "detailAddress", label: "地址"},
+        {prop: "phoneNumber", label: "联系电话"},
+        {prop: "registerDate", label: "注册时间"},
       ],
 
       tableData: [
-        {
-          id:1,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:2,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:3,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:4,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:5,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:6,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-
       ],
 
       nId: '1',
@@ -229,8 +151,23 @@ export default {
 
     },
     querySearch(pageNum) {
-
-
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/person-management/getUserByPage?page='+pageNum+'&pageSize='+this.pagesize,
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data.data)
+        this.tableData = response.data.data.records
+        this.totalCount = response.data.data.total
+        // if (response.data.code==='200') {
+        //   this.result = response.data.data.list
+        //   this.totalCount = response.data.data.total
+        // }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
   },
   created() {

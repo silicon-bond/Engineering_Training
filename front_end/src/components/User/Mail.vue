@@ -58,7 +58,7 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="submitForm('Rules3')" id="submibtn">提交</el-button>
+          <el-button type="primary" @click="submit" id="submibtn">确认</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -112,7 +112,45 @@ export default {
     }
   },
   methods:{
-    submitForm(message){
+    submit(){
+      const form1=new Promise((resolve,reject)=>{
+        this.$refs['Rules1'].validate(valid => {
+          if(valid) resolve()
+        })
+      })
+      const form2=new Promise((resolve,reject)=>{
+        this.$refs['Rules2'].validate(valid => {
+          if(valid) resolve()
+        })
+      })
+      const form3=new Promise((resolve,reject)=>{
+        this.$refs['Rules3'].validate(valid => {
+          if(valid) resolve()
+        })
+      })
+      Promise.all([form1,form2,form3]).then(()=>{
+        this.$refs[message].validate((valid) => {
+          if (valid) {
+            this.$confirm('确定提交此修改?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.submitForm()
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消修改'
+              });
+            });
+          } else {
+            console.log('error !!');
+            return false;
+          }
+        });
+      })
+    },
+    submitForm(){
       let mailMessage = {
         deliverName:this.Form.senderName,
         deliverPhoneNumber:this.Form.senderTelephone,
@@ -123,32 +161,19 @@ export default {
         receiptDetailAddress:this.Form.recipientAddress,
         networkId:this.Form.value
       }
-      this.$refs[message].validate((valid) => {
-        if (valid) {
-          this.$axios({
-            method: 'post',
-            headers: {
-              'Content-type': 'application/json;charset=UTF-8'
-            },
-            data: JSON.stringify(mailMessage),
-            url: 'http://localhost:8081/express/user/addExpress',
-          }).then((response) => {          //这里使用了ES6的语法
-            console.log(response.data.data)
-            // if (response.data.code === '200'){
-            //   alert("注册成功")
-            //   this.$router.push('/login/login')
-            // }else {
-            //   alert("用户名已被占用")
-            //   this.$router.go(0)
-            // }
-          }).catch((error) => {
-            console.log(error)       //请求失败返回的数据
-          })
-        } else {
-          console.log('error !!');
-          return false;
-        }
-      });
+      this.$axios({
+        method: 'post',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        data: JSON.stringify(mailMessage),
+        url: 'http://localhost:8081/express/user/addExpress',
+      }).then((response) => {          //这里使用了ES6的语法
+        alert("寄件成功")
+        this.$router.push('/user/logistics')
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     getAllBranch(){
       this.$axios({
@@ -156,17 +181,9 @@ export default {
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
-        url: 'http://localhost:8081/express/api/allNetworks',
+        url: 'http://8.130.39.140:8081/express/api/allNetworks',
       }).then((response) => {          //这里使用了ES6的语法
-        console.log(response.data.data)
         this.options = response.data.data
-        // if (response.data.code === '200'){
-        //   alert("注册成功")
-        //   this.$router.push('/login/login')
-        // }else {
-        //   alert("用户名已被占用")
-        //   this.$router.go(0)
-        // }
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })
