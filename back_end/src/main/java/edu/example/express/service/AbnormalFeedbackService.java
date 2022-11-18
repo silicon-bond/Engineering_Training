@@ -25,7 +25,7 @@ public interface AbnormalFeedbackService {
      * @author wh
      * @since 2022-11-18
      */
-    Page<AbnormalFeedback> getAbnormalFeedbacksListByNetworkIdAndState(int page, int pageSize, Integer networkId, int state);
+    Page<AbnormalFeedback> getAbnormalFeedbacksListByNetworkIdAndState(int page, int pageSize, int networkId, int state);
 
     /**
      * 根据网点ID分页查询AbnormalFeedback
@@ -37,7 +37,7 @@ public interface AbnormalFeedbackService {
      * @author wh
      * @since 2022-11-18
      */
-    Page<AbnormalFeedback> getAbnormalFeedbacksListByNetworkId(int page, int pageSize, Integer networkId);
+    Page<AbnormalFeedback> getAbnormalFeedbacksListByNetworkId(int page, int pageSize, int networkId);
 
     /**
     * 分页查询AbnormalFeedback

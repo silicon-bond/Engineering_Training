@@ -45,10 +45,10 @@ public class NetworkAdministratorController {
     /**
      * 查询给定Id网点的反馈信息列表
      */
-    @RequestMapping(method = RequestMethod.GET, value = {"/network_id/state"})
+    @RequestMapping(method = RequestMethod.GET, value = "/network_id/state")
     public ResultBean<?> listByNetworkIdAndState(@RequestParam(name = "page", defaultValue = "1") int page,
                                             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-                                            @RequestParam(name = "network_id", defaultValue = "") Integer networkId,
+                                            @RequestParam(name = "network_id", defaultValue = "") int networkId,
                                             @RequestParam(name = "state", defaultValue = "") int state) {
         return new ResultBean<>(abnormalFeedbackService.getAbnormalFeedbacksListByNetworkIdAndState(page, pageSize, networkId, state));
     }
@@ -56,10 +56,10 @@ public class NetworkAdministratorController {
     /**
      * 查询给定Id网点的反馈信息列表
      */
-    @RequestMapping(method = RequestMethod.GET, value = {"/network_id"})
+    @RequestMapping(method = RequestMethod.GET, value = "/network_id")
     public ResultBean<?> listByNetworkId(@RequestParam(name = "page", defaultValue = "1") int page,
                                     @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-                                    @RequestParam(name = "network_id", defaultValue = "") Integer networkId) {
+                                    @RequestParam(name = "network_id", defaultValue = "") int networkId) {
         return new ResultBean<>(abnormalFeedbackService.getAbnormalFeedbacksListByNetworkId(page, pageSize, networkId));
     }
 
