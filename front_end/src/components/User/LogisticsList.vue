@@ -181,12 +181,13 @@ export default {
 
     },
     querySearch(pageNum) {
+      let user = JSON.parse(localStorage.getItem("userinfo_kuaidi"))
       this.$axios({
         method: 'get',
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
-        url: 'http://8.130.39.140:8081/express/user/getExpress/ByReceiptPhoneNum?page='+pageNum+'&pageSize='+this.pagesize+'&ReceiptPhoneNumberr=12345678911',
+        url: 'http://8.130.39.140:8081/express/user/getExpressByStateAndID?page='+pageNum+'&pageSize='+this.pagesize+'&id=&state=&phoneNum='+user.phoneNumber,
       }).then((response) => {          //这里使用了ES6的语法
         this.tableData = response.data.data.records
         this.totalCount = response.data.data.total
@@ -200,12 +201,13 @@ export default {
       this.searchByfactor(this.currentPage)
     },
     searchByfactor(pageNum){
+      let user = JSON.parse(localStorage.getItem("userinfo_kuaidi"))
       this.$axios({
         method: 'get',
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
-        url: 'http://8.130.39.140:8081/express/user/getExpressByStateAndID?page='+pageNum+'&pageSize='+this.pagesize+'&id='+this.searchContent+'&state='+this.value+'&phoneNum=12345678911',
+        url: 'http://8.130.39.140:8081/express/user/getExpressByStateAndID?page='+pageNum+'&pageSize='+this.pagesize+'&id='+this.searchContent+'&state='+this.value+'&phoneNum='+user.phoneNumber,
       }).then((response) => {          //这里使用了ES6的语法
         this.tableData = response.data.data.records
         this.totalCount = response.data.data.total

@@ -129,24 +129,17 @@ export default {
         })
       })
       Promise.all([form1,form2,form3]).then(()=>{
-        this.$refs[message].validate((valid) => {
-          if (valid) {
-            this.$confirm('确定提交此修改?', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              this.submitForm()
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消修改'
-              });
-            });
-          } else {
-            console.log('error !!');
-            return false;
-          }
+        this.$confirm('确定提交此修改?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.submitForm()
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消修改'
+          });
         });
       })
     },

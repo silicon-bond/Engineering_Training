@@ -145,29 +145,53 @@ export default {
       },
     }
   },
+  mounted() {
+
+  },
   methods:{
     toLogin(){
       this.$router.push('/login/login')
     },
     sendyzm(){
-      this.$axios({
-        method: 'get',
-        headers: {
-          'Content-type': 'application/json;charset=UTF-8'
-        },
-        url: 'http://8.130.39.140:8081/express/api/user/Captcha/'+this.information.email,
-      }).then((response) => {          //这里使用了ES6的语法
-        // if (response.data.code === '200'){
-        //   alert('登录成功！');
-        //   localStorage.setItem('id',response.data.data.id)
-        //   localStorage.setItem('account',response.data.data.name)
-        //   this.$router.push('/user')
-        // } else {
-        //   alert('用户名或密码错误!');
-        // }
-      }).catch((error) => {
-        console.log(error)       //请求失败返回的数据
-      })
+      let RegEmail = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+      if(RegEmail.test(this.information.email)) {
+        this.$axios({
+          method: 'get',
+          headers: {
+            'Content-type': 'application/json;charset=UTF-8'
+          },
+          url: 'http://8.130.39.140:8081/express/api/user/Captcha/'+this.information.email,
+        }).then((response) => {          //这里使用了ES6的语法
+          if (response.data.message === '发送成功') {
+            this.$message({
+              showClose: true,
+              message: '验证码发送成功',
+              type: 'success'
+            });
+          } else {
+            this.$message({
+              showClose: true,
+              message: '验证码发送失败',
+              type: 'error'
+            });
+          }
+
+        }).catch((error) => {
+          console.log(error)       //请求失败返回的数据
+          this.$message({
+              showClose: true,
+              message: '服务器出了点问题',
+              type: 'error'
+          });
+        })
+      } else {
+        this.$message({
+          showClose: true,
+          message: '请输入正确的邮箱格式',
+          type: 'warning'
+        });
+      }
+
     },
     register(message){
       if (this.charactor==='1'){//用户注册
@@ -187,16 +211,34 @@ export default {
               data: JSON.stringify(userMessage),
               url: 'http://8.130.39.140:8081/express/user/Register',
             }).then((response) => {          //这里使用了ES6的语法
-              console.log(response.data.data)
-              // if (response.data.code === '200'){
-              //   alert("注册成功")
-              //   this.$router.push('/login/login')
-              // }else {
-              //   alert("用户名已被占用")
-              //   this.$router.go(0)
-              // }
+              console.log(response)
+              if (response.data.message === '用户已注册'){
+                this.$message({
+                    showClose: true,
+                    message: '邮箱已被注册！',
+                    type: 'error'
+                });
+                // this.$router.push('/login/login')
+              }else if(response.data.message === '验证码错误') {
+                this.$message({
+                    showClose: true,
+                    message: '验证码错误！',
+                    type: 'error'
+                });
+              }  else {
+                this.$message({
+                    showClose: true,
+                    message: '注册成功！正在跳转',
+                    type: 'success'
+                });
+              }
             }).catch((error) => {
               console.log(error)       //请求失败返回的数据
+              this.$message({
+                  showClose: true,
+                  message: '服务器出了点问题',
+                  type: 'error'
+              });
             })
           } else {
             console.log('error !!');
@@ -281,7 +323,7 @@ export default {
 }
 
 .el-form-item {
-  margin-bottom: 12px;
+  margin-bottom: 20px;
 }
 
 </style>
