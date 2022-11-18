@@ -47,7 +47,7 @@ public class Deliveryman extends Model<Deliveryman> {
     private String phoneNumber;
 
     @TableField(exist = false)
-    private String networkName;
+    private Network network;
 
     @Override
     protected Serializable pkVal() {
