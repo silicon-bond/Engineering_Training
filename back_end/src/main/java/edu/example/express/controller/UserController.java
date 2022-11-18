@@ -149,14 +149,21 @@ public class UserController {
             result.setMessage("用户已注册");
             return result;
         }
-        Boolean flag = verificationCodeService.IsVerificationCode(code);
-        if(!flag){
+        try {
+            Boolean flag = verificationCodeService.IsVerificationCode(code);
+            if(!flag){
+                result.setMessage("验证码错误");
+                return result;
+            }
+        }catch(Exception e){
             result.setMessage("验证码错误");
             return result;
         }
         user.setPhoneNumber(userBean.getPhoneNum());
         user.setEmail(userBean.getEmail());
         user.setPassword(userBean.getPassword());
+        LocalDate date = LocalDate.now();
+        user.setRegisterDate(date);
 
 
         if(userService.insertUser(user)>0){
@@ -174,28 +181,32 @@ public class UserController {
         VerificationCode code = new VerificationCode();
         code.setCode(userBean.getCaptcha());
         code.setEmail(userBean.getEmail());
-        Boolean flag = verificationCodeService.IsVerificationCode(code);
-        if(!flag){
-            result.setMessage("验证码错误");
+        try {
+            Boolean flag = verificationCodeService.IsVerificationCode(code);
+            if(!flag){
+                result.setMessage("无效邮箱");
+                return result;
+            }
+        }catch(Exception e){
+            result.setMessage("修改失败");
             return result;
         }
         User user = userService.getUserByEmail(userBean.getEmail());
         Deliveryman deliveryman = deliverymanService.getDeliverymanByEmail(userBean.getEmail());
 
-        if(user != null)
+        if(user != null) {
             user.setPassword(userBean.getPassword());
-
-        if(deliveryman != null)
+            if(userService.updateUser(user)>0){
+                result.setMessage("修改成功");
+            }
+        }
+        if(deliveryman != null) {
             deliveryman.setPassword(userBean.getPassword());
-
-
-        if(userService.updateUser(user)>0){
-            result.setMessage("修改成功");
+            if(deliverymanService.updateDeliveryman(deliveryman)>0){
+                result.setMessage("修改成功");
+            }
         }
 
-        if(deliverymanService.updateDeliveryman(deliveryman)>0){
-            result.setMessage("修改成功");
-        }
 
         return  result;
 
