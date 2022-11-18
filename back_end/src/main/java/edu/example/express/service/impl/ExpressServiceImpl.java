@@ -190,9 +190,9 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
     public Page<Express> getExpressListByStateAndDeliverymanId(int page, int pageSize, Integer state, Integer networkId, Integer deliverymanId) {
         log.info("正在查询express中state为{}的数据",state);
         QueryWrapper<Express> queryWrapper = new QueryWrapper<Express>();
-        if (deliverymanId != null)
-            queryWrapper =  queryWrapper.eq("collect_id", deliverymanId).or().eq("delivery_id", deliverymanId);
         queryWrapper =  queryWrapper.eq("state", state).eq("network_id", networkId);
+        if (deliverymanId != null)
+            queryWrapper =  queryWrapper.and(wapper -> wapper.eq("collect_id", deliverymanId).or().eq("delivery_id", deliverymanId));
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;
