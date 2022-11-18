@@ -15,6 +15,31 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 public interface AbnormalFeedbackService {
 
     /**
+     * 根据网点ID分页查询给定状态的AbnormalFeedback
+     *
+     * @param page     当前页数
+     * @param pageSize 页的大小
+     * @param networkId  网点ID
+     * @param state    反馈单的状态
+     * @return 返回mybatis-plus的Page对象,其中records字段为符合条件的查询结果
+     * @author wh
+     * @since 2022-11-18
+     */
+    Page<AbnormalFeedback> getAbnormalFeedbacksListByNetworkIdAndState(int page, int pageSize, Integer networkId, int state);
+
+    /**
+     * 根据网点ID分页查询AbnormalFeedback
+     *
+     * @param page     当前页数
+     * @param pageSize 页的大小
+     * @param networkId  网点ID
+     * @return 返回mybatis-plus的Page对象,其中records字段为符合条件的查询结果
+     * @author wh
+     * @since 2022-11-18
+     */
+    Page<AbnormalFeedback> getAbnormalFeedbacksListByNetworkId(int page, int pageSize, Integer networkId);
+
+    /**
     * 分页查询AbnormalFeedback
     *
     * @param page     当前页数

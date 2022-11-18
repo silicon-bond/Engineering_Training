@@ -3,6 +3,7 @@ package edu.example.express.controller;
 
 import edu.example.express.entity.Deliveryman;
 import edu.example.express.entity.Express;
+import edu.example.express.service.AbnormalFeedbackService;
 import edu.example.express.service.DeliverymanService;
 import edu.example.express.service.ExpressService;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +38,30 @@ public class NetworkAdministratorController {
 
     @Resource
     private DeliverymanService deliverymanService;
+
+    @Resource
+    private AbnormalFeedbackService abnormalFeedbackService;
+
+    /**
+     * 查询给定Id网点的反馈信息列表
+     */
+    @RequestMapping(method = RequestMethod.GET, value = {"/network_id/state"})
+    public ResultBean<?> listByNetworkIdAndState(@RequestParam(name = "page", defaultValue = "1") int page,
+                                            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                            @RequestParam(name = "network_id", defaultValue = "") Integer networkId,
+                                            @RequestParam(name = "state", defaultValue = "") int state) {
+        return new ResultBean<>(abnormalFeedbackService.getAbnormalFeedbacksListByNetworkIdAndState(page, pageSize, networkId, state));
+    }
+
+    /**
+     * 查询给定Id网点的反馈信息列表
+     */
+    @RequestMapping(method = RequestMethod.GET, value = {"/network_id"})
+    public ResultBean<?> listByNetworkId(@RequestParam(name = "page", defaultValue = "1") int page,
+                                    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                    @RequestParam(name = "network_id", defaultValue = "") Integer networkId) {
+        return new ResultBean<>(abnormalFeedbackService.getAbnormalFeedbacksListByNetworkId(page, pageSize, networkId));
+    }
 
 
     /**

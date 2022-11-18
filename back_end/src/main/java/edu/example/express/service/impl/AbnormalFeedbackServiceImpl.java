@@ -23,6 +23,25 @@ import edu.example.express.exception.bizException.BizException;
 public class AbnormalFeedbackServiceImpl extends ServiceImpl<AbnormalFeedbackMapper, AbnormalFeedback> implements AbnormalFeedbackService {
 
     @Override
+    public Page<AbnormalFeedback> getAbnormalFeedbacksListByNetworkIdAndState(int page, int pageSize, Integer networkId, int state) {
+        log.info("正在查询AbnormalFeedback中networkId={}, state={}的数据",networkId, state);
+        QueryWrapper<AbnormalFeedback> queryWrapper =  new QueryWrapper<AbnormalFeedback>().eq("network_id", networkId)
+                .and(wapper -> wapper.eq("state", state));
+        Page<AbnormalFeedback> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        log.info("根据网点ID和反馈单State分页查询AbnormalFeedback完毕: 结果数 = {} ",result.getRecords().size());
+        return result;
+    }
+
+    @Override
+    public Page<AbnormalFeedback> getAbnormalFeedbacksListByNetworkId(int page, int pageSize, Integer networkId) {
+        log.info("正在查询AbnormalFeedback中networkId为{}的数据",networkId);
+        QueryWrapper<AbnormalFeedback> queryWrapper =  new QueryWrapper<AbnormalFeedback>().eq("network_id", networkId);
+        Page<AbnormalFeedback> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        log.info("根据网点ID分页查询AbnormalFeedback完毕: 结果数 = {} ",result.getRecords().size());
+        return result;
+    }
+
+    @Override
     public Page<AbnormalFeedback> listAbnormalFeedbacksByPage(int page, int pageSize, String factor) {
         log.info("正在执行分页查询abnormalFeedback: page = {} pageSize = {} factor = {}",page,pageSize,factor);
         QueryWrapper<AbnormalFeedback> queryWrapper =  new QueryWrapper<AbnormalFeedback>().like("", factor);
