@@ -74,7 +74,7 @@ public interface ExpressService {
     */
     int updateExpress(Express express);
 
-    Page<Express> getExpressListByNetworkId(Integer networkId, int page, int pageSize);
+    Page<Express> getExpressListByNetworkIdAndState(Integer networkId, int page, int pageSize);
 
     Page<Express> getExpressListByDeliverPhoneNumber(String deliver_phone_number, int page, int pageSize);
 

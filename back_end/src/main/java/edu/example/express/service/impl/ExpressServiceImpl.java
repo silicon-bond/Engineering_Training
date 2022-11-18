@@ -1,6 +1,7 @@
 package edu.example.express.service.impl;
 
 import edu.example.express.entity.Express;
+import edu.example.express.entity.ExpressState;
 import edu.example.express.mapper.ExpressMapper;
 import edu.example.express.service.ExpressService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -107,9 +108,10 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
     }
 
     @Override
-    public Page<Express> getExpressListByNetworkId(Integer networkId, int page, int pageSize) {
+    public Page<Express> getExpressListByNetworkIdAndState(Integer networkId, int page, int pageSize) {
         log.info("正在查询express中networkId为{}的数据",networkId);
-        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("network_id", networkId);
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("network_id", networkId)
+                .and(wapper -> wapper.eq("state", ExpressState.Uncollected).or().eq("state", ExpressState.ToBeDelivered));
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;
