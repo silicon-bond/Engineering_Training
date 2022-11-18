@@ -114,8 +114,10 @@ public class DeliverymanServiceImpl extends ServiceImpl<DeliverymanMapper,Delive
     }
 
     private Deliveryman completeInfo(Deliveryman deliveryman){
-        Network network = networkService.getNetworkById(deliveryman.getNetworkId());
-        deliveryman.setNetworkName(network.getNetworkName());
+        if (deliveryman != null){
+            Network network = networkService.getNetworkById(deliveryman.getNetworkId());
+            deliveryman.setNetwork(network);
+        }
         return deliveryman;
     }
 
