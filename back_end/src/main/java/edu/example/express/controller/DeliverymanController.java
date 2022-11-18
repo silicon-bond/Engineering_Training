@@ -8,6 +8,8 @@ import edu.example.express.service.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDate;
 
 @RestController
@@ -96,8 +98,10 @@ public class DeliverymanController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/orderReceiving")
-    private ResultBean<?> orderReceiving(@RequestParam("expressId")Integer expressId,
-                                         @RequestParam("deliverymanId")Integer deliverymanId){
+    private void orderReceiving(HttpServletResponse response,
+                                @RequestParam("expressId")Integer expressId,
+                                @RequestParam("deliverymanId")Integer deliverymanId,
+                                @RequestParam("networkId")Integer networkId){
         Express express = expressService.getExpressById(expressId);
         if (express != null){
             Integer state = express.getState();
@@ -108,9 +112,11 @@ public class DeliverymanController {
                 express.setDeliveryId(deliverymanId);
             }
             expressService.updateExpress(express);
-            return new ResultBean<>(express);
-        } else {
-            return new ResultBean<>("物流状态修改失败", "500");
+            try {
+                response.sendRedirect("/express/api/deliveryman/expressList?networkId="+networkId);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
