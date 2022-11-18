@@ -8,6 +8,7 @@ import edu.example.express.service.*;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
 
 @RestController
@@ -96,7 +97,8 @@ public class DeliverymanController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/orderReceiving")
-    private ResultBean<?> orderReceiving(@RequestParam("expressId")Integer expressId,
+    private ResultBean<?> orderReceiving(HttpServletResponse response,
+                                         @RequestParam("expressId")Integer expressId,
                                          @RequestParam("deliverymanId")Integer deliverymanId){
         Express express = expressService.getExpressById(expressId);
         if (express != null){
