@@ -1,11 +1,14 @@
 package edu.example.express.service.impl;
 
+import edu.example.express.entity.Deliveryman;
 import edu.example.express.entity.Express;
 import edu.example.express.entity.ExpressState;
+import edu.example.express.entity.Network;
 import edu.example.express.mapper.ExpressMapper;
 import edu.example.express.service.ExpressService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import edu.example.express.service.NetworkService;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.groovy.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,8 @@ import edu.example.express.exception.bizException.BizException;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -32,12 +37,16 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
     @Autowired
     ExpressMapper expressMapper;
 
+    @Resource
+    private NetworkService networkService;
+
     @Override
     public Page<Express> listExpresssByPage(int page, int pageSize, String factor) {
         log.info("正在执行分页查询express: page = {} pageSize = {} factor = {}",page,pageSize,factor);
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().like("", factor);
         //TODO 这里需要自定义用于匹配的字段,并把wrapper传入下面的page方法
         Page<Express> result = super.page(new Page<>(page, pageSize));
+        result.setRecords(completeListInfo(result.getRecords()));
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;
     }
@@ -172,7 +181,6 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
     public Page<Express> listExpresssPageByIdAndState(int page, int pageSize, String factor, int id, int state) {
         String state_name = expressMapper.getExpressStateNameById(id);
         log.info("正在查询express中id为{},或者订单状态id为{},订单状态为{}的数据", id, state,state_name);
-
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>();
         if (id != -1){
             queryWrapper.eq("express_id",id);
@@ -180,8 +188,8 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         if (state != -1){
             queryWrapper.eq("state", state);
         }
-
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        result.setRecords(completeListInfo(result.getRecords()));
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;
     }
@@ -236,8 +244,32 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         queryWrapper.and(QueryWrapper -> QueryWrapper.eq("deliver_phone_number",phoneNum).or().eq("receipt_phone_number",phoneNum));
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
 
-
-
         return result;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private Express completeInfo(Express express){
+        Network network = networkService.getNetworkById(express.getNetworkId());
+        express.setNetworkName(network.getNetworkName());
+        return express;
+    }
+
+    private List<Express> completeListInfo(List<Express> expressList){
+        List<Express> newList = new ArrayList<Express>();
+        for (Express express : expressList){
+            newList.add(completeInfo(express));
+        }
+        return newList;
     }
 }

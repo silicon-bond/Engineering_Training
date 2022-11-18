@@ -52,9 +52,6 @@ public class Express extends Model<Express> {
     @TableField("deliver_country")
     private String deliverCountry;
 
-    @TableField("deliver_street")
-    private String deliverStreet;
-
     @TableField("deliver_detail_address")
     private String deliverDetailAddress;
 
@@ -73,9 +70,6 @@ public class Express extends Model<Express> {
     @TableField("receipt_country")
     private String receiptCountry;
 
-    @TableField("receipt_street")
-    private String receiptStreet;
-
     @TableField("receipt_detail_address")
     private String receiptDetailAddress;
 
@@ -93,6 +87,9 @@ public class Express extends Model<Express> {
 
     @TableField("orderer_id")
     private Integer ordererId;
+
+    @TableField(value = "network_name", exist = false)
+    private String networkName;
 
 
     @Override

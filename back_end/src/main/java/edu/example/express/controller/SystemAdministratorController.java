@@ -3,6 +3,7 @@ package edu.example.express.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import edu.example.express.entity.*;
+import edu.example.express.service.NetworkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import edu.example.express.entity.dto.ResultBean;
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +36,6 @@ public class SystemAdministratorController {
     @Resource
     private SystemAdministratorService systemAdministratorService;
 
-
     /**
      * 模块一：对用户，快递员，网点管理员的增删改查
      */
@@ -42,6 +45,11 @@ public class SystemAdministratorController {
      */
     @PostMapping("/person-management/addOneUser")
     public ResultBean addOneUser(@RequestBody User user){
+        if (user.getPhoneNumber() != null){
+            if (systemAdministratorService.ifUsedPhoneNumber(user.getPhoneNumber())){
+                return new ResultBean("电话已经被使用","403");
+            }
+        }
         int result =  systemAdministratorService.addOneUser(user);
         ResultBean resultBean = new ResultBean("用户增加成功","",result);
         return resultBean;
@@ -56,6 +64,11 @@ public class SystemAdministratorController {
 
     @PutMapping("/person-management/update/1")
     public ResultBean UpdateUser(@RequestBody User user){
+        if (user.getPhoneNumber() != null){
+            if (systemAdministratorService.ifUsedPhoneNumber(user.getPhoneNumber())){
+                return new ResultBean("电话已经被使用","403");
+            }
+        }
         int result = systemAdministratorService.updateUser(user);
         ResultBean resultBean = new ResultBean("用户修改成功","",result);
         return resultBean;
@@ -82,6 +95,11 @@ public class SystemAdministratorController {
      */
     @PostMapping("/person-management/addOneDeliveryman")
     public ResultBean addOneDeliveryman(@RequestBody Deliveryman deliveryman){
+        if (deliveryman.getPhoneNumber() != null){
+            if (systemAdministratorService.ifUsedPhoneNumber(deliveryman.getPhoneNumber())){
+                return new ResultBean("电话已经被使用","403");
+            }
+        }
         int result =  systemAdministratorService.addOneDeliveryman(deliveryman);
         ResultBean resultBean = new ResultBean("快递员增加成功","",result);
         return resultBean;
@@ -96,6 +114,11 @@ public class SystemAdministratorController {
 
     @PutMapping("/person-management/update/2")
     public ResultBean UpdateDeliveryman(@RequestBody Deliveryman deliveryman){
+        if (deliveryman.getPhoneNumber() != null){
+            if (systemAdministratorService.ifUsedPhoneNumber(deliveryman.getPhoneNumber())){
+                return new ResultBean("电话已经被使用","403");
+            }
+        }
         int result = systemAdministratorService.updateDeliveryman(deliveryman);
         ResultBean resultBean = new ResultBean("快递员修改成功","",result);
         return resultBean;
@@ -122,6 +145,11 @@ public class SystemAdministratorController {
      */
     @PostMapping("/person-management/addOneNetworkAdministrator")
     public ResultBean addOneNetworkAdministrator(@RequestBody NetworkAdministrator networkAdministrator){
+        if (networkAdministrator.getPhoneNumber() != null){
+            if (systemAdministratorService.ifUsedPhoneNumber(networkAdministrator.getPhoneNumber())){
+                return new ResultBean("电话已经被使用","403");
+            }
+        }
         int result =  systemAdministratorService.addOneNetworkAdministrator(networkAdministrator);
         ResultBean resultBean = new ResultBean("网点管理员增加成功","",result);
         return resultBean;
@@ -136,6 +164,11 @@ public class SystemAdministratorController {
 
     @PutMapping("/person-management/update/3")
     public ResultBean UpdateNetworkAdministrator(@RequestBody NetworkAdministrator networkAdministrator){
+        if (networkAdministrator.getPhoneNumber() != null){
+            if (systemAdministratorService.ifUsedPhoneNumber(networkAdministrator.getPhoneNumber())){
+                return new ResultBean("电话已经被使用","403");
+            }
+        }
         int result = systemAdministratorService.updateNetworkAdministrator(networkAdministrator);
         ResultBean resultBean = new ResultBean("网点管理员修改成功","",result);
         return resultBean;
@@ -246,6 +279,13 @@ public class SystemAdministratorController {
 
         return new ResultBean(list);
     }
+
+
+//    public static void main(String[] args) {
+//        LocalDateTime localDateTime = LocalDateTime.now();
+//        System.out.println(localDateTime);
+//
+//    }
 }
 
 
