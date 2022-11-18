@@ -43,6 +43,10 @@ public class UserController {
     @Resource
     private AbnormalFeedbackService abnormalFeedbackService;
 
+    @Resource
+    private DeliverymanService deliverymanService;
+
+
 
     /**
     * 查询分页数据
@@ -165,7 +169,7 @@ public class UserController {
 
     @PostMapping("/Forgetpassword")
     public  ResultBean<?> Forgetpassword(@RequestBody RegisterUserBean userBean
-                                                                                ){
+    ){
         ResultBean<Object> result = new ResultBean<>();
         VerificationCode code = new VerificationCode();
         code.setCode(userBean.getCaptcha());
@@ -176,16 +180,27 @@ public class UserController {
             return result;
         }
         User user = userService.getUserByEmail(userBean.getEmail());
+        Deliveryman deliveryman = deliverymanService.getDeliverymanByEmail(userBean.getEmail());
 
-        user.setPassword(userBean.getPassword());
+        if(user != null)
+            user.setPassword(userBean.getPassword());
+
+        if(deliveryman != null)
+            deliveryman.setPassword(userBean.getPassword());
+
 
         if(userService.updateUser(user)>0){
+            result.setMessage("修改成功");
+        }
+
+        if(deliverymanService.updateDeliveryman(deliveryman)>0){
             result.setMessage("修改成功");
         }
 
         return  result;
 
     }
+
     @GetMapping("/getExpressByStateAndID")
     public ResultBean<?> getExpressByStateAndID(@RequestParam(name = "page", defaultValue = "1") int page,
                                                 @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,

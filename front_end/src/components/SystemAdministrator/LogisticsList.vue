@@ -63,23 +63,23 @@
     <el-dialog title="编辑物流信息" :visible.sync="editDetail">
 
       <div id="editBox">
-        <el-form ref="detail" :model="detail" label-width="115px">
-          <el-form-item label="订单编号">
+        <el-form ref="detail" :model="detail" label-width="125px" :rules="rules">
+          <el-form-item label="订单编号" prop="id">
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
-          <el-form-item label="寄件人">
+          <el-form-item label="寄件人" prop="sender">
             <el-input v-model="detail.sender"></el-input>
           </el-form-item>
-          <el-form-item label="寄件人电话号码">
+          <el-form-item label="寄件人电话号码" prop="senderNumber">
             <el-input v-model="detail.senderNumber"></el-input>
           </el-form-item>
-          <el-form-item label="收件人">
+          <el-form-item label="收件人" prop="recipient">
             <el-input v-model="detail.recipient"></el-input>
           </el-form-item>
-          <el-form-item label="收件人电话号码">
+          <el-form-item label="收件人电话号码" prop="recipientNumber">
             <el-input v-model="detail.recipientNumber"></el-input>
           </el-form-item>
-          <el-form-item label="状态">
+          <el-form-item label="状态" prop="state">
             <el-select v-model="detail.state" style="width: 100%">
               <el-option
                 v-for="item in options"
@@ -89,11 +89,11 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="发货时间">
+          <el-form-item label="发货时间" prop="deliveryTime">
             <el-input v-model="detail.deliveryTime" readonly></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="editClick">确认</el-button>
+            <el-button type="primary" @click="editClick('detail')">确认</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -114,7 +114,6 @@ export default {
         recipientNumber:'',
         deliveryTime:'',
         state:'',
-        arrivalTime:''
       },
       dialogFormVisible: false,
       editDetail: false,
@@ -149,6 +148,23 @@ export default {
 
       tableData: [
       ],
+      rules:{
+        sender:[
+          { required: true, message: '寄件人不能为空', trigger: 'blur' },
+        ],
+        senderNumber:[
+          { required: true, message: '寄件人电话号码不能为空', trigger: 'blur' },
+        ],
+        recipient:[
+          { required: true, message: '收件人不能为空', trigger: 'blur' },
+        ],
+        recipientNumber:[
+          { required: true, message: '收件人电话号码不能为空', trigger: 'blur' },
+        ],
+        state:[
+          { required: true, message: '物流状态不能为空', trigger: 'blur' },
+        ]
+      },
       resultStatus:'1',
       nId: '1',
       nname: '',
@@ -186,25 +202,48 @@ export default {
       this.detail.state = row.state
       this.editDetail = true
     },
-    editClick(){
-      this.$confirm('确定提交此修改?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.editSubmit()
-      }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消修改'
-        });
+    editClick(message){
+      this.$refs[message].validate((valid) => {
+        if (valid) {
+          this.$confirm('确定提交此修改?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.editSubmit()
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消修改'
+            });
+          });
+        } else {
+          return false;
+        }
       });
     },
-    editSubmit(){//未实现
-
-
-
-
+    editSubmit(){
+      let logisticsMessage = {
+        expressId:this.detail.id,
+        deliverName:this.detail.sender,
+        deliverPhoneNumber:this.detail.senderNumber,
+        receiptName:this.detail.recipient,
+        receiptPhoneNumber:this.detail.recipientNumber,
+        orderDate:this.detail.deliveryTime,
+        state:this.detail.state
+      }
+      this.$axios({
+        method: 'put',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        data: JSON.stringify(logisticsMessage),
+        url: 'http://8.130.39.140:8081/express/api/express',
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     querySearch(pageNum) {
       this.$axios({

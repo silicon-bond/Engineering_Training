@@ -6,7 +6,7 @@
         <div id="searchContent">
           <el-input  v-model="searchContent" placeholder="请输入手机号"></el-input>
         </div>
-        <el-button type="primary">搜索</el-button>
+        <el-button type="primary" @click="searchClick">搜索</el-button>
         <el-button id="addUserbtn" type="primary">添加用户</el-button>
       </div>
     </div>
@@ -27,8 +27,8 @@
 
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="text" @click="editClick(scope.$index,scope.row)" class="button">编辑</el-button>
-            <el-button size="mini" type="text" @click="deleteClick(scope.$index,scope.row)" class="button">删除</el-button>
+            <el-button size="mini" type="text" @click="editClick(scope.row)" class="button">编辑</el-button>
+            <el-button size="mini" type="text" @click="deleteClick(scope.row)" class="button">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -51,23 +51,22 @@
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
           <el-form-item label="邮箱">
-            <el-input v-model="detail.sender"></el-input>
+            <el-input v-model="detail.email"></el-input>
           </el-form-item>
           <el-form-item label="地址">
-            <el-input v-model="detail.recipient"></el-input>
+            <el-input v-model="detail.address"></el-input>
           </el-form-item>
           <el-form-item label="联系电话">
-            <el-input v-model="detail.state"></el-input>
+            <el-input v-model="detail.phone"></el-input>
           </el-form-item>
           <el-form-item label="注册时间">
-            <el-input v-model="detail.deliveryTime"></el-input>
+            <el-input v-model="detail.registerTime"></el-input>
           </el-form-item>
           <el-form-item label="密码">
-            <el-input v-model="detail.arrivalTime"></el-input>
+            <el-input v-model="detail.password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="editSubmit">确认</el-button>
-            <el-button>取消</el-button>
+            <el-button type="primary" @click="editConfirm">确认</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -82,11 +81,11 @@ export default {
     return {
       detail: {
         id:'',
-        sender:'',
-        recipient:'',
-        deliveryTime:'',
-        state:'',
-        arrivalTime:''
+        email:'',
+        address:'',
+        phone:'',
+        registerTime:'',
+        password:''
       },
       dialogFormVisible: false,
       editDetail: false,
@@ -103,7 +102,7 @@ export default {
 
       tableData: [
       ],
-
+      resultStatus:'1',
       nId: '1',
       nname: '',
       content: '',
@@ -121,21 +120,14 @@ export default {
   methods: {
     handleCurrentChange: function(val) {
       this.currentPage = val;
-      this.querySearch(this.currentPage);
+      if (this.resultStatus === '1'){
+        this.querySearch(this.currentPage);
+      }
+      else{
+        this.searchByPhone(this.currentPage);
+      }
     },
-
-
-    lookClick(index,row) {
-      this.detail.id = row.id
-      this.detail.sender = row.sender
-      this.detail.recipient = row.recipient
-      this.detail.arrivalTime = row.arrivalTime
-      this.detail.deliveryTime = row.deliveryTime
-      this.detail.state = row.state
-      this.lookDetail = true
-
-    },
-    editClick(index,row){
+    editClick(row){
       this.detail.id = row.id
       this.detail.sender = row.sender
       this.detail.recipient = row.recipient
@@ -144,10 +136,21 @@ export default {
       this.detail.state = row.state
       this.editDetail = true
     },
+    editConfirm(){
+
+    },
     deleteClick(){
 
     },
-    editSubmit(){
+    deleteConfirm(){
+
+    },
+    searchClick(){
+      this.resultStatus='2'
+      this.currentPage=1
+      this.searchByPhone(this.currentPage)
+    },
+    searchByPhone(){
 
     },
     querySearch(pageNum) {
@@ -158,13 +161,9 @@ export default {
         },
         url: 'http://8.130.39.140:8081/express/api/system-administrator/person-management/getUserByPage?page='+pageNum+'&pageSize='+this.pagesize,
       }).then((response) => {          //这里使用了ES6的语法
-        console.log(response.data.data)
+        console.log(response.data)
         this.tableData = response.data.data.records
         this.totalCount = response.data.data.total
-        // if (response.data.code==='200') {
-        //   this.result = response.data.data.list
-        //   this.totalCount = response.data.data.total
-        // }
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })

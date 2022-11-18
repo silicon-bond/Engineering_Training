@@ -72,7 +72,6 @@ public class VerificationCodeController {
 //    }
 
     @GetMapping("/{email}")
-    @Async
     public ResultBean<?> getVerificationCode(@PathVariable("email") String email) throws ParseException {
         ResultBean<Object> result = new ResultBean<>();
         VerificationCode verificationCode = new VerificationCode();
@@ -82,7 +81,13 @@ public class VerificationCodeController {
         String code = verificationCodeService.generateVerificationCode();
         String title = "Express APP";
         String content = "您的验证码为：" + code;
-        verificationCodeService.sendSimpleMail(email,title,content);
+        try {
+            verificationCodeService.sendSimpleMail(email, title, content);
+        }catch (Exception e){
+            result.setMessage("验证码错误");
+            return result;
+        }
+
         verificationCode.setCode(code);
         result.setCode("200");
         result.setMessage("发送成功");
