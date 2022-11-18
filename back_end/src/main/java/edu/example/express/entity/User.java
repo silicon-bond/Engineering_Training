@@ -41,8 +41,6 @@ public class User extends Model<User> {
 
     private String country;
 
-    private String street;
-
     private String detailAddress;
 
     private String phoneNumber;
