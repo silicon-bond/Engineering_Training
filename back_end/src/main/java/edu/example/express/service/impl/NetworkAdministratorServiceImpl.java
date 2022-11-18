@@ -3,6 +3,7 @@ package edu.example.express.service.impl;
 import edu.example.express.entity.Deliveryman;
 import edu.example.express.entity.Express;
 import edu.example.express.entity.NetworkAdministrator;
+import edu.example.express.entity.SystemAdministrator;
 import edu.example.express.mapper.NetworkAdministratorMapper;
 import edu.example.express.service.DeliverymanService;
 import edu.example.express.service.ExpressService;
@@ -97,5 +98,14 @@ public class NetworkAdministratorServiceImpl extends ServiceImpl<NetworkAdminist
     @Override
     public boolean save(NetworkAdministrator entity) {
         return false;
+    }
+
+    @Override
+    public NetworkAdministrator getNetworkAdministratorByAccount(String account) {
+        log.info("正在查询networkAdministrator中account为{}的数据", account);
+        QueryWrapper<NetworkAdministrator> queryWrapper =  new QueryWrapper<NetworkAdministrator>().eq("account", account);
+        NetworkAdministrator networkAdministrator = super.getOne(queryWrapper);
+        log.info("查询account为{}的networkAdministrator{}",account,(null == networkAdministrator?"无结果":"成功"));
+        return networkAdministrator;
     }
 }

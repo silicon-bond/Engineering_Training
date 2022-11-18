@@ -79,4 +79,6 @@ public interface NetworkAdministratorService {
     */
     int updateNetworkAdministrator(NetworkAdministrator networkAdministrator);
 
+    NetworkAdministrator getNetworkAdministratorByAccount(String account);
+
 }
