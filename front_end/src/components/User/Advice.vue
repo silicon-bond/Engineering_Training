@@ -60,6 +60,7 @@ export default {
   },
   methods:{
     submitForm(message){
+      let user = JSON.parse(localStorage.getItem("userinfo_kuaidi"))
       this.$refs[message].validate((valid) => {
         if (valid) {
           this.$axios({
@@ -67,7 +68,7 @@ export default {
             headers: {
               'Content-type': 'application/json;charset=UTF-8'
             },
-            url: 'http://localhost:8081/express/user/FeedBack?title='+this.ruleForm.title+'&description='+this.ruleForm.content+'&phoneNum=12345678911&networkId='+this.ruleForm.branch,
+            url: 'http://localhost:8081/express/user/FeedBack?title='+this.ruleForm.title+'&description='+this.ruleForm.content+'&phoneNum='+user.phoneNumber+'&networkId='+this.ruleForm.branch,
           }).then((response) => {          //这里使用了ES6的语法
             alert('发表意见成功')
             this.$router.go(0)
