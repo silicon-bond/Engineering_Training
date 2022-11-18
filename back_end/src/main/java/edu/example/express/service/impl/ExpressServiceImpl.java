@@ -118,11 +118,10 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
     }
 
     @Override
-    public Page<Express> getExpressListByDeliverymanId(Integer deliverymanId, int page, int pageSize) {
+    public Page<Express> getExpressListByNetworkAndDeliverymanId(Integer networkId, Integer deliverymanId, int page, int pageSize) {
         log.info("正在查询express中deliverymanId为{}的数据", deliverymanId);
-        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("delivery_id", deliverymanId)
-                                                                        .or()
-                                                                        .eq("collect_id", deliverymanId);
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("network_id", networkId)
+                .and(wapper -> wapper.eq("delivery_id", deliverymanId).or().eq("collect_id", deliverymanId));
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;

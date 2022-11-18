@@ -117,8 +117,9 @@ public class DeliverymanController {
     @RequestMapping(method = RequestMethod.GET, value = "/myExpressList")
     private ResultBean<?> getMyExpressList(@RequestParam(name = "page", defaultValue = "1") int page,
                                            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                           @RequestParam(name = "networkId")Integer networkId,
                                            @RequestParam("deliverymanId")Integer deliverymanId){
-        return new ResultBean<>(expressService.getExpressListByDeliverymanId(deliverymanId, page, pageSize));
+        return new ResultBean<>(expressService.getExpressListByNetworkAndDeliverymanId(networkId, deliverymanId, page, pageSize));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/expressById")
