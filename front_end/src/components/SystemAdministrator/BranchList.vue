@@ -4,10 +4,10 @@
       <h2 id="searchTitle">网点查询</h2>
       <div id="search">
         <div id="searchContent">
-          <el-input  v-model="searchContent" placeholder="请输入网点名"></el-input>
+          <el-input  v-model="searchContent" placeholder="请输入网点编号"></el-input>
         </div>
         <el-button type="primary">搜索</el-button>
-        <el-button id="addUserbtn" type="primary">添加网点</el-button>
+        <el-button id="addUserbtn" type="primary" @click="add">添加网点</el-button>
       </div>
     </div>
     <el-divider></el-divider>
@@ -27,7 +27,6 @@
 
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="text" @click="lookClick(scope.$index,scope.row)" class="button">查看</el-button>
             <el-button size="mini" type="text" @click="editClick(scope.$index,scope.row)" class="button">编辑</el-button>
             <el-button size="mini" type="text" @click="deleteClick(scope.$index,scope.row)" class="button">删除</el-button>
           </template>
@@ -203,17 +202,7 @@ export default {
     },
 
 
-    lookClick(index,row) {
-      this.detail.id = row.id
-      this.detail.sender = row.sender
-      this.detail.recipient = row.recipient
-      this.detail.arrivalTime = row.arrivalTime
-      this.detail.deliveryTime = row.deliveryTime
-      this.detail.state = row.state
-      this.lookDetail = true
-
-    },
-    editClick(index,row){
+    edit(row){
       this.detail.id = row.id
       this.detail.sender = row.sender
       this.detail.recipient = row.recipient
@@ -222,14 +211,19 @@ export default {
       this.detail.state = row.state
       this.editDetail = true
     },
+    editClick(){
+
+    },
+    editConfirm(){
+
+    },
     deleteClick(){
 
     },
-    editSubmit(){
+    deleteConfirm(){
 
     },
     querySearch(pageNum) {
-
 
     },
   },

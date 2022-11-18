@@ -40,8 +40,8 @@
             required
             v-model="information.yzm"
           ></el-input>
-          <el-button type="primary" @click="sendyzm" style=" float: right; width: 30%;font-size: 8px; padding-left: 2px; padding-right: 2px">
-            发送验证码
+          <el-button :disabled="isdisable" type="primary" @click="sendyzm" style=" float: right; width: 30%;font-size: 8px; padding-left: 2px; padding-right: 2px">
+            {{yanzhenma}}
           </el-button>
           <div style="clear:both;"></div>
         </el-form-item>
@@ -99,6 +99,10 @@ export default {
       }
     };
     return{
+      clock: null,
+      isdisable: false,
+      yanzhenma:'获取验证码',
+      time: 30,
       options: [{
         value: '1',
         label: '福州网点'
@@ -145,14 +149,60 @@ export default {
       },
     }
   },
-  mounted() {
+
+  created() {
+    console.log(1111);
+    const that = this
+    // 获取网点列表
+    this.$axios({
+      method: 'get',
+      headers: {
+        'Content-type': 'application/json;charset=UTF-8'
+      },
+      url: 'http://8.130.39.140:8081/express/api/allNetworks',
+    }).then((response) => {          //这里使用了ES6的语法
+      const data = response.data.data
+      let tmp = []
+      for (let i = 0; i < data.length; i++) {
+        tmp.push({value: `${data[i].networkId}`, label: `${data[i].networkName}`})
+      }
+      that.options = tmp
+    }).catch((error) => {
+      console.log(error)       //请求失败返回的数据
+      this.$message({
+          showClose: true,
+          message: '获取网点列表失败',
+          type: 'error'
+      });
+    })
 
   },
+  mounted() {
+    if (localStorage.getItem('yanzhen2')) {
+      this.isdisable = true;
+      this.clock = setInterval(this.doLoop, 1000);
+    }
+  },
+
   methods:{
     toLogin(){
       this.$router.push('/login/login')
     },
-    sendyzm(){
+
+    doLoop(){
+      this.time--;
+      if(this.time > 0){
+        this.yanzhenma = this.time + 's后获取';
+      } else{
+        clearInterval(this.clock); //清除js定时器
+        this.isdisable = false;
+        this.yanzhenma = '获取验证码';
+        this.time = 30; //重置时间
+        localStorage.removeItem('yanzhen2')
+      }
+    },
+
+    sendyzm(){//发送验证码
       let RegEmail = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
       if(RegEmail.test(this.information.email)) {
         this.$axios({
@@ -168,6 +218,9 @@ export default {
               message: '验证码发送成功',
               type: 'success'
             });
+            this.isdisable = true;
+            localStorage.setItem('yanzhen2', 1)
+            this.clock = setInterval(this.doLoop, 1000);
           } else {
             this.$message({
               showClose: true,
@@ -212,13 +265,22 @@ export default {
               url: 'http://8.130.39.140:8081/express/user/Register',
             }).then((response) => {          //这里使用了ES6的语法
               console.log(response)
-              if (response.data.message === '用户已注册'){
+              if (response.data.message === '注册成功') {
+                this.$message({
+                    showClose: true,
+                    message: '注册成功！跳转至登陆页面...',
+                    type: 'success',
+                    duration: 2000
+                });
+                setTimeout(()=> {
+                    this.$router.push('/login/login')
+                }, 2000)
+              }else if (response.data.message === '用户已注册'){
                 this.$message({
                     showClose: true,
                     message: '邮箱已被注册！',
                     type: 'error'
                 });
-                // this.$router.push('/login/login')
               }else if(response.data.message === '验证码错误') {
                 this.$message({
                     showClose: true,
@@ -228,8 +290,8 @@ export default {
               }  else {
                 this.$message({
                     showClose: true,
-                    message: '注册成功！正在跳转',
-                    type: 'success'
+                    message: '其他异常!',
+                    type: 'error',
                 });
               }
             }).catch((error) => {
@@ -239,6 +301,7 @@ export default {
                   message: '服务器出了点问题',
                   type: 'error'
               });
+
             })
           } else {
             console.log('error !!');
@@ -264,15 +327,42 @@ export default {
               url: 'http://8.130.39.140:8081/express/api/deliveryman/register',
             }).then((response) => {          //这里使用了ES6的语法
               console.log(response.data.data)
-              // if (response.data.code === '200'){
-              //   alert("注册成功")
-              //   this.$router.push('/login/login')
-              // }else {
-              //   alert("用户名已被占用")
-              //   this.$router.go(0)
-              // }
+              if (response.data.message === '注册成功') {
+                this.$message({
+                    showClose: true,
+                    message: '注册成功！跳转至登陆页面...',
+                    type: 'success',
+                    duration: 2000
+                });
+                setTimeout(()=> {
+                    this.$router.push('/login/login')
+                }, 2000)
+              }else if (response.data.message === '用户已注册'){
+                this.$message({
+                    showClose: true,
+                    message: '邮箱已被注册！',
+                    type: 'error'
+                });
+              }else if(response.data.message === '验证码错误') {
+                this.$message({
+                    showClose: true,
+                    message: '验证码错误！',
+                    type: 'error'
+                });
+              }  else {
+                this.$message({
+                    showClose: true,
+                    message: '其他异常',
+                    type: 'error',
+                });
+              }
             }).catch((error) => {
               console.log(error)       //请求失败返回的数据
+              this.$message({
+                  showClose: true,
+                  message: '服务器出了点问题',
+                  type: 'error'
+              });
             })
           } else {
             console.log('error !!');
