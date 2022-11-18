@@ -162,16 +162,25 @@ export default {
           },
           url: 'http://8.130.39.140:8081/express/api/user/Captcha/'+this.information.email,
         }).then((response) => {          //这里使用了ES6的语法
-          this.$message({
-            showClose: true,
-            message: '验证码发送成功',
-            type: 'success'
-          });
+          if (response.data.message === '发送成功') {
+            this.$message({
+              showClose: true,
+              message: '验证码发送成功',
+              type: 'success'
+            });
+          } else {
+            this.$message({
+              showClose: true,
+              message: '验证码发送失败',
+              type: 'error'
+            });
+          }
+
         }).catch((error) => {
           console.log(error)       //请求失败返回的数据
           this.$message({
               showClose: true,
-              message: '验证码发送失败',
+              message: '服务器出了点问题',
               type: 'error'
           });
         })
@@ -185,7 +194,6 @@ export default {
 
     },
     register(message){
-      const that = this
       if (this.charactor==='1'){//用户注册
         let userMessage = {
           phoneNum:this.information.phone.toString(),
@@ -228,7 +236,7 @@ export default {
               console.log(error)       //请求失败返回的数据
               this.$message({
                   showClose: true,
-                  message: '网络出了点问题',
+                  message: '服务器出了点问题',
                   type: 'error'
               });
             })
