@@ -4,10 +4,9 @@
       <h2 id="searchTitle">用户查询</h2>
       <div id="search">
         <div id="searchContent">
-          <el-input  v-model="searchContent" placeholder="请输入手机号"></el-input>
+          <el-input  v-model="searchContent" placeholder="请输入用户编号"></el-input>
         </div>
         <el-button type="primary" @click="searchClick">搜索</el-button>
-        <el-button id="addUserbtn" type="primary">添加用户</el-button>
       </div>
     </div>
     <el-divider></el-divider>
@@ -27,7 +26,7 @@
 
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="text" @click="editClick(scope.row)" class="button">编辑</el-button>
+            <el-button size="mini" type="text" @click="edit(scope.row)" class="button">编辑</el-button>
             <el-button size="mini" type="text" @click="deleteClick(scope.row)" class="button">删除</el-button>
           </template>
         </el-table-column>
@@ -44,29 +43,28 @@
       :total="totalCount">
     </el-pagination>
     <el-dialog title="编辑用户信息" :visible.sync="editDetail">
-
       <div id="editBox">
-        <el-form ref="detail" :model="detail" label-width="80px">
+        <el-form ref="detail" :model="detail" label-width="125px" :rules="editRules">
           <el-form-item label="用户编号">
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
-          <el-form-item label="邮箱">
-            <el-input v-model="detail.email"></el-input>
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="detail.email" readonly></el-input>
           </el-form-item>
-          <el-form-item label="地址">
+          <el-form-item label="地址" prop="address">
             <el-input v-model="detail.address"></el-input>
           </el-form-item>
-          <el-form-item label="联系电话">
+          <el-form-item label="联系电话" prop="phone">
             <el-input v-model="detail.phone"></el-input>
           </el-form-item>
           <el-form-item label="注册时间">
-            <el-input v-model="detail.registerTime"></el-input>
+            <el-input v-model="detail.registerTime" readonly></el-input>
           </el-form-item>
-          <el-form-item label="密码">
+          <el-form-item label="密码" prop="password">
             <el-input v-model="detail.password"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="editConfirm">确认</el-button>
+            <el-button type="primary" @click="editClick('detail')">确认</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -89,7 +87,6 @@ export default {
       },
       dialogFormVisible: false,
       editDetail: false,
-
       searchContent:'',
       tableCol: [
         //{prop: "id", label: "id"},
@@ -102,6 +99,17 @@ export default {
 
       tableData: [
       ],
+      editRules:{
+        address:[
+          { required: true, message: '地址不能为空', trigger: 'change' },
+        ],
+        phone:[
+          { required: true, message: '联系电话不能为空', trigger: 'change' },
+        ],
+        password:[
+          { required: true, message: '密码不能为空', trigger: 'change' },
+        ]
+      },
       resultStatus:'1',
       nId: '1',
       nname: '',
@@ -127,31 +135,117 @@ export default {
         this.searchByPhone(this.currentPage);
       }
     },
-    editClick(row){
-      this.detail.id = row.id
-      this.detail.sender = row.sender
-      this.detail.recipient = row.recipient
-      this.detail.arrivalTime = row.arrivalTime
-      this.detail.deliveryTime = row.deliveryTime
-      this.detail.state = row.state
+    edit(row){
+      this.detail.id = row.userId
+      this.detail.email = row.email
+      this.detail.address = row.detailAddress
+      this.detail.phone = row.phoneNumber
+      this.detail.registerTime = row.registerDate
+      this.detail.password = row.password
       this.editDetail = true
     },
+    editClick(message){
+      this.$refs[message].validate((valid) => {
+        if (valid) {
+          this.$confirm('确定提交此修改?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.editConfirm()
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消修改'
+            });
+          });
+        } else {
+          return false;
+        }
+      });
+    },
     editConfirm(){
-
+      let userMessage = {
+        userId:this.detail.id,
+        email:this.detail.email,
+        detailAddress:this.detail.address,
+        phoneNumber:this.detail.phone,
+        password:this.detail.password
+      }
+      this.$axios({
+        method: 'put',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        data: JSON.stringify(userMessage),
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/person-management/update/1',
+      }).then((response) => {          //这里使用了ES6的语法
+        if (response.data.message==="用户修改成功"){
+          this.$message({
+            message: '修改用户成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('修改用户失败');
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
-    deleteClick(){
-
+    deleteClick(row){
+      this.$confirm('确定删除此用户?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteConfirm(row)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     },
-    deleteConfirm(){
-
+    deleteConfirm(row){
+      this.$axios({
+        method: 'delete',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/deleteByIdAndRole?id='+row.userId+'&role=1',
+      }).then((response) => {          //这里使用了ES6的语法
+        if (response.data.message==="success"){
+          this.$message({
+            message: '删除用户成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('删除用户失败');
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     searchClick(){
       this.resultStatus='2'
       this.currentPage=1
-      this.searchByPhone(this.currentPage)
+      this.searchById(this.currentPage)
     },
-    searchByPhone(){
-
+    searchById(pageNum){
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/getPeopleByIdAndRole?id='+this.searchContent+'&role=1',
+      }).then((response) => {          //这里使用了ES6的语法
+        this.tableData = response.data.data.records
+        this.totalCount = response.data.data.total
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     querySearch(pageNum) {
       this.$axios({

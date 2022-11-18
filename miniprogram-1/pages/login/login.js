@@ -36,25 +36,19 @@ Page({
         //   responseData:res.data.result[0].body
         // });
         if(res.data.data==null){
-          wx.showModal({
-            title: '提示',
-            content: '用户邮箱或密码错误',
-            success: function (res) {
-              if (res.confirm) { //这里是点击了确定以后
-                console.log('用户点击确定')
-              } else { //这里是点击了取消以后
-                console.log('用户点击取消')
-              }
-            }
+          wx.showToast({
+            title: '邮箱或密码错误',
+            icon: 'error',
+            duration: 2000
           })
-        }else{
+        } else{
           wx.setStorage({
-          key:"userInfo",
-          data:res.data.data
-        });
-        wx.redirectTo({
-          url: '../home/home'
-        })
+            key:"userInfo",
+            data:res.data.data
+          });
+          wx.switchTab({
+            url: '../home/home'
+          })
         }  
       },
       fail: function (res) {

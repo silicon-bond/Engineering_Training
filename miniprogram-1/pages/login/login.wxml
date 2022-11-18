@@ -6,14 +6,13 @@
       </view>
       <view class="userinfoBox-email">
           <image src="../../resources/youxiang.png" class="userinfoBox-email-png"></image>
-          <view class="userinfoBox-email-input">
-          <input type="text" bindinput="userNameInput" style="width: 95%; float:right;" placeholder="请输入注册邮箱" />
+          <view class="userinfoBox-email-input" style="padding-top: 13rpx;">
+            <input type="text" bindinput="userNameInput" style="width: 95%; float:right;" placeholder="请输入注册邮箱" />
           </view>
-          
       </view>
       <view class="userinfoBox-email">
           <image src="../../resources/mima.png" class="userinfoBox-email-png"></image>
-          <view class="userinfoBox-email-input">
+          <view class="userinfoBox-email-input"  style="padding-top: 13rpx;">
             <input type="text" bindinput="userPasswordInput" password="true" style="width: 95%; float:right;" placeholder="请输入密码" />
           </view>
         </view>

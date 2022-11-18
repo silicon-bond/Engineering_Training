@@ -39,7 +39,9 @@
             required
             v-model="information.valicode"
           ></el-input>
-          <el-button @click="sendyzm" id="sendyzm" type="primary" style="font-size: 8px; padding-left: 2px; padding-right: 2px">{{yanzhenma}}</el-button>
+          <el-button :disabled="isdisable" @click="sendyzm" id="sendyzm" type="primary" style="font-size: 8px; padding-left: 2px; padding-right: 2px">
+            {{yanzhenma}}
+          </el-button>
           <div style="clear:both;"></div>
         </el-form-item>
         <el-form-item style="margin-bottom: 3px" prop="newPwd">
@@ -66,12 +68,15 @@ export default {
   name: "ForgetPassword",
   data(){
     return{
+      clock: null,
+      isdisable: false,
       yanzhenma:'获取验证码',
       information:{
         email:'',
         valicode: '',
         newPwd:'',
       },
+      time: 30,
       rules:{
         email:[
           {required: true, message: '邮箱不能为空', trigger: ['blur', 'change']}
@@ -79,11 +84,17 @@ export default {
         valicode:[
           {required: true, message: '验证码不能为空', trigger: ['blur', 'change']}
         ],
-        newpwd:[
+        newPwd:[
           {required: true, message: '新密码不能为空', trigger: 'blur'},
-          { pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/, message: '新密码必须同时包含数字与字母,且长度为 8-20位' }
+          {pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,20}$/, message: '新密码必须同时包含数字与字母,且长度为 8-20位' }
         ],
       },
+    }
+  },
+  mounted() {
+    if (localStorage.getItem('yanzhen1')) {
+      this.isdisable = true;
+      this.clock = setInterval(this.doLoop, 1000);
     }
   },
   methods:{
@@ -91,26 +102,62 @@ export default {
       this.$router.push('/login/login')
     },
 
-    sendyzm(){
-      this.$axios({
-        method: 'get',
-        headers: {
-          'Content-type': 'application/json;charset=UTF-8'
-        },
-        url: 'http://8.130.39.140:8081/express/api/user/Captcha/'+this.information.email,
-      }).then((response) => {          //这里使用了ES6的语法
-        // if (response.data.code === '200'){
-        //   alert('登录成功！');
-        //   localStorage.setItem('id',response.data.data.id)
-        //   localStorage.setItem('account',response.data.data.name)
-        //   this.$router.push('/user')
-        // } else {
-        //   alert('用户名或密码错误!');
-        // }
-      }).catch((error) => {
-        console.log(error)       //请求失败返回的数据
-      })
+    doLoop(){
+      this.time--;
+      if(this.time > 0){
+        this.yanzhenma = this.time + 's后获取';
+      } else{
+        clearInterval(this.clock); //清除js定时器
+        this.isdisable = false;
+        this.yanzhenma = '获取验证码';
+        this.time = 30; //重置时间
+        localStorage.removeItem('yanzhen1')
+      }
     },
+
+    sendyzm(){//发送验证码
+      let RegEmail = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+      if(RegEmail.test(this.information.email)) {
+        this.$axios({
+          method: 'get',
+          headers: {
+            'Content-type': 'application/json;charset=UTF-8'
+          },
+          url: 'http://8.130.39.140:8081/express/api/user/Captcha/'+this.information.email,
+        }).then((response) => {          //这里使用了ES6的语法
+          if (response.data.message === '发送成功') {
+            this.$message({
+              showClose: true,
+              message: '验证码发送成功',
+              type: 'success'
+            });
+            this.isdisable = true;
+            localStorage.setItem('yanzhen1', 1)
+            this.clock = setInterval(this.doLoop, 1000);
+          } else {
+            this.$message({
+              showClose: true,
+              message: '验证码发送失败',
+              type: 'error'
+            });
+          }
+        }).catch((error) => {
+          console.log(error)       //请求失败返回的数据
+          this.$message({
+              showClose: true,
+              message: '服务器出了点问题',
+              type: 'error'
+          });
+        })
+      } else {
+        this.$message({
+          showClose: true,
+          message: '请输入正确的邮箱格式',
+          type: 'warning'
+        });
+      }
+    },
+
     editConfirm(message){
       let userMessage = {
         email:this.information.email.toString(),
@@ -128,15 +175,30 @@ export default {
             url: 'http://8.130.39.140:8081/express/user/Forgetpassword',
           }).then((response) => {          //这里使用了ES6的语法
             console.log(response.data.data)
-            // if (response.data.code === '200'){
-            //   alert("注册成功")
-            //   this.$router.push('/login/login')
-            // }else {
-            //   alert("用户名已被占用")
-            //   this.$router.go(0)
-            // }
+            if (true) {
+               this.$message({
+                  showClose: true,
+                  message: '修改密码成功！跳转至登陆页面...',
+                  type: 'success',
+                  duration: 2000
+              });
+              setTimeout(()=> {
+                  this.$router.push('/login/login')
+              }, 2000)
+            } else {
+              this.$message({
+                  showClose: true,
+                  message: '修改密码失败！',
+                  type: 'error',
+              });
+            }
           }).catch((error) => {
             console.log(error)       //请求失败返回的数据
+            this.$message({
+                showClose: true,
+                message: '服务器出了点问题',
+                type: 'error'
+            });
           })
         } else {
           console.log('error !!');
