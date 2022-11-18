@@ -96,11 +96,13 @@ Page({
   },
 
   showD() {
+    console.log(123);
     this.setData({
       stateForRD:true
     })
   },
   showR() {
+    console.log(456);
     this.setData({
       stateForRD:false
     })
