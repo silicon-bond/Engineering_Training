@@ -86,9 +86,18 @@ public class UserController {
     /**
     * 修改
     */
-    @RequestMapping(method = RequestMethod.PUT)
+    @PostMapping("/updateUser")
     public ResultBean<?> updateById(@RequestBody User user) {
-        return new ResultBean<>(userService.updateUser(user));
+
+        int flag = userService.updateUser(user);
+        ResultBean<Object> result = new ResultBean<>();
+        if(flag>0){
+            result.setMessage("修改成功");
+            return result;
+        }
+        result.setMessage("修改失败");
+        return result;
+
     }
 
     @GetMapping("/getExpress/ByReceiptPhoneNum")
