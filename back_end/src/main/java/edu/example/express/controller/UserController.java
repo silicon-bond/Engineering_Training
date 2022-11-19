@@ -193,7 +193,7 @@ public class UserController {
         try {
             Boolean flag = verificationCodeService.IsVerificationCode(code);
             if(!flag){
-                result.setMessage("无效邮箱");
+                result.setMessage("验证码错误");
                 return result;
             }
         }catch(Exception e){
@@ -247,6 +247,7 @@ public class UserController {
         feedback.setDescription(description);
         feedback.setProviderPhoneNumber(phoneNum);
         feedback.setNetworkId(networkId);
+        feedback.setState(0);
 
         int i = abnormalFeedbackService.insertAbnormalFeedback(feedback);
 
