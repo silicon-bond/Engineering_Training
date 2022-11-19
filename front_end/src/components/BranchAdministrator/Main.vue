@@ -28,10 +28,10 @@
             <i class="el-icon-reading"></i>
             <span slot="title">意见箱管理</span>
           </el-menu-item>
-          <el-menu-item index="/branch/personalCenter">
-            <i class="el-icon-message"></i>
-            <span slot="title">个人中心</span>
-          </el-menu-item>
+<!--          <el-menu-item index="/branch/personalCenter">-->
+<!--            <i class="el-icon-message"></i>-->
+<!--            <span slot="title">个人中心</span>-->
+<!--          </el-menu-item>-->
         </el-menu>
       </div>
       <div id="rightBox">
@@ -66,7 +66,7 @@ export default {
       if (key === "/branch/logistics") this.$router.push('/branch/logistics')
       if (key === "/branch/deliverymanList") this.$router.push('/branch/deliverymanList')
       if (key === "/branch/adviceList") this.$router.push('/branch/adviceList')
-      if (key === "/branch/personalCenter") this.$router.push('/branch/personalCenter')
+      // if (key === "/branch/personalCenter") this.$router.push('/branch/personalCenter')
     },
     logout(){
       localStorage.clear();

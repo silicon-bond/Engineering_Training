@@ -54,7 +54,7 @@
           <el-form-item label="账号" prop="account">
             <el-input v-model="detail.account"></el-input>
           </el-form-item>
-          <el-form-item label="昵称" prop="nickname">
+          <el-form-item label="姓名" prop="nickname">
             <el-input v-model="detail.nickname"></el-input>
           </el-form-item>
           <el-form-item label="联系电话" prop="phone">
@@ -64,7 +64,14 @@
             <el-input v-model="detail.password"></el-input>
           </el-form-item>
           <el-form-item label="所属网点" prop="branch">
-            <el-input v-model="detail.branch"></el-input>
+            <el-select v-model="detail.branch" style="width: 100%">
+              <el-option
+                v-for="item in options"
+                :key="item.networkId"
+                :label="item.country+item.networkName"
+                :value="item.networkId">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="editClick('detail')">确认</el-button>
@@ -80,7 +87,7 @@
           <el-form-item label="账号" prop="account">
             <el-input v-model="addMessage.account"></el-input>
           </el-form-item>
-          <el-form-item label="昵称" prop="nickname">
+          <el-form-item label="姓名" prop="nickname">
             <el-input v-model="addMessage.nickname"></el-input>
           </el-form-item>
           <el-form-item label="联系电话" prop="phone">
@@ -94,7 +101,7 @@
               <el-option
                 v-for="item in options"
                 :key="item.networkId"
-                :label="item.municipal+item.networkName"
+                :label="item.country+item.networkName"
                 :value="item.networkId">
               </el-option>
             </el-select>
@@ -136,10 +143,9 @@ export default {
         //{prop: "id", label: "id"},
         {prop: "networkAdministratorId", label: "系统管理员编号"},
         {prop: "account", label: "账号"},
-        {prop: "nickname", label: "昵称"},
+        {prop: "nickname", label: "姓名"},
         {prop: "password", label: "密码"},
         {prop: "phoneNumber", label: "联系电话"},
-        {prop: "branch", label: "所属网点"},
       ],
       options: [],
       value: '',
@@ -147,7 +153,7 @@ export default {
       ],
       addRules:{
         nickname:[
-          { required: true, message: '昵称不能为空', trigger: 'change' },
+          { required: true, message: '姓名不能为空', trigger: 'change' },
         ],
         account:[
           { required: true, message: '账号不能为空', trigger: 'change' },
@@ -175,9 +181,9 @@ export default {
         password:[
           { required: true, message: '密码不能为空', trigger: 'change' },
         ],
-        // branch:[
-        //   { required: true, message: '所属网点不能为空', trigger: 'change' },
-        // ]
+        branch:[
+          { required: true, message: '所属网点不能为空', trigger: 'change' },
+        ]
       },
       nId: '1',
       nname: '',
@@ -377,6 +383,7 @@ export default {
   },
   created() {
     this.querySearch(this.currentPage)
+    this.getAllBranch()
   }
 }
 </script>

@@ -69,7 +69,7 @@
             <el-option
               v-for="item in options"
               :key="item.networkId"
-              :label="item.municipal+item.networkName"
+              :label="item.country+item.networkName"
               :value="item.networkId">
             </el-option>
           </el-select>
@@ -192,11 +192,11 @@ export default {
         receiptName:this.Form.recipientName,
         receiptPhoneNumber:this.Form.recipientTelephone,
         deliverProvince:CodeToText[`${this.Form.senderSSQ[0]}`],
-        deliverCountry:CodeToText[`${this.Form.senderSSQ[1]}`],
-        deliverMunicipal:CodeToText[`${this.Form.senderSSQ[2]}`],
+        deliverMunicipal:CodeToText[`${this.Form.senderSSQ[1]}`],
+        deliverCountry:CodeToText[`${this.Form.senderSSQ[2]}`],
         receiptProvince:CodeToText[`${this.Form.recipientSSQ[0]}`],
-        receiptCountry:CodeToText[`${this.Form.recipientSSQ[1]}`],
-        receiptMunicipal:CodeToText[`${this.Form.recipientSSQ[2]}`],
+        receiptMunicipal:CodeToText[`${this.Form.recipientSSQ[1]}`],
+        receiptCountry:CodeToText[`${this.Form.recipientSSQ[2]}`],
         receiptDetailAddress:this.Form.recipientAddress,
         networkId:this.Form.value
       }
