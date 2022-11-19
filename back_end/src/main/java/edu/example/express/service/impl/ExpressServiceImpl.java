@@ -161,6 +161,17 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
     }
 
     @Override
+    public Page<Express> getExpressListByNetworkIdAndDateAndState(int state, Integer networkId, int page, int pageSize, LocalDate DateStart, LocalDate DateOver){
+        log.info("正在查询express中NetworkId为{},state为{},且时间范围在{}和{}之间的数据", networkId, state, DateStart, DateOver);
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("network_id", networkId)
+                .eq("state", state)
+                .between("order_date", DateStart, DateOver);
+        Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
+        return result;
+    }
+
+    @Override
     public Page<Express> getExpressListByReceiptPhoneNumber(String receipt_phone_number, int page, int pageSize){
         log.info("正在查询express中receipt_phone_number为{}数据", receipt_phone_number);
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("receipt_phone_number", receipt_phone_number);
