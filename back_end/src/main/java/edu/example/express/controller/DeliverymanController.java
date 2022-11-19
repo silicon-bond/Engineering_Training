@@ -130,9 +130,26 @@ public class DeliverymanController {
         return new ResultBean<>(expressService.getExpressListByNetworkAndDeliverymanId(networkId, deliverymanId, isCompleted, expressId, page, pageSize));
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/myUnCompletedExpressList")
+    private ResultBean<?> getMyUnCompletedExpressList(@RequestParam(name = "page", defaultValue = "1") int page,
+                                                      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                                      @RequestParam(name = "deliverymanId")Integer deliverymanId,
+                                                      @RequestParam(name = "expressId", required = false)Integer expressId){
+        return new ResultBean<>(expressService.getUnCompletedExpressList(page, pageSize, deliverymanId, expressId));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/myCompletedExpressList")
+    private ResultBean<?> getMyCompletedExpressList(@RequestParam(name = "page", defaultValue = "1") int page,
+                                                    @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                                    @RequestParam(name = "deliverymanId")Integer deliverymanId,
+                                                    @RequestParam(name = "expressId", required = false)Integer expressId){
+        return new ResultBean<>(expressService.getCompletedExpressList(page, pageSize, deliverymanId, expressId));
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/expressById")
-    private ResultBean<?> getExpressById(@RequestParam(name = "expressId")Integer expressId){
-        return new ResultBean<>(expressService.getExpressById(expressId));
+    private ResultBean<?> getExpressById(@RequestParam(name = "expressId")Integer expressId,
+                                         @RequestParam(name = "networkId")Integer networkId){
+        return new ResultBean<>(expressService.getExpressByIdAndNetworkId(expressId, networkId));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/completeDelivery")
