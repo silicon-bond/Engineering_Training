@@ -102,10 +102,10 @@
     <h3 id="tableTitle">物流信息列表</h3>
     <el-divider></el-divider>
 
-    <el-dialog title="编辑物流详情" :visible.sync="dialogDetail">
+    <el-dialog title="编辑物流详情" :visible.sync="editDetail">
 
       <div id="detailBox">
-        <el-form ref="detail" :model="detail" label-width="80px">
+        <el-form ref="detail" :model="detail" label-width="140px" :rules="rules">
           <el-form-item label="订单编号">
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
@@ -115,25 +115,45 @@
           <el-form-item label="寄件人电话号码" prop="senderNumber">
             <el-input v-model="detail.senderNumber"></el-input>
           </el-form-item>
+          <el-form-item label="寄件地址(省/市/区)">
+            <el-cascader
+              size="large"
+              :options="jijianoptions"
+              v-model="detail.senderSSQ">
+            </el-cascader>
+          </el-form-item>
           <el-form-item label="收件人" prop="recipient">
             <el-input v-model="detail.recipient"></el-input>
           </el-form-item>
           <el-form-item label="收件人电话号码" prop="recipientNumber">
             <el-input v-model="detail.recipientNumber"></el-input>
           </el-form-item>
+            <el-form-item label="收件地址(省/市/区)">
+              <el-cascader
+                size="large"
+                :options="shoujianoptions"
+                v-model="detail.recipientSSQ">
+              </el-cascader>
+            </el-form-item>
           <el-form-item label="状态">
-            <el-input v-model="detail.state" readonly></el-input>
+            <el-select v-model="detail.state" style="width: 100%" disabled>
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item label="寄件地址">
-            <el-input v-model="detail.deliveryAddress"></el-input>
+          <el-form-item label="下单时间" prop="deliveryTime">
+            <el-input v-model="detail.deliveryTime" readonly></el-input>
           </el-form-item>
-          <el-form-item label="收货地址">
-            <el-input v-model="detail.recipentAddress"></el-input>
+          <el-form-item>
+            <el-button type="primary" @click="editClick('detail')">确认</el-button>
           </el-form-item>
         </el-form>
       </div>
     </el-dialog>
-
 
     <el-dialog title="转发网点查询" :visible.sync="transferDetail">
     <div id="detailBox">
@@ -202,54 +222,77 @@
 </template>
 
 <script>
+import { regionData,  CodeToText, TextToCode} from 'element-china-area-data';
 export default {
   name: "LogisticsList",
   data() {
     return {
+      jijianoptions: regionData,
+      shoujianoptions: regionData,
       deliverymanId:'',
       maybechange:'',
       newdata:'',
       networkId:'',
       response:'',
-      dialogDetail: false,
+      editDetail: false,
       transferDetail:false,
       detail: {
         id:'',
         sender:'',
+        senderNumber:'',
+        senderSSQ: null,
         recipient:'',
+        recipientNumber:'',
+        recipientSSQ: null,
+        deliveryTime:'',
         state:'',
-        deliveryAddress:'',
-        recipentAddress:''
+        branch:''
       },
 
       networkname:[
 
       ],
-
-      options: [{
-        value: '0',
-        label: '未揽件'
-      },
-        {
-          value: '3',
-          label: '待派送'
-        },{
-        value: '1',
-          label:'已揽件'
-        },
-        {
-          value: '2',
-          label:'运输中'
-        },
-        {
-          value: '4',
-          label: '派送中'
-        },
-        {
-          value: '5',
-          label: '已送达'
-        }
+      rules:{
+        sender:[
+          { required: true, message: '寄件人不能为空', trigger: 'change' },
         ],
+        senderNumber:[
+          { pattern:/^1[3|4|5|7|8][0-9]{9}$/,message: '请输入正确的手机号码',trigger: 'change' },
+          { required: true, message: '寄件人电话号码不能为空', trigger: 'change' },
+        ],
+        recipient:[
+          { required: true, message: '收件人不能为空', trigger: 'change' },
+        ],
+        recipientNumber:[
+          { pattern:/^1[3|4|5|7|8][0-9]{9}$/,message: '请输入正确的手机号码',trigger: 'change' },
+          { required: true, message: '收件人电话号码不能为空', trigger: 'change' },
+        ],
+        state:[
+          { required: true, message: '物流状态不能为空', trigger: 'change' },
+        ],
+        branch:[
+          { required: true, message: '当前所属网点不能为空', trigger: 'change' },
+        ]
+      },
+      options: [{
+        value: 0,
+        label: '未揽件'
+      }, {
+        value: 1,
+        label: '已揽件'
+      }, {
+        value: 2,
+        label: '运输中'
+      }, {
+        value: 3,
+        label: '待派送'
+      }, {
+        value: 4,
+        label: '派送中'
+      }, {
+        value: 5,
+        label: '已送达'
+      }],
       value: '',
       nextnet:'',
       searchContent:'',
@@ -262,7 +305,7 @@ export default {
         // {prop: "receiptName", label: "收件人"},
         {prop: "detailaddress", label: "寄件地址"},
         {prop: "recipeaddress", label: "收货地址"},
-        {prop: "orderDate", label: "订单时间"}
+        {prop: "orderDate", label: "下单时间"}
 
       ],
       tableData: [
@@ -346,43 +389,85 @@ export default {
       })
     },
 
-    lookClick(index,row) {
+    edit(row){
       this.detail.id = row.expressId
       this.detail.sender = row.deliverName
+      this.detail.senderNumber = row.deliverPhoneNumber
+      let  array = []
+      array[0] = TextToCode[`${row.deliverProvince}`].code
+      array[1] = TextToCode[`${row.deliverProvince}`][`${row.deliverMunicipal}`].code
+      array[2] = TextToCode[`${row.deliverProvince}`][`${row.deliverMunicipal}`][`${row.deliverCountry}`].code
+      this.detail.senderSSQ = array
       this.detail.recipient = row.receiptName
-      // this.detail.arrivalTime = row.arrivalTime
-      // this.detail.deliveryTime = row.deliveryTime
-      if (row.state===1){
-        this.detail.state = '已揽件'
-      }
-      else if(row.state===2) {
-        this.detail.state = '运输中'
-      }
-      else if(row.state===4) {
-        this.detail.state = '派送中'
-      }
-      else if (row.state===0){
-        this.detail.state = '未揽件'
-      }
-      else if (row.state===3){
-        this.detail.state = '待派送'
-      }
-      else {
-        this.detail.state = '已送达'
-      }
-      this.detail.deliveryAddress=row.detailaddress
-      this.detail.recipentAddress=row.recipeaddress
-      this.dialogDetail = true
-
+      this.detail.recipientNumber = row.receiptPhoneNumber
+      let  array2 = []
+      array2[0] = TextToCode[`${row.receiptProvince}`].code
+      array2[1] = TextToCode[`${row.receiptProvince}`][`${row.receiptMunicipal}`].code
+      array2[2] = TextToCode[`${row.receiptProvince}`][`${row.receiptMunicipal}`][`${row.receiptCountry}`].code
+      this.detail.recipientSSQ = array2
+      this.detail.deliveryTime = row.orderDate
+      this.detail.state = row.state
+      this.detail.branch = row.networkId
+      this.editDetail = true
     },
-    edit(row){
-
-    },
-    editClick(){
-
+    editClick(message){
+      this.$refs[message].validate((valid) => {
+        if (valid) {
+          this.$confirm('确定提交此修改?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.editConfirm()
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消修改'
+            });
+          });
+        } else {
+          return false;
+        }
+      });
     },
     editConfirm(){
+      let logisticsMessage = {
+        expressId:this.detail.id,
+        deliverName:this.detail.sender,
+        deliverPhoneNumber:this.detail.senderNumber,
+        deliverProvince:CodeToText[`${this.detail.senderSSQ[0]}`],
+        deliverMunicipal:CodeToText[`${this.detail.senderSSQ[1]}`],
+        deliverCountry:CodeToText[`${this.detail.senderSSQ[2]}`],
+        receiptName:this.detail.recipient,
+        receiptPhoneNumber:this.detail.recipientNumber,
+        receiptProvince:CodeToText[`${this.detail.recipientSSQ[0]}`],
+        receiptMunicipal:CodeToText[`${this.detail.recipientSSQ[1]}`],
+        receiptCountry:CodeToText[`${this.detail.recipientSSQ[2]}`],
+        state:this.detail.state
+      }
+      this.$axios({
+        method: 'put',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        data: JSON.stringify(logisticsMessage),
+        url: 'http://8.130.39.140:8081/express/api/express/updateById',
+      }).then((response) => {          //这里使用了ES6的语法
+        if (response.data.message==="success"){
+          this.$message({
+            message: '修改物流成功',
+            type: 'success'
+          });
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
 
+        }else {
+          this.$message.error('修改物流失败');
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     transferclick(index,row) {
       this.transferDetail = true

@@ -63,7 +63,7 @@
     <el-dialog title="编辑物流信息" :visible.sync="editDetail">
 
       <div id="editBox">
-        <el-form ref="detail" :model="detail" label-width="125px" :rules="rules">
+        <el-form ref="detail" :model="detail" label-width="140px" :rules="rules">
           <el-form-item label="订单编号" prop="id">
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
@@ -73,7 +73,7 @@
           <el-form-item label="寄件人电话号码" prop="senderNumber">
             <el-input v-model="detail.senderNumber"></el-input>
           </el-form-item>
-          <el-form-item label="省/市/区">
+          <el-form-item label="寄件地址(省/市/区)">
             <el-cascader
               size="large"
               :options="jijianoptions"
@@ -86,7 +86,7 @@
           <el-form-item label="收件人电话号码" prop="recipientNumber">
             <el-input v-model="detail.recipientNumber"></el-input>
           </el-form-item>
-          <el-form-item label="省/市/区">
+          <el-form-item label="收件地址(省/市/区)">
             <el-cascader
               size="large"
               :options="shoujianoptions"
@@ -234,11 +234,16 @@ export default {
       this.detail.senderNumber = row.deliverPhoneNumber
       let  array = []
       array[0] = TextToCode[`${row.deliverProvince}`].code
-      array[1] = TextToCode[`${row.deliverProvince}`][`${row.municipal}`].code
-      array[2] = TextToCode[`${row.deliverProvince}`][`${row.municipal}`][`${row.country}`].code
+      array[1] = TextToCode[`${row.deliverProvince}`][`${row.deliverMunicipal}`].code
+      array[2] = TextToCode[`${row.deliverProvince}`][`${row.deliverMunicipal}`][`${row.deliverCountry}`].code
       this.detail.senderSSQ = array
       this.detail.recipient = row.receiptName
       this.detail.recipientNumber = row.receiptPhoneNumber
+      let  array2 = []
+      array2[0] = TextToCode[`${row.receiptProvince}`].code
+      array2[1] = TextToCode[`${row.receiptProvince}`][`${row.receiptMunicipal}`].code
+      array2[2] = TextToCode[`${row.receiptProvince}`][`${row.receiptMunicipal}`][`${row.receiptCountry}`].code
+      this.detail.recipientSSQ = array2
       this.detail.deliveryTime = row.orderDate
       this.detail.state = row.state
       this.detail.branch = row.networkId
@@ -269,8 +274,14 @@ export default {
         expressId:this.detail.id,
         deliverName:this.detail.sender,
         deliverPhoneNumber:this.detail.senderNumber,
+        deliverProvince:CodeToText[`${this.detail.senderSSQ[0]}`],
+        deliverMunicipal:CodeToText[`${this.detail.senderSSQ[1]}`],
+        deliverCountry:CodeToText[`${this.detail.senderSSQ[2]}`],
         receiptName:this.detail.recipient,
         receiptPhoneNumber:this.detail.recipientNumber,
+        receiptProvince:CodeToText[`${this.detail.recipientSSQ[0]}`],
+        receiptMunicipal:CodeToText[`${this.detail.recipientSSQ[1]}`],
+        receiptCountry:CodeToText[`${this.detail.recipientSSQ[2]}`],
         state:this.detail.state
       }
       this.$axios({
