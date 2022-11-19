@@ -130,7 +130,7 @@ public class ExpressController {
     /**
     * 修改
     */
-    @RequestMapping(method = RequestMethod.POST, value = "updateById")
+    @RequestMapping(method = RequestMethod.PUT, value = "/updateById")
     public ResultBean<?> updateById(@RequestBody Express express) {
         return new ResultBean<>(expressService.updateExpress(express));
     }
