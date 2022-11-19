@@ -146,6 +146,14 @@ public class DeliverymanController {
         return new ResultBean<>(expressService.getCompletedExpressList(page, pageSize, deliverymanId, expressId));
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/myAllExpresses")
+    private ResultBean<?> getMyAllExpresses(@RequestParam(name = "page", defaultValue = "1") int page,
+                                            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                            @RequestParam(name = "deliverymanId")Integer deliverymanId,
+                                            @RequestParam(name = "state", required = false)Integer state){
+        return new ResultBean<>(expressService.getMyAllExpresses(page, pageSize, deliverymanId, state));
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/expressById")
     private ResultBean<?> getExpressById(@RequestParam(name = "expressId")Integer expressId,
                                          @RequestParam(name = "networkId")Integer networkId){

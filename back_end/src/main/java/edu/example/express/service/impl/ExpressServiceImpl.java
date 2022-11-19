@@ -317,6 +317,21 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         return result;
     }
 
+    @Override
+    public Page<Express> getMyAllExpresses(int page, int pageSize, Integer deliverymanId, Integer state) {
+        QueryWrapper<Express> queryWrapper = new QueryWrapper<Express>();
+        queryWrapper = queryWrapper.nested(
+                wapper -> wapper.eq("collect_id", deliverymanId)
+                        .or().eq("delivery_id", deliverymanId)
+        );
+        if (state != null){
+            queryWrapper.eq("state", state);
+        }
+        Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        result.setRecords(completeListInfo(result.getRecords()));
+        return result;
+    }
+
     private Express completeInfo(Express express){
         Network network = networkService.getNetworkById(express.getNetworkId());
         express.setNetwork(network);

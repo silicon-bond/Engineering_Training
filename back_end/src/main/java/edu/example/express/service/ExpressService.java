@@ -105,5 +105,6 @@ public interface ExpressService {
 
     Page<Express> getCompletedExpressList(int page, int pageSize, Integer deliverymanId, Integer expressId);
 
+    Page<Express> getMyAllExpresses(int page, int pageSize, Integer deliverymanId, Integer state);
 
 }
