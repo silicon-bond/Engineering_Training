@@ -61,7 +61,6 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         return result;
     }
 
-
     @Override
     public Page<Express> getExpressByIdAndReceiptPhoneNumber(int page, int pageSize, int id, String receipt_phone_number){
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("receipt_phone_number", receipt_phone_number)
@@ -76,6 +75,15 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
     public Express getExpressById(int id) {
         log.info("正在查询express中id为{}的数据",id);
         Express express = super.getById(id);
+        log.info("查询id为{}的express{}",id,(null == express?"无结果":"成功"));
+        return express;
+    }
+
+    @Override
+    public Express getExpressByIdAndNetworkId(int id, int networkId) {
+        log.info("正在查询express中id为{}的数据",id);
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("express_id", id).eq("networkId", networkId);
+        Express express = super.getOne(queryWrapper);
         log.info("查询id为{}的express{}",id,(null == express?"无结果":"成功"));
         return express;
     }
@@ -127,15 +135,17 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         return result;
     }
 
+
+
     @Override
     public Page<Express> getExpressListByNetworkAndDeliverymanId(Integer networkId, Integer deliverymanId, Integer isCompleted, Integer expressId, int page, int pageSize) {
         log.info("正在查询express中deliverymanId为{}的数据", deliverymanId);
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>();
+        queryWrapper = queryWrapper.nested(wapper -> wapper.eq("delivery_id", deliverymanId).or().eq("collect_id", deliverymanId));
         if (expressId != null)
             queryWrapper = queryWrapper.eq("express_id", expressId);
         else
             queryWrapper = queryWrapper.eq("network_id", networkId);
-        queryWrapper = queryWrapper.and(wapper -> wapper.eq("delivery_id", deliverymanId).or().eq("collect_id", deliverymanId));
         if (isCompleted != null){
             if (isCompleted == 0){
                 queryWrapper = queryWrapper.and(wapper -> wapper.eq("state", ExpressState.Collected).eq("collect_id", deliverymanId).or().eq("state", ExpressState.Delivering).eq("delivery_id", deliverymanId));
@@ -279,17 +289,33 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         return result;
     }
 
+    @Override
+    public Page<Express> getUnCompletedExpressList(int page, int pageSize, Integer deliverymanId, Integer expressId) {
+        QueryWrapper<Express> queryWrapper = new QueryWrapper<Express>();
+        queryWrapper = queryWrapper.nested(
+                wapper -> wapper.eq("state", ExpressState.Collected).eq("collect_id", deliverymanId)
+                                .or()
+                                .eq("state", ExpressState.Delivering).eq("delivery_id", deliverymanId));
+        if (expressId != null)
+            queryWrapper = queryWrapper.eq("express_id", expressId);
+        Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        result.setRecords(completeListInfo(result.getRecords()));
+        return result;
+    }
 
-
-
-
-
-
-
-
-
-
-
+    @Override
+    public Page<Express> getCompletedExpressList(int page, int pageSize, Integer deliverymanId, Integer expressId) {
+        QueryWrapper<Express> queryWrapper = new QueryWrapper<Express>();
+        queryWrapper = queryWrapper.nested(
+                wapper -> wapper.ne("state", ExpressState.Collected).eq("collect_id", deliverymanId)
+                        .or()
+                        .ne("state", ExpressState.Delivering).eq("delivery_id", deliverymanId));
+        if (expressId != null)
+            queryWrapper = queryWrapper.eq("express_id", expressId);
+        Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        result.setRecords(completeListInfo(result.getRecords()));
+        return result;
+    }
 
     private Express completeInfo(Express express){
         Network network = networkService.getNetworkById(express.getNetworkId());

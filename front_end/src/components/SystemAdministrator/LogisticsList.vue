@@ -165,12 +165,14 @@ export default {
           { required: true, message: '寄件人不能为空', trigger: 'change' },
         ],
         senderNumber:[
+          { pattern:/^1[3|4|5|7|8][0-9]{9}$/,message: '请输入正确的手机号码',trigger: 'change' },
           { required: true, message: '寄件人电话号码不能为空', trigger: 'change' },
         ],
         recipient:[
           { required: true, message: '收件人不能为空', trigger: 'change' },
         ],
         recipientNumber:[
+          { pattern:/^1[3|4|5|7|8][0-9]{9}$/,message: '请输入正确的手机号码',trigger: 'change' },
           { required: true, message: '收件人电话号码不能为空', trigger: 'change' },
         ],
         state:[
@@ -248,12 +250,12 @@ export default {
         state:this.detail.state
       }
       this.$axios({
-        method: 'put',
+        method: 'post',
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
         data: JSON.stringify(logisticsMessage),
-        url: 'http://8.130.39.140:8081/express/api/express',
+        url: 'http://8.130.39.140:8081/express/api/expressupdateById',
       }).then((response) => {          //这里使用了ES6的语法
         if (response.data.message==="success"){
           this.$message({

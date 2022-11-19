@@ -39,6 +39,8 @@ public interface ExpressService {
     */
     Express getExpressById(int id);
 
+    Express getExpressByIdAndNetworkId(int id, int networkId);
+
     Page<Express> getExpressByIdAndDeliverPhoneNumber(int page, int pageSize, int id, String deliver_phone_number);
 
     Page<Express> getExpressByIdAndReceiptPhoneNumber(int page, int pageSize, int id, String receipt_phone_number);
@@ -98,5 +100,10 @@ public interface ExpressService {
     Page<Express> getExpressListByStateAndId(int page,int pageSize,Integer state,Integer id, String phoneNum);
 
     Page<Express> getExpressListByStateAndDeliverymanId(int page, int pageSize, Integer state, Integer networkId, Integer deliverymanId);
+
+    Page<Express> getUnCompletedExpressList(int page, int pageSize, Integer deliverymanId, Integer expressId);
+
+    Page<Express> getCompletedExpressList(int page, int pageSize, Integer deliverymanId, Integer expressId);
+
 
 }

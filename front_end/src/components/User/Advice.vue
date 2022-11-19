@@ -24,7 +24,7 @@
           </el-form-item>
           <el-divider></el-divider>
           <el-form-item>
-            <el-button type="primary" @click="submitForm('ruleForm')" id="submibtn">提交</el-button>
+            <el-button type="primary" @click="submitClick('ruleForm')" id="submibtn">提交</el-button>
           </el-form-item>
         </el-form>
 
@@ -59,26 +59,47 @@ export default {
     }
   },
   methods:{
-    submitForm(message){
-      let user = JSON.parse(localStorage.getItem("userinfo_kuaidi"))
+    submitClick(message){
       this.$refs[message].validate((valid) => {
         if (valid) {
-          this.$axios({
-            method: 'get',
-            headers: {
-              'Content-type': 'application/json;charset=UTF-8'
-            },
-            url: 'http://localhost:8081/express/user/FeedBack?title='+this.ruleForm.title+'&description='+this.ruleForm.content+'&phoneNum='+user.phoneNumber+'&networkId='+this.ruleForm.branch,
-          }).then((response) => {          //这里使用了ES6的语法
-            alert('发表意见成功')
-            this.$router.go(0)
-          }).catch((error) => {
-            console.log(error)       //请求失败返回的数据
-          })
+          this.$confirm('确定发表此意见?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.submitForm()
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消修改'
+            });
+          });
         } else {
           return false;
         }
       });
+    },
+    submitForm(){
+      let user = JSON.parse(localStorage.getItem("userinfo_kuaidi"))
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/user/FeedBack?title='+this.ruleForm.title+'&description='+this.ruleForm.content+'&phoneNum='+user.phoneNumber+'&networkId='+this.ruleForm.branch,
+      }).then((response) => {          //这里使用了ES6的语法
+        if (response.data.message==="反馈成功"){
+          this.$message({
+            message: '发表意见成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('发表意见失败');
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     getAllBranch(){
       this.$axios({

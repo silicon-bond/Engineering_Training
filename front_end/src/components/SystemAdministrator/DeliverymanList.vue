@@ -119,6 +119,7 @@ export default {
           { required: true, message: '姓名不能为空', trigger: 'change' },
         ],
         phone:[
+          { pattern:/^1[3|4|5|7|8][0-9]{9}$/,message: '请输入正确的手机号码',trigger: 'change' },
           { required: true, message: '联系电话不能为空', trigger: 'change' },
         ],
         password:[
@@ -186,7 +187,7 @@ export default {
         email:this.detail.email,
         phoneNumber:this.detail.phone,
         password:this.detail.password,
-
+        username:this.detail.username
       }
       this.$axios({
         method: 'put',

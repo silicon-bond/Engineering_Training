@@ -48,7 +48,7 @@
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
           <el-form-item label="姓名" prop="username">
-            <el-input v-model="detail.nickname"></el-input>
+            <el-input v-model="detail.username"></el-input>
           </el-form-item>
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="detail.email" readonly></el-input>
@@ -82,7 +82,7 @@ export default {
       detail: {
         id:'',
         email:'',
-        nickname:'',
+        username:'',
         address:'',
         phone:'',
         registerTime:'',
@@ -111,6 +111,7 @@ export default {
           { required: true, message: '地址不能为空', trigger: 'change' },
         ],
         phone:[
+          { pattern:/^1[3|4|5|7|8][0-9]{9}$/,message: '请输入正确的手机号码',trigger: 'change' },
           { required: true, message: '联系电话不能为空', trigger: 'change' },
         ],
         password:[
@@ -139,13 +140,13 @@ export default {
         this.querySearch(this.currentPage);
       }
       else{
-        this.searchByPhone(this.currentPage);
+        this.searchById(this.currentPage);
       }
     },
     edit(row){
       this.detail.id = row.userId
       this.detail.email = row.email
-      this.detail.nickname = row.username
+      this.detail.username = row.username
       this.detail.address = row.detailAddress
       this.detail.phone = row.phoneNumber
       this.detail.registerTime = row.registerDate
@@ -175,7 +176,7 @@ export default {
     editConfirm(){
       let userMessage = {
         userId:this.detail.id,
-        username:this.detail.nickname,
+        username:this.detail.username,
         email:this.detail.email,
         detailAddress:this.detail.address,
         phoneNumber:this.detail.phone,

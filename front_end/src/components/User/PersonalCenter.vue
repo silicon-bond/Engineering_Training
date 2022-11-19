@@ -108,7 +108,6 @@ export default {
           user.municipal = CodeToText[`${this.form.address[1]}`],
           user.country = CodeToText[`${this.form.address[2]}`],
           localStorage.setItem("userinfo_kuaidi",JSON.stringify(user))
-          this.$router.go(0)
         }else {
           this.$message.error('保存个人信息失败');
         }

@@ -159,6 +159,7 @@ export default {
           { required: true, message: '账号不能为空', trigger: 'change' },
         ],
         phone:[
+          { pattern:/^1[3|4|5|7|8][0-9]{9}$/,message: '请输入正确的手机号码',trigger: 'change' },
           { required: true, message: '联系电话不能为空', trigger: 'change' },
         ],
         password:[
@@ -176,6 +177,7 @@ export default {
           { required: true, message: '账号不能为空', trigger: 'change' },
         ],
         phone:[
+          { pattern:/^1[3|4|5|7|8][0-9]{9}$/,message: '请输入正确的手机号码',trigger: 'change' },
           { required: true, message: '联系电话不能为空', trigger: 'change' },
         ],
         password:[
