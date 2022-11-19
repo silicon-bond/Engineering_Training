@@ -14,6 +14,15 @@
           <el-form-item label="联系电话" prop="senderTelephone">
             <el-input v-model="Form.senderTelephone" placeholder="请输入寄件人联系电话"></el-input>
           </el-form-item>
+          <el-form-item label="普通地址">
+            <el-cascader
+            size="large"
+            :options="jijianoptions"
+            v-model="Form.senderSSQ"
+            @change="jijianhandleChange">
+            </el-cascader>
+          </el-form-item>
+
           <el-form-item label="详细地址" prop="senderAddress">
             <el-input v-model="Form.senderAddress" placeholder="请输入寄件人地址"></el-input>
           </el-form-item>
@@ -37,6 +46,14 @@
           <el-form-item label="联系电话" prop="recipientTelephone">
             <el-input v-model="Form.recipientTelephone" placeholder="请输入收件人联系电话"></el-input>
           </el-form-item>
+          <el-form-item label="普通地址">
+            <el-cascader
+            size="large"
+            :options="shoujianoptions"
+            v-model="Form.recipientSSQ"
+            @change="shoujianhandleChange">
+            </el-cascader>
+          </el-form-item>
           <el-form-item label="详细地址" prop="recipientAddress">
             <el-input v-model="Form.recipientAddress" placeholder="请输入收件人地址"></el-input>
           </el-form-item>
@@ -52,7 +69,7 @@
             <el-option
               v-for="item in options"
               :key="item.networkId"
-              :label="item.networkName"
+              :label="item.municipal+item.networkName"
               :value="item.networkId">
             </el-option>
           </el-select>
@@ -66,16 +83,23 @@
 </template>
 
 <script>
+ import { regionData,  CodeToText, TextToCode} from 'element-china-area-data';
 export default {
   name: "Mail",
   data(){
     return{
+      jijianselectedOptions: [],
+      shoujianselectedOptions: [],
+      jijianoptions: regionData,
+      shoujianoptions: regionData,
       labelPosition:'left',
       options: [],
       Form: {
+        senderSSQ: null,
         senderName:'',
         senderTelephone:'',
         senderAddress:'',
+        recipientSSQ: null,
         recipientName:'',
         recipientTelephone:'',
         recipientAddress:'',
@@ -89,6 +113,9 @@ export default {
         ],
         senderTelephone: [
           { required: true, message: '请输入寄件人联系电话', trigger: 'blur' }
+        ],
+        senderptAddress: [
+          { required: true, message: '请选择寄件人地址', trigger: 'blur' }
         ],
         senderAddress: [
           { required: true, message: '请输入寄件人地址', trigger: 'blur' }
@@ -112,6 +139,19 @@ export default {
     }
   },
   methods:{
+    jijianhandleChange (value) {
+        console.log(value)
+        console.log(CodeToText[`${this.Form.senderSSQ[0]}`]);
+        console.log(CodeToText[`${this.Form.senderSSQ[1]}`]);
+        console.log(CodeToText[`${this.Form.senderSSQ[2]}`]);
+    },
+    shoujianhandleChange (value) {
+        console.log(value)
+        console.log(CodeToText[`${this.Form.recipientSSQ[0]}`]);
+        console.log(CodeToText[`${this.Form.recipientSSQ[1]}`]);
+        console.log(CodeToText[`${this.Form.recipientSSQ[2]}`]);
+    },
+
     submit(){
       const form1=new Promise((resolve,reject)=>{
         this.$refs['Rules1'].validate(valid => {
@@ -151,6 +191,12 @@ export default {
         description:this.Form.note,
         receiptName:this.Form.recipientName,
         receiptPhoneNumber:this.Form.recipientTelephone,
+        deliverProvince:CodeToText[`${this.Form.senderSSQ[0]}`],
+        deliverCountry:CodeToText[`${this.Form.senderSSQ[1]}`],
+        deliverMunicipal:CodeToText[`${this.Form.senderSSQ[2]}`],
+        receiptProvince:CodeToText[`${this.Form.recipientSSQ[0]}`],
+        receiptCountry:CodeToText[`${this.Form.recipientSSQ[1]}`],
+        receiptMunicipal:CodeToText[`${this.Form.recipientSSQ[2]}`],
         receiptDetailAddress:this.Form.recipientAddress,
         networkId:this.Form.value
       }
@@ -177,6 +223,7 @@ export default {
         url: 'http://8.130.39.140:8081/express/api/allNetworks',
       }).then((response) => {          //这里使用了ES6的语法
         this.options = response.data.data
+
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })

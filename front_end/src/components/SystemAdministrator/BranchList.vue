@@ -4,10 +4,10 @@
       <h2 id="searchTitle">网点查询</h2>
       <div id="search">
         <div id="searchContent">
-          <el-input  v-model="searchContent" placeholder="请输入网点名"></el-input>
+          <el-input  v-model="searchContent" placeholder="请输入网点编号"></el-input>
         </div>
         <el-button type="primary">搜索</el-button>
-        <el-button id="addUserbtn" type="primary">添加网点</el-button>
+        <el-button id="addUserbtn" type="primary" @click="add">添加网点</el-button>
       </div>
     </div>
     <el-divider></el-divider>
@@ -24,12 +24,15 @@
           align="center"
           show-overflow-tooltip>
         </el-table-column>
-
+        <el-table-column prop="province,country,municipal" label="网点所在地址" align="center">
+          <template slot-scope="scope">
+            {{ scope.row.province}}{{ scope.row.country }}{{ scope.row.municipal }}
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="text" @click="lookClick(scope.$index,scope.row)" class="button">查看</el-button>
-            <el-button size="mini" type="text" @click="editClick(scope.$index,scope.row)" class="button">编辑</el-button>
-            <el-button size="mini" type="text" @click="deleteClick(scope.$index,scope.row)" class="button">删除</el-button>
+            <el-button size="mini" type="text" @click="edit(scope.row)" class="button">编辑</el-button>
+            <el-button size="mini" type="text" @click="deleteClick(scope.row)" class="button">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -44,56 +47,25 @@
       layout="prev, pager, next"
       :total="totalCount">
     </el-pagination>
-    <el-dialog title="网点详情" :visible.sync="lookDetail">
 
-      <div id="detailBox">
-        <el-form ref="detail" :model="detail" label-width="80px">
-          <el-form-item label="订单编号">
-            <el-input v-model="detail.id" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="寄件人">
-            <el-input v-model="detail.sender" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="收件人">
-            <el-input v-model="detail.recipient" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="状态">
-            <el-input v-model="detail.state" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="发货时间">
-            <el-input v-model="detail.deliveryTime" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="送达时间">
-            <el-input v-model="detail.arrivalTime" readonly></el-input>
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-dialog>
-
-    <el-dialog title="编辑网点信息" :visible.sync="editDetail">
+    <el-dialog title="编辑网点信息" :visible.sync="editDetail" :rules="editRules">
 
       <div id="editBox">
-        <el-form ref="detail" :model="detail" label-width="80px">
-          <el-form-item label="订单编号">
+        <el-form ref="detail" :model="detail" label-width="125px">
+          <el-form-item label="网点编号">
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
-          <el-form-item label="寄件人">
+          <el-form-item label="网点名称">
             <el-input v-model="detail.sender"></el-input>
           </el-form-item>
-          <el-form-item label="收件人">
+          <el-form-item label="网点地址">
             <el-input v-model="detail.recipient"></el-input>
           </el-form-item>
-          <el-form-item label="状态">
-            <el-input v-model="detail.state"></el-input>
-          </el-form-item>
-          <el-form-item label="发货时间">
-            <el-input v-model="detail.deliveryTime"></el-input>
-          </el-form-item>
-          <el-form-item label="送达时间">
-            <el-input v-model="detail.arrivalTime"></el-input>
+          <el-form-item label="注册时间">
+            <el-input v-model="detail.deliveryTime" readonly></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="editSubmit">确认</el-button>
+            <el-button type="primary" @click="editClick('detail')">确认</el-button>
             <el-button>取消</el-button>
           </el-form-item>
         </el-form>
@@ -109,11 +81,9 @@ export default {
     return {
       detail: {
         id:'',
-        sender:'',
-        recipient:'',
+        name:'',
+        address: null,
         deliveryTime:'',
-        state:'',
-        arrivalTime:''
       },
       dialogFormVisible: false,
       lookDetail: false,
@@ -122,64 +92,14 @@ export default {
       searchContent:'',
       tableCol: [
         //{prop: "id", label: "id"},
-        {prop: "id", label: "订单编号"},
-        {prop: "sender", label: "寄件人"},
-        {prop: "recipient", label: "收件人"},
-        {prop: "deliveryTime", label: "发货时间"},
-        {prop: "state", label: "物流状态"},
-        {prop: "arrivalTime", label: "预计到达时间"},
+        {prop: "networkId", label: "网点编号"},
+        {prop: "networkName", label: "网点名称"},
+        {prop: "registerDate", label: "注册时间"},
       ],
+      editRules:{
 
+      },
       tableData: [
-        {
-          id:1,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:2,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:3,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:4,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:5,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:6,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-
       ],
 
       nId: '1',
@@ -202,18 +122,16 @@ export default {
       this.querySearch(this.currentPage);
     },
 
-
-    lookClick(index,row) {
-      this.detail.id = row.id
-      this.detail.sender = row.sender
-      this.detail.recipient = row.recipient
-      this.detail.arrivalTime = row.arrivalTime
-      this.detail.deliveryTime = row.deliveryTime
-      this.detail.state = row.state
-      this.lookDetail = true
+    add(){
 
     },
-    editClick(index,row){
+    addClick(){
+
+    },
+    addConfirm(){
+
+    },
+    edit(row){
       this.detail.id = row.id
       this.detail.sender = row.sender
       this.detail.recipient = row.recipient
@@ -222,15 +140,61 @@ export default {
       this.detail.state = row.state
       this.editDetail = true
     },
-    deleteClick(){
+    editClick(){
 
     },
-    editSubmit(){
+    editConfirm(){
 
+    },
+    deleteClick(row){
+      this.$confirm('确定删除此网点?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteConfirm(row)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    deleteConfirm(row){
+      this.$axios({
+        method: 'delete',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/network-management/deleteNetworkById/'+row.networkId,
+      }).then((response) => {          //这里使用了ES6的语法
+        if (response.data.message==="success"){
+          this.$message({
+            message: '删除网点成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('删除网点失败');
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     querySearch(pageNum) {
-
-
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/network-management/getNetworkByPage?page='+pageNum+'&pageSize='+this.pagesize,
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+        this.tableData = response.data.data.records
+        this.totalCount = response.data.data.total
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
   },
   created() {

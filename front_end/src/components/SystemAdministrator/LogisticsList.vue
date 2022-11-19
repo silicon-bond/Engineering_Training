@@ -150,19 +150,19 @@ export default {
       ],
       rules:{
         sender:[
-          { required: true, message: '寄件人不能为空', trigger: 'blur' },
+          { required: true, message: '寄件人不能为空', trigger: 'change' },
         ],
         senderNumber:[
-          { required: true, message: '寄件人电话号码不能为空', trigger: 'blur' },
+          { required: true, message: '寄件人电话号码不能为空', trigger: 'change' },
         ],
         recipient:[
-          { required: true, message: '收件人不能为空', trigger: 'blur' },
+          { required: true, message: '收件人不能为空', trigger: 'change' },
         ],
         recipientNumber:[
-          { required: true, message: '收件人电话号码不能为空', trigger: 'blur' },
+          { required: true, message: '收件人电话号码不能为空', trigger: 'change' },
         ],
         state:[
-          { required: true, message: '物流状态不能为空', trigger: 'blur' },
+          { required: true, message: '物流状态不能为空', trigger: 'change' },
         ]
       },
       resultStatus:'1',
@@ -229,7 +229,6 @@ export default {
         deliverPhoneNumber:this.detail.senderNumber,
         receiptName:this.detail.recipient,
         receiptPhoneNumber:this.detail.recipientNumber,
-        orderDate:this.detail.deliveryTime,
         state:this.detail.state
       }
       this.$axios({
@@ -240,7 +239,15 @@ export default {
         data: JSON.stringify(logisticsMessage),
         url: 'http://8.130.39.140:8081/express/api/express',
       }).then((response) => {          //这里使用了ES6的语法
-        console.log(response.data)
+        if (response.data.message==="success"){
+          this.$message({
+            message: '修改物流成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('修改物流失败');
+        }
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })
@@ -253,6 +260,7 @@ export default {
         },
         url: 'http://8.130.39.140:8081/express/api/express?page='+pageNum+'&pageSize='+this.pagesize,
       }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
         this.tableData = response.data.data.records
         this.totalCount = response.data.data.total
       }).catch((error) => {
@@ -285,7 +293,6 @@ export default {
         type: 'warning'
       }).then(() => {
         this.deleteConfirm(row)
-
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -301,11 +308,15 @@ export default {
         },
         url: 'http://8.130.39.140:8081/express/api/express/'+row.expressId,
       }).then((response) => {          //这里使用了ES6的语法
-        this.querySearch(this.currentPage)
-        // if (response.data.code==='200') {
-        //   this.result = response.data.data.list
-        //   this.totalCount = response.data.data.total
-        // }
+        if (response.data.message==="success"){
+          this.$message({
+            message: '删除物流成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('删除物流失败');
+        }
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })

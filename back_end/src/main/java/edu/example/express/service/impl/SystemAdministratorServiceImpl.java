@@ -5,12 +5,18 @@ import edu.example.express.mapper.SystemAdministratorMapper;
 import edu.example.express.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import org.codehaus.groovy.util.StringUtil;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import edu.example.express.exception.bizException.BizException;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.lang.System.in;
 
 /**
 * <p>
@@ -35,6 +41,9 @@ public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministra
 
     @Resource
     NetworkService networkService;
+
+    @Resource
+    SystemAdministratorMapper systemAdministratorMapper;
 
 
     /**
@@ -98,6 +107,7 @@ public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministra
     @Override
     public Page<Deliveryman> getDeliverymanByPage(int page, int pageSize, String factor) {
         Page<Deliveryman> deliverymanList = deliverymanService.getDeliverymanByPage(page, pageSize, factor);
+        deliverymanList.setRecords(completeListInfo1(deliverymanList.getRecords()));
         return deliverymanList;
     }
 
@@ -129,6 +139,7 @@ public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministra
     @Override
     public Page<NetworkAdministrator> getNetworkAdministratorByPage(int page, int pageSize, String factor) {
         Page<NetworkAdministrator> networkAdministratorList = networkAdministratorService.getNetworkAdministratorByPage(page, pageSize, factor);
+        networkAdministratorList.setRecords(completeListInfo2(networkAdministratorList.getRecords()));
         return networkAdministratorList;
     }
 
@@ -265,6 +276,7 @@ public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministra
                 queryWrapper.eq("deliveryman_id",id);
             }
             Page<Deliveryman> deliverymanPage = deliverymanService.page(new Page<>(page,pageSize),queryWrapper);
+            deliverymanPage.setRecords(completeListInfo1(deliverymanPage.getRecords()));
             return (Page<T>) deliverymanPage;
         }
         if (role == 3){
@@ -273,10 +285,73 @@ public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministra
                 queryWrapper.eq("network_administrator_id",id);
             }
             Page<NetworkAdministrator> networkAdministratorPage = networkAdministratorService.page(new Page<>(page,pageSize),queryWrapper);
+            networkAdministratorPage.setRecords(completeListInfo2(networkAdministratorPage.getRecords()));
             return (Page<T>) networkAdministratorPage;
         }
         return null;
     }
 
 
+
+    private Deliveryman completeInfo1(Deliveryman entity){
+        Network network = networkService.getNetworkById(entity.getNetworkId());
+        entity.setNetwork(network);
+        return entity;
+    }
+
+    private List<Deliveryman> completeListInfo1(List<Deliveryman> entityList){
+        List<Deliveryman> newList = new ArrayList<>();
+        for (Deliveryman entity : entityList){
+            newList.add(completeInfo1(entity));
+        }
+        return newList;
+    }
+
+    private NetworkAdministrator completeInfo2(NetworkAdministrator entity){
+        Network network = networkService.getNetworkById(entity.getNetworkId());
+        entity.setNetwork(network);
+        return entity;
+    }
+
+    private List<NetworkAdministrator> completeListInfo2(List<NetworkAdministrator> entityList){
+        List<NetworkAdministrator> newList = new ArrayList<>();
+        for (NetworkAdministrator entity : entityList){
+            newList.add(completeInfo2(entity));
+        }
+        return newList;
+    }
+
+
+
+//    private <T> T completeInfo(T entity){
+//        Network network = networkService.getNetworkById(entity.getNetworkId());
+//        entity.setNetworkName(network.getNetworkName());
+//        return entity;
+//    }
+//
+//    private <T> List<T> completeListInfo(List<T> entityList){
+//        List<T> newList = new ArrayList<T>();
+//        for (T entity : entityList){
+//            newList.add(completeInfo(entity));
+//        }
+//        return newList;
+//    }
+
+
+    @Override
+    public Boolean ifUsedPhoneNumber(String phoneNumber) {
+        List<String> phone1 = systemAdministratorMapper.getUserPhoneNumber();
+        List<String> phone2 = systemAdministratorMapper.getDeliverymanPhoneNumber();
+        List<String> phone3 = systemAdministratorMapper.getNetworkAdministratorPhoneNumber();
+        if (phone1.contains(phoneNumber)){
+            return true;
+        }
+        if (phone2.contains(phoneNumber)){
+            return true;
+        }
+        if (phone3.contains(phoneNumber)){
+            return true;
+        }
+        return false;
+    }
 }

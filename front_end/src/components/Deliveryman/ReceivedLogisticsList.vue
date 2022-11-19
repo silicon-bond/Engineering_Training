@@ -13,14 +13,42 @@
           </el-option>
         </el-select>
         <div id="searchContent">
-          <el-input  v-model="searchContent" placeholder="请输入快递单号"></el-input>
+<!--          <el-input  v-model="searchContent" placeholder="请输入快递单号"></el-input>-->
+          <el-button type="primary" @click="searchClick">搜索</el-button>
         </div>
-        <el-button type="primary" @click="searchpackage()">搜索</el-button>
+<!--        <el-button type="primary" @click="searchpackage()">搜索</el-button>-->
       </div>
     </div>
     <el-divider></el-divider>
     <h3 id="tableTitle">物流信息列表</h3>
     <el-divider></el-divider>
+
+    <el-dialog title="物流详情" :visible.sync="dialogDetail">
+
+      <div id="detailBox">
+        <el-form ref="detail" :model="detail" label-width="80px">
+          <el-form-item label="订单编号">
+            <el-input v-model="detail.id" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="寄件人">
+            <el-input v-model="detail.sender" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="收件人">
+            <el-input v-model="detail.recipient" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="状态">
+            <el-input v-model="detail.state" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="寄件地址">
+            <el-input v-model="detail.deliveryAddress" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="收货地址">
+            <el-input v-model="detail.recipentAddress" readonly></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-dialog>
+
     <div id="table">
       <el-table :data="tableData"
                 stripe
@@ -36,9 +64,21 @@
           show-overflow-tooltip>
         </el-table-column>
 
+        <el-table-column label="物流状态" align="center">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.state===0">未揽件</el-tag>
+            <el-tag v-if="scope.row.state===1">已揽件</el-tag>
+            <el-tag v-if="scope.row.state===2">运输中</el-tag>
+            <el-tag v-if="scope.row.state===3">待派送</el-tag>
+            <el-tag v-if="scope.row.state===4">派送中</el-tag>
+            <el-tag v-if="scope.row.state===5">已送达</el-tag>
+          </template>
+        </el-table-column>
+
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="text" @click="sendover(scope.$index,scope.row)" class="button" icon="el-icon-view">送达</el-button>
+            <el-button size="mini" type="text" @click="lookClick(scope.$index,scope.row)" class="button" icon="el-icon-view">查看</el-button>
+            <el-button size="mini" type="text" v-if="(scope.row.state ===1&&scope.row.collectId===deliverymanId)||(scope.row.state ===4&&scope.row.deliveryId===deliverymanId)" @click="sendClick(scope.$index,scope.row)" class="button" icon="el-icon-view">送达</el-button>
 <!--            <el-button size="mini" type="text" @click="handleEdit(scope.$index,scope.row)" v-if="scope.row.state !== 1"class="button" icon="el-icon-delete">删除</el-button>-->
           </template>
         </el-table-column>
@@ -59,17 +99,33 @@
 
 <script>
 export default {
-  name: "LogisticsList",
+  name: "ReceivedLogisticsList",
   data() {
     return {
+      deliverymanId:'',
+      networkId:'',
+      dialogDetail: false,
+      detail: {
+        id:'',
+        sender:'',
+        recipient:'',
+        state:'',
+        deliveryAddress:'',
+        recipentAddress:''
+      },
       options: [ {
-        value: '选项2',
+        value: '1',
         label: '已揽件'
       }, {
-        value: '选项3',
+        value: '2',
         label: '运输中'
-      },  {
-        value: '选项5',
+      },
+        {
+          value: '3',
+          label: '待派送'
+        },
+        {
+        value: '5',
         label: '已送达'
       }],
       value: '',
@@ -77,16 +133,17 @@ export default {
       tableCol: [
         //{prop: "id", label: "id"},
         {prop: "expressId", label: "订单编号"},
-        {prop: "deliverName", label: "寄件人"},
-        {prop: "receiptName", label: "收件人"},
-        {prop: "deliverDetailAddress", label: "详细地址"},
-        {prop: "state", label: "物流状态"},
-        {prop: "type", label: "物品类型"},
+        // {prop: "deliverName", label: "寄件人"},
+        // {prop: "receiptName", label: "收件人"},
+        {prop: "detailaddress", label: "寄件地址"},
+        {prop: "recipeaddress", label: "收货地址"},
       ],
       tableData: [
 
 
       ],
+      resultStatus:'1',
+
       pagesize: 5,
       //当前页码
       currentPage: 1,
@@ -102,48 +159,111 @@ export default {
 
     handleCurrentChange: function(val) {
       this.currentPage = val;
+      if (this.resultStatus === '1'){
+        this.querySearch(this.currentPage);
+      }
+      else{
+        this.searchByfactor(this.currentPage);
+      }
     },
-    searchpackage(){
+
+    lookClick(index,row) {
+      this.detail.id = row.expressId
+      this.detail.sender = row.deliverName
+      this.detail.recipient = row.receiptName
+      // this.detail.arrivalTime = row.arrivalTime
+      // this.detail.deliveryTime = row.deliveryTime
+      if (row.state===1){
+        this.detail.state = '已揽件'
+      }
+      else if(row.state===2) {
+        this.detail.state = '运输中'
+      }
+      else if(row.state===4) {
+        this.detail.state = '派送中'
+      }
+      else{
+        this.detail.state = '已送达'
+
+      }
+      this.detail.deliveryAddress=row.detailaddress
+      this.detail.recipentAddress=row.recipeaddress
+      this.dialogDetail = true
+
+    },
+
+    searchClick(){
+      this.resultStatus='2'
+      this.currentPage=1
+      this.searchByfactor(this.currentPage)
+    },
+
+    searchByfactor(pageNum){
+      this.resultStatus='2'
+      this.currentPage=1
       this.$axios({
         method: 'get',
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
         // data: JSON.stringify(info),
-        url: 'http://8.130.39.140:8080/express/api/deliveryman/expressById/?expressId='+this.searchContent,
+        url: 'http://8.130.39.140:8081/express/api/deliveryman/expressState/?state='+this.value+'&networkId='+this.networkId+'&deliverymanId='+this.deliverymanId+'&page='+pageNum+'&pageSize='+this.pagesize,
       }).then((response) => {          //这里使用了ES6的语法
-        // console.log(response.data.data)
+        console.log(this.value)
+        console.log(response.data.data)
         if (response.data.code==='1') {
-          this.tableData=[]
-          this.tableData.push(response.data.data)
-          console.log(this.tableData)
-          // this.totalCount = response.data.data.total
+          // this.tableData=response.data.data.records
+          this.tableData = response.data.data.records
+          this.totalCount = response.data.data.total
+
+          this.tableData.forEach((item,index)=>{
+            item.detailaddress=item.deliverProvince+item.deliverMunicipal+item.deliverCountry+item.deliverStreet+item.deliverDetailAddress
+            item.recipeaddress=item.receiptProvince+item.receiptMunicipal+item.receiptCountry+item.receiptStreet+item.receiptDetailAddress
+
+          })
         }
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })
     },
 
-    sendover(index,row) {
+    sendClick(index,row){
+      this.$confirm('确定接单此物流?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.sendover(row)
+
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消接单'
+        });
+      });
+    },
+
+    sendover(row) {
       this.$axios({
         method: 'get',
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
         // data: JSON.stringify(info),
-        url: 'http://8.130.39.140:8080/express/api/deliveryman/completeDelivery/?expressId='+row.expressId,
+        url: 'http://8.130.39.140:8081/express/api/deliveryman/completeDelivery/?expressId='+row.expressId,
       }).then((response) => {          //这里使用了ES6的语法
         console.log(response.data)
         if (response.data.code==='1') {
           // this.tableData = response.data.data
           // this.totalCount = response.data.data.total
+          this.querySearch(this.currentPage)
         }
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })
     },
 
-    querySearch() {
+    querySearch(pageNum) {
       // let info = {
       //   pn:pageNum
       // }
@@ -153,12 +273,20 @@ export default {
           'Content-type': 'application/json;charset=UTF-8'
         },
         // data: JSON.stringify(info),
-        url: 'http://8.130.39.140:8080/express/api/deliveryman/myExpressList/?deliverymanId=1',
+        url: 'http://8.130.39.140:8081/express/api/deliveryman/myExpressList/?deliverymanId='+this.deliverymanId+'&networkId='+this.networkId+'&page='+pageNum+'&pageSize='+this.pagesize,
       }).then((response) => {          //这里使用了ES6的语法
-        // console.log(response.data.data)
+        console.log(response.data.data)
         if (response.data.code==='1') {
           this.tableData = response.data.data.records
-          // this.totalCount = response.data.data.total
+          // this.tableData = this.tableData.filter((item) => {
+          //   return item.state ===1||item.state===4
+          // });
+          this.tableData.forEach((item,index)=>{
+            item.detailaddress=item.deliverProvince+item.deliverMunicipal+item.deliverCountry+item.deliverDetailAddress
+            item.recipeaddress=item.receiptProvince+item.receiptMunicipal+item.receiptCountry+item.receiptDetailAddress
+
+          })
+          this.totalCount = response.data.data.total
         }
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
@@ -168,7 +296,10 @@ export default {
   },
 
   created () {
-    this.querySearch()
+    let info=JSON.parse(localStorage.getItem('userinfo_kuaidi'))
+    this.deliverymanId=info.deliverymanId
+    this.networkId=info.networkId
+    this.querySearch(this.currentPage)
   }
 }
 </script>

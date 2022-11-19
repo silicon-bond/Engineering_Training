@@ -71,6 +71,7 @@ public interface SystemAdministratorService {
 
     <T> Page<T> getPeopleByIdAndRole(int id, int role,Class<T> tClass,int page,int pageSize,String factor);
 
+    Boolean ifUsedPhoneNumber(String phoneNumber);
 
 
 

@@ -4,10 +4,9 @@
       <h2 id="searchTitle">快递员查询</h2>
       <div id="search">
         <div id="searchContent">
-          <el-input  v-model="searchContent" placeholder="请输入手机号"></el-input>
+          <el-input  v-model="searchContent" placeholder="请输入快递员编号"></el-input>
         </div>
-        <el-button type="primary">搜索</el-button>
-        <el-button id="addUserbtn" type="primary">添加快递员</el-button>
+        <el-button type="primary" @click="searchClick">搜索</el-button>
       </div>
     </div>
     <el-divider></el-divider>
@@ -27,9 +26,8 @@
 
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="text" @click="lookClick(scope.$index,scope.row)" class="button">查看</el-button>
-            <el-button size="mini" type="text" @click="editClick(scope.$index,scope.row)" class="button">编辑</el-button>
-            <el-button size="mini" type="text" @click="deleteClick(scope.$index,scope.row)" class="button">删除</el-button>
+            <el-button size="mini" type="text" @click="edit(scope.row)" class="button">编辑</el-button>
+            <el-button size="mini" type="text" @click="deleteClick(scope.row)" class="button">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -44,57 +42,31 @@
       layout="prev, pager, next"
       :total="totalCount">
     </el-pagination>
-    <el-dialog title="快递员详情" :visible.sync="lookDetail">
-
-      <div id="detailBox">
-        <el-form ref="detail" :model="detail" label-width="80px">
-          <el-form-item label="订单编号">
-            <el-input v-model="detail.id" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="寄件人">
-            <el-input v-model="detail.sender" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="收件人">
-            <el-input v-model="detail.recipient" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="状态">
-            <el-input v-model="detail.state" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="发货时间">
-            <el-input v-model="detail.deliveryTime" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="送达时间">
-            <el-input v-model="detail.arrivalTime" readonly></el-input>
-          </el-form-item>
-        </el-form>
-      </div>
-    </el-dialog>
 
     <el-dialog title="编辑快递员信息" :visible.sync="editDetail">
 
       <div id="editBox">
-        <el-form ref="detail" :model="detail" label-width="80px">
-          <el-form-item label="订单编号">
+        <el-form ref="detail" :model="detail" label-width="125px"  :rules="editRules">
+          <el-form-item label="快递员编号">
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
-          <el-form-item label="寄件人">
-            <el-input v-model="detail.sender"></el-input>
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="detail.email" readonly></el-input>
           </el-form-item>
-          <el-form-item label="收件人">
-            <el-input v-model="detail.recipient"></el-input>
+          <el-form-item label="联系电话" prop="phone">
+            <el-input v-model="detail.phone"></el-input>
           </el-form-item>
-          <el-form-item label="状态">
-            <el-input v-model="detail.state"></el-input>
+          <el-form-item label="注册时间">
+            <el-input v-model="detail.registerTime" readonly></el-input>
           </el-form-item>
-          <el-form-item label="发货时间">
-            <el-input v-model="detail.deliveryTime"></el-input>
+          <el-form-item label="密码" prop="password">
+            <el-input v-model="detail.password"></el-input>
           </el-form-item>
-          <el-form-item label="送达时间">
-            <el-input v-model="detail.arrivalTime"></el-input>
+          <el-form-item label="所属网点" prop="branch">
+            <el-input v-model="detail.branch"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="editSubmit">确认</el-button>
-            <el-button>取消</el-button>
+            <el-button type="primary" @click="editClick('detail')">确认</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -109,78 +81,35 @@ export default {
     return {
       detail: {
         id:'',
-        sender:'',
-        recipient:'',
-        deliveryTime:'',
-        state:'',
-        arrivalTime:''
+        email:'',
+        phone:'',
+        registerTime:'',
+        password:'',
+        branch:''
       },
       dialogFormVisible: false,
-      lookDetail: false,
       editDetail: false,
 
       searchContent:'',
       tableCol: [
         //{prop: "id", label: "id"},
-        {prop: "id", label: "订单编号"},
-        {prop: "sender", label: "寄件人"},
-        {prop: "recipient", label: "收件人"},
-        {prop: "deliveryTime", label: "发货时间"},
-        {prop: "state", label: "物流状态"},
-        {prop: "arrivalTime", label: "预计到达时间"},
+        {prop: "deliverymanId", label: "快递员编号"},
+        {prop: "email", label: "邮箱"},
+        {prop: "phoneNumber", label: "联系电话"},
+        {prop: "registerDate", label: "注册时间"},
       ],
 
       tableData: [
-        {
-          id:1,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:2,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:3,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:4,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:5,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:6,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-
       ],
+      editRules:{
+        phone:[
+          { required: true, message: '联系电话不能为空', trigger: 'change' },
+        ],
+        password:[
+          { required: true, message: '密码不能为空', trigger: 'change' },
+        ]
+      },
+      resultStatus:'1',
 
       nId: '1',
       nname: '',
@@ -202,35 +131,133 @@ export default {
       this.querySearch(this.currentPage);
     },
 
-
-    lookClick(index,row) {
-      this.detail.id = row.id
-      this.detail.sender = row.sender
-      this.detail.recipient = row.recipient
-      this.detail.arrivalTime = row.arrivalTime
-      this.detail.deliveryTime = row.deliveryTime
-      this.detail.state = row.state
-      this.lookDetail = true
-
-    },
-    editClick(index,row){
-      this.detail.id = row.id
-      this.detail.sender = row.sender
-      this.detail.recipient = row.recipient
-      this.detail.arrivalTime = row.arrivalTime
-      this.detail.deliveryTime = row.deliveryTime
-      this.detail.state = row.state
+    edit(row){
+      this.detail.id = row.deliverymanId
+      this.detail.email = row.email
+      this.detail.phone = row.phoneNumber
+      this.detail.registerTime = row.registerDate
+      this.detail.password = row.password
+      this.detail.branch = ''
       this.editDetail = true
     },
-    deleteClick(){
-
+    editClick(message){
+      this.$refs[message].validate((valid) => {
+        if (valid) {
+          this.$confirm('确定提交此修改?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.editConfirm()
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消修改'
+            });
+          });
+        } else {
+          return false;
+        }
+      });
     },
-    editSubmit(){
+    editConfirm(){
+      let deliverymanMessage = {
+        deliverymanId:this.detail.id,
+        email:this.detail.email,
+        phoneNumber:this.detail.phone,
+        password:this.detail.password,
 
+      }
+      this.$axios({
+        method: 'put',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        data: JSON.stringify(deliverymanMessage),
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/person-management/update/2',
+      }).then((response) => {          //这里使用了ES6的语法
+        if (response.data.message==="快递员修改成功"){
+          this.$message({
+            message: '修改快递员信息成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('修改快递员信息失败');
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
+    deleteClick(row){
+      this.$confirm('确定删除此快递员?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteConfirm(row)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    deleteConfirm(row){
+      this.$axios({
+        method: 'delete',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/deleteByIdAndRole?id='+row.deliverymanId+'&role=2',
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+        if (response.data.message==="success"){
+          this.$message({
+            message: '删除快递员成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('删除快递员失败');
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
+    searchClick(){
+      this.resultStatus='2'
+      this.currentPage=1
+      this.searchById(this.currentPage)
+    },
+    searchById(pageNum){
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/getPeopleByIdAndRole?id='+this.searchContent+'&role=2',
+      }).then((response) => {          //这里使用了ES6的语法
+        this.tableData = response.data.data.records
+        this.totalCount = response.data.data.total
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     querySearch(pageNum) {
-
-
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/person-management/getDeliverymanByPage?page='+pageNum+'&pageSize='+this.pagesize,
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+        this.tableData = response.data.data.records
+        this.totalCount = response.data.data.total
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
   },
   created() {

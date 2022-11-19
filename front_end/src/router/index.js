@@ -16,6 +16,7 @@ const UserMain = () => import('../components/User/Main')
 const UserLogisticsList = () => import('../components/User/LogisticsList')
 const UserMail = () => import('../components/User/Mail')
 const UserAdvice = () => import('../components/User/Advice')
+const UserPersonalCenter = () => import('../components/User/PersonalCenter')
 //快递员端
 const DeliverymanMain = () => import('../components/Deliveryman/Main')
 const DeliverymanLogisticsList = () => import('../components/Deliveryman/LogisticsList')
@@ -91,6 +92,10 @@ const routes = [
         path: '/user/advice',
         component:UserAdvice
       },
+      {
+        path: '/user/personalCenter',
+        component:UserPersonalCenter
+      }
     ]
   },
   {//快递员端

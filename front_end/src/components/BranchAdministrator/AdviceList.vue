@@ -151,13 +151,13 @@ export default {
           'Content-type': 'application/json;charset=UTF-8'
         },
         // data: JSON.stringify(info),
-        url: 'http://localhost:8080/express/api/network-administrator/getDeliveryman?page=1&pageSize=10&networkId=3',
+        url: 'http://8.130.39.140:8081/express/api/network-administrator/network_id?page=1&pageSize=5&networkId=3',
       }).then((response) => {          //这里使用了ES6的语法
         console.log(response.data)
-        if (response.data.code==='1') {
-          this.tableData = response.data.data.records
-          // this.totalCount = response.data.data.total
-        }
+        // if (response.data.code==='1') {
+        //   this.tableData = response.data.data.records
+        //   // this.totalCount = response.data.data.total
+        // }
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })

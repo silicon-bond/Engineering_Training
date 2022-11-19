@@ -11,7 +11,6 @@ Page({
       "receipt_provice":"福建省",
       "receipt_municipal":"福州市",
       "receipt_country":"闽侯县",
-      "receipt_street":"",
       "receipt_detail_address":""
     },
     region: ['福建省', '福州市', '闽侯县'],

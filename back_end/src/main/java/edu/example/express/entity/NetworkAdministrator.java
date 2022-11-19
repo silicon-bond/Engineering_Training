@@ -1,6 +1,7 @@
 package edu.example.express.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
@@ -36,6 +37,8 @@ public class NetworkAdministrator extends Model<NetworkAdministrator> {
 
     private String phoneNumber;
 
+    @TableField(exist = false)
+    private Network network;
 
     @Override
     protected Serializable pkVal() {

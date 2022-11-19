@@ -20,7 +20,6 @@
   </view>
 
   <view class="containerBox-infoFour">
-  <input value="{{info.receipt_street}}"  data-is-obj="1" data-obj-name="info" data-field-name="receipt_street" bindinput="setInputValue" class="containerBox-infoThree-country" placeholder="请输入收件人的街道信息"></input>
   <textarea value="{{info.receipt_detail_address}}"  data-is-obj="1" data-obj-name="info" data-field-name="receipt_detail_address" bindinput="setInputValue" class="containerBox-infoFour-text" placeholder="请输入收件人的详细地址"></textarea>
   </view>
 </view>

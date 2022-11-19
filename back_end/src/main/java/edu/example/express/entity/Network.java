@@ -31,6 +31,12 @@ public class Network extends Model<Network> {
 
     private String networkName;
 
+    private String province;
+
+    private String municipal;
+
+    private String country;
+
 
     @Override
     protected Serializable pkVal() {

@@ -40,5 +40,11 @@ mail:
   fromMail:
     fromAddress: 1376060367@qq.com
 
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
 
 

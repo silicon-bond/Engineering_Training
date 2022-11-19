@@ -11,7 +11,6 @@ Page({
       "deliver_provice":"福建省",
       "deliver_municipal":"福州市",
       "deliver_country":"闽侯县",
-      "deliver_street":"",
       "deliver_detail_address":""
     },
 

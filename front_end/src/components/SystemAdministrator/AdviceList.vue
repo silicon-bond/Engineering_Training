@@ -35,8 +35,8 @@
 
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="text" @click="lookClick(scope.$index,scope.row)" class="button">查看</el-button>
-            <el-button size="mini" type="text" @click="deleteClick(scope.$index,scope.row)" class="button">删除</el-button>
+            <el-button size="mini" type="text" @click="lookClick(scope.row)" class="button">查看</el-button>
+            <el-button size="mini" type="text" @click="deleteClick(scope.row)" class="button">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -54,24 +54,18 @@
     <el-dialog title="意见详情" :visible.sync="lookDetail">
 
       <div id="detailBox">
-        <el-form ref="detail" :model="detail" label-width="80px">
-          <el-form-item label="订单编号">
-            <el-input v-model="detail.id" readonly></el-input>
+        <el-form ref="detail" :model="detail" label-width="125px">
+          <el-form-item label="意见编号">
+            <el-input v-model="detail.abnormalFeedbackId" readonly></el-input>
           </el-form-item>
-          <el-form-item label="寄件人">
-            <el-input v-model="detail.sender" readonly></el-input>
+          <el-form-item label="意见标题">
+            <el-input v-model="detail.title" readonly></el-input>
           </el-form-item>
-          <el-form-item label="收件人">
-            <el-input v-model="detail.recipient" readonly></el-input>
+          <el-form-item label="意见内容">
+            <el-input v-model="detail.content" readonly></el-input>
           </el-form-item>
-          <el-form-item label="状态">
-            <el-input v-model="detail.state" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="发货时间">
-            <el-input v-model="detail.deliveryTime" readonly></el-input>
-          </el-form-item>
-          <el-form-item label="送达时间">
-            <el-input v-model="detail.arrivalTime" readonly></el-input>
+          <el-form-item label="所属网点">
+            <el-input v-model="detail.branch" readonly></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -93,12 +87,13 @@ export default {
       }],
       value: '',
       detail: {
-        id:'',
-        sender:'',
-        recipient:'',
-        deliveryTime:'',
+        abnormalFeedbackId:'',
+        title:'',
+        description:'',
+        feedbackDate:'',
+        providerPhoneNumber:'',
+        branch:'',
         state:'',
-        arrivalTime:''
       },
       dialogFormVisible: false,
       lookDetail: false,
@@ -107,64 +102,14 @@ export default {
       searchContent:'',
       tableCol: [
         //{prop: "id", label: "id"},
-        {prop: "id", label: "订单编号"},
-        {prop: "sender", label: "寄件人"},
-        {prop: "recipient", label: "收件人"},
+        {prop: "abnormalFeedbackId", label: "意见编号"},
+        {prop: "title", label: "意见标题"},
+        {prop: "providerPhoneNumber", label: "反馈人联系电话"},
         {prop: "deliveryTime", label: "发货时间"},
-        {prop: "state", label: "物流状态"},
-        {prop: "arrivalTime", label: "预计到达时间"},
+        {prop: "state", label: "意见状态"},
       ],
 
       tableData: [
-        {
-          id:1,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:2,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:3,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:4,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:5,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-        {
-          id:6,
-          sender:'小松',
-          recipient:'小明',
-          deliveryTime:'2022.11.06 16:21',
-          state:'运输中',
-          arrivalTime:'2022.11.09 16:21'
-        },
-
       ],
 
       nId: '1',
@@ -214,8 +159,19 @@ export default {
 
     },
     querySearch(pageNum) {
-
-
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/abnormal-feedback?page='+pageNum+'&pageSize='+this.pagesize+'&factor=',
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+        this.tableData = response.data.data.records
+        this.totalCount = response.data.data.total
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
   },
   created() {
