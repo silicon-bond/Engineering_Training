@@ -1,17 +1,17 @@
-<view class="header">
-  <image class="header-portrait" src="../../resources/xiaochou.png"></image>
+<view bindtap="touserinfo" class="header">
+  <image class="header-portrait" src="../../resources/002-快递箱.png"></image>
   <view class="header-text">
     <view class="header-name">用户{{userInfo.userId}}</view>
     <view class="header-intro">欢迎使用快递服务</view>
   </view>
 </view>
-<view class="info">
+<view bindtap="tofangkui" class="info">
   <view class="courier">
     <view class="courier-P1">
       <image class="courier-P1-portrait" src="../../resources/aniukefu2.png"></image>
       <view class="courier-P1-text">
         <view class="courier-P1-info">
-          <view class="courier-P1-name">联系客服</view>
+          <view class="courier-P1-name">意见反馈</view>
         </view>
       </view>
     </view>

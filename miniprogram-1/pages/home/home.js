@@ -8,7 +8,20 @@ Page({
     userInfo:{},
   },
 
+  touserinfo(){
+    wx.navigateTo({
+      url: '../usergr/usergr',
+    })
+  },
+
+  tofangkui(){
+    wx.navigateTo({
+      url: '../userfk/userfk',
+    })
+  },
+
   exit() {
+    wx.clearStorage()
     wx.redirectTo({
       url: '../login/login',
     })

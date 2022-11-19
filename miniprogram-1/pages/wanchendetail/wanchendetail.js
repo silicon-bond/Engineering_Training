@@ -5,6 +5,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    isShow: true,
     userInfo:{},
     expressInfo:{},
     network:{},
@@ -13,25 +14,24 @@ Page({
 
   submit() {
     const that = this
-    console.log('sub');
     wx.showModal({
       title: '提示',
-      content: '是否确定接单',
+      content: '是否确定送达',
       success (res) {
         if (res.confirm) {
+          console.log('sss');
           wx.request({
-            url: `http://8.130.39.140:8081/express/api/deliveryman/orderReceiving?expressId=${that.data.expressInfo.expressId}&deliverymanId=${that.data.userInfo.deliverymanId}`,
+            url: `http://8.130.39.140:8081/express/api/deliveryman/completeDelivery?expressId=${that.data.expressInfo.expressId}`,
             method: 'GET',
             success: function (res) {
-              console.log(res)
               wx.showToast({
-                title: '接单成功',
+                title: '成功送达',
                 icon: 'success',
                 duration: 2000
               })
               setTimeout(()=> {
                 wx.redirectTo({
-                  url: '../deliveryMan/deliveryMan',
+                  url: '../deliveryManjiedan/deliveryManjiedan',
                 })
               }, 2000)
             },
@@ -59,6 +59,9 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
+    this.setData({
+      isShow: options.stateForRD=='true'?true:false
+    })
     wx.getStorage({
       key:"userInfo",
       success(res){

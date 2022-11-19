@@ -27,14 +27,14 @@
 }
 .containerBox-info-img{
   margin-top: 5rpx;
-  margin-left: 35rpx;
+  margin-left: 15rpx;
   width: 60rpx;
   height: 45rpx;
 }
 .containerBox-info-right{
   margin-top: 5rpx;
-  margin-right: 35rpx;
-  width: 60rpx;
+  margin-right: 15rpx;
+  width: 70rpx;
   height: 60rpx;
 }
 .containerBox-info-name{
@@ -46,11 +46,11 @@
 .containerBox-info-name-place{
   width: 120rpx;
   font-size:larger;
+  text-align: center;
 }
 .containerBox-info-name-name2{
-  width: 65rpx;
+  width: 120rpx;
   margin-top: 15rpx;
-  font-size:medium;
 }
 .containerBox-info-name-arrow{
   width: 240rpx;

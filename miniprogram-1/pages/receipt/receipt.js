@@ -10,7 +10,7 @@ Page({
     pageD:2,
     pageR:2,
     stateForRD:true,
-    state:['未揽件','已揽件','运输中','派送中','已送达'],
+    state:['未揽件','已揽件','运输中','待派送','派送中','已送达'],
     expressListForDelivery:[
       {
         "expressId":3,
@@ -249,7 +249,7 @@ Page({
       })
     }else{
       wx.request({
-        url: 'http://8.130.39.140:8081/express/api/express/receiptPhoneNumber?page=1&pageSize=4&phoneNumber='+that.data.userInfo['phoneNumber'],
+        url: 'http://8.130.39.140:8081/express/api/express/receiptPhoneNumber?page='+that.data.pageR+'&pageSize=4&phoneNumber='+that.data.userInfo['phoneNumber'],
         method: 'GET',
         success: function (res) {
           console.log(res);
