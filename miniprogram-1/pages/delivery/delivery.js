@@ -14,7 +14,6 @@ Page({
       "deliver_provice":"",
       "deliver_municipal":"",
       "deliver_country":"",
-      "deliver_street":"",
       "deliver_detail_address":""
     },
     infoReceipt:{
@@ -23,7 +22,6 @@ Page({
       "receipt_provice":"",
       "receipt_municipal":"",
       "receipt_country":"",
-      "receipt_street":"",
       "receipt_detail_address":""
     },
     "description":"",
@@ -68,14 +66,12 @@ Page({
                 deliverProvince:that.data.infoDeliver['deliver_provice'],
                 deliverMunicipal:that.data.infoDeliver['deliver_municipal'],
                 deliverCountry:that.data.infoDeliver['deliver_country'],
-                deliverStreet:that.data.infoDeliver['deliver_street'],
                 deliverDetailAddress:that.data.infoDeliver['deliver_detail_address'],
                 deliverPhoneNumber:that.data.infoDeliver['deliver_phone_number'],
                 receiptName:that.data.infoReceipt['receipt_name'],
                 receiptProvince:that.data.infoReceipt['receipt_provice'],
                 receiptMunicipal:that.data.infoReceipt['receipt_municipal'],
                 receiptCountry:that.data.infoReceipt['receipt_country'],
-                receiptStreet:that.data.infoReceipt['receipt_street'],
                 receiptDetailAddress:that.data.infoReceipt['receipt_detail_address'],
                 receiptPhoneNumber:that.data.infoReceipt['receipt_phone_number'],
                 description:that.data.description,

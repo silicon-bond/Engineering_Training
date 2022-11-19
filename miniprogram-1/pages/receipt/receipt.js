@@ -94,6 +94,12 @@ Page({
     }
     
   },
+  navigateToDetail(e){
+    console.log(e.currentTarget.dataset.id);
+    wx.navigateTo({
+      url: '../../pages/receipt/content?expressId='+e.currentTarget.dataset.id,
+    })
+  },
 
   showD() {
     console.log(123);

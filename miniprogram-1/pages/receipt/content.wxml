@@ -1,2 +1,11 @@
-<!--pages/receipt/content.wxml-->
-<text>pages/receipt/content.wxml</text>
+<view class="containerBox">
+<view class="containerBox-info-Id">物流编号: {{expressInfo.expressId}}</view>
+<view class="containerBox-info-time">下单时间: {{expressInfo.orderDate}}</view>
+<view class="containerBox-info-state">状态：{{expressInfo.state}}</view>
+<view class="containerBox-info-network">负责网点:{{network.networkName}}</view>
+<view class="containerBox-info-diliver-address">发货人地址:{{expressInfo.deliverMunicipal}}{{expressInfo.deliverCountry}}</view>
+<view class="containerBox-info-diliver-phone">发货人联系方式:{{expressInfo.deliverPhoneNumber}}</view>
+<view class="containerBox-info-receipt-address">收货人地址:{{expressInfo.receiptMunicipal}}{{expressInfo.receiptCountry}}</view>
+<view class="containerBox-info-receipt-phone">收货人联系方式:{{expressInfo.receiptPhoneNumber}}</view>
+<view class="containerBox-info-des">订单信息:{{expressInfo.description}}</view>
+</view>
