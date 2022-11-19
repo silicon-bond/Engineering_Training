@@ -6,6 +6,7 @@ import edu.example.express.entity.Express;
 import edu.example.express.service.AbnormalFeedbackService;
 import edu.example.express.service.DeliverymanService;
 import edu.example.express.service.ExpressService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import edu.example.express.entity.dto.ResultBean;
@@ -25,6 +26,7 @@ import java.time.LocalDate;
  * @since 2022-11-14
  * @version v1.0
  */
+@Slf4j
 @RestController
 @RequestMapping("/express/api/network-administrator")
 @CrossOrigin(origins = "*")
@@ -130,11 +132,17 @@ public class NetworkAdministratorController {
     @RequestMapping(method = RequestMethod.GET, path = "/getExpressByStateAndTime")
     public ResultBean<?> getExpressByNetworkId(@RequestParam(name = "page", defaultValue = "1") int page,
                                                @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
-                                               @RequestParam(name = "state") int state,
+                                               @RequestParam(name = "state", defaultValue = "110") int state,
                                                @RequestParam(name = "networkId") int networkId,
                                                @RequestParam(name = "dateStart", defaultValue = "2000-01-01") LocalDate dateStart,
                                                @RequestParam(name = "dateOver", defaultValue = "2099-12-31") LocalDate dateOver) {
-        return new ResultBean<>(expressService.getExpressListByNetworkIdAndDateAndState(state, networkId, page, pageSize, dateStart, dateOver));
+        log.info("正在查询express中state为{}的数据", state);
+        if(state == 110){
+            return new ResultBean<>(expressService.getExpressListByNetworkIdAndDate(networkId, page, pageSize, dateStart, dateOver));
+        }else{
+            return new ResultBean<>(expressService.getExpressListByNetworkIdAndDateAndState(state, networkId, page, pageSize, dateStart, dateOver));
+        }
+
     }
 
     /**
