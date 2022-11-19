@@ -42,19 +42,27 @@ Page({
             duration: 2000
           })
         } else{
+          wx.showToast({
+            title: '登陆成功',
+            icon: 'success',
+            duration: 2000
+          })
           wx.setStorage({
             key:"userInfo",
             data:res.data.data
           });
-          if (res.data.data.userId != null) {
-            wx.switchTab({
-              url: '../home/home'
-            })
-          } else {
-            wx.redirectTo({
-              url: '../deliveryMan/deliveryMan',
-            })
-          }
+          setTimeout(()=> {
+            if (res.data.data.userId != null) {
+              wx.switchTab({
+                url: '../home/home'
+              })
+            } else {
+              wx.redirectTo({
+                url: '../deliveryMan/deliveryMan',
+              })
+            }
+          }, 2000)
+          
           // wx.switchTab({
           //   url: '../home/home'
           // })

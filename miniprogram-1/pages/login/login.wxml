@@ -1,4 +1,42 @@
-<view class="container">
+<!--pages/login/index.wxml-->
+<view class="my-container">
+  <view class="head">
+    <image mode="widthFix" src="../../resources/picture2.png"></image>
+  </view>
+  <view class="content">
+    <view class="content-head">
+      <image mode="widthFix" src="../../resources/picture1.png"></image>
+    </view>
+    <view class="content-body">
+      <view class="input-item">
+        <view>账号</view>
+        <input bindinput="userNameInput" type="text"/>
+      </view>
+      <view class="input-item">
+        <view>密码</view>
+        <input bindinput="userPasswordInput" style="font-size: 40rpx;"model:value="{{password}}" type="password"/>
+      </view>
+      <!-- <view class="input-item">
+        <view>类型</view>
+        <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+          <view class="picker">
+            {{array[index]}}
+          </view>
+        </picker>
+      </view> -->
+    </view>
+    <view class="content-foot">
+      <view bindtap="logIn" class="btn-login">登录</view>
+    </view>
+  </view>
+  <view class="foot">
+    <image mode="widthFix" src="../../resources/picture3.png"></image>
+  </view>
+</view>
+
+
+
+<!-- <view class="container">
   <view class="loginbox">
     <view class="userinfoBox">
       <view class="userinfoBox-motto">
@@ -19,4 +57,4 @@
         <button type="primary" class="userinfoBox-button" bindtap="logIn">登录</button>
     </view>
   </view>
-</view>
+</view> -->

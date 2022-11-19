@@ -153,7 +153,12 @@ Page({
       url: 'http://8.130.39.140:8081/express/api/allNetworks',
       method: 'GET',
       success: function (res) {
+        console.log('-----');
         console.log(res);
+        console.log('-----');
+        for(let i = 0; i<res.data.data.length;i++) {
+          res.data.data[i]['tmp'] = `${res.data.data[i].country}${res.data.data[i].networkName}`
+        }
         that.setData({
           networks:res.data.data,
           checkedNetwork:res.data.data[0]

@@ -1,4 +1,98 @@
-/**index.wxss**/
+/* pages/login/index.wxss */
+/**app.wxss**/
+
+page {
+  font-size: 28rpx;
+  background-color: #fff;
+}
+
+.head {
+  position: relative;
+  height: 15vh;
+}
+
+.foot {
+  position: relative;
+}
+
+.foot image {
+  width: 100%;
+}
+
+.head image {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 85%;
+}
+
+.content {
+  position: relative;
+  top: -3vh;
+  width: 80%;
+  height: 70vh;
+  margin: 0 auto;
+  padding: 30rpx;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  border-radius: 10rpx;
+  border: 2px solid rgb(209,220,238);
+  box-shadow: 0 0 30rpx rgba(106,148,196,0.3);
+}
+.content-head {
+  width: 100%;
+}
+
+.content-head image {
+  width: 100%;
+}
+
+
+.content-foot {
+  position: absolute;
+  bottom: 50rpx;
+  left: 50%;
+  width: calc(100% - 60rpx);
+  transform: translateX(-50%);
+}
+
+.input-item {
+  width: 100%;
+  margin: 20rpx 0;
+  padding: 20rpx 0;
+  display: flex;
+}
+
+.input-item > view {
+  margin: 0 6vw 0 3vw;
+}
+
+input {
+  width: 43vw;
+  border-bottom: 2rpx solid rgb(221,221,221);
+}
+
+.picker {
+  width: 43vw;
+  text-align: center;
+  border-bottom: 2rpx solid rgb(221,221,221);
+}
+
+.btn-login {
+  box-sizing: border-box;
+  width: 100%;
+  background-color: rgb(106,148,196);
+  color: #fff;
+  text-align: center;
+  padding: 20rpx;
+  border-radius: 10rpx;
+}
+
+ 
+/* *index.wxss*
 
 page {
   height: 100%;
@@ -62,4 +156,4 @@ page {
   padding: 10rpx 10rpx;
   border: 1px solid #aaa;
   border-radius: 15rpx;
-}
+} */
