@@ -26,7 +26,7 @@
         </el-table-column>
         <el-table-column prop="province,country,municipal" label="网点所在地址" align="center">
           <template slot-scope="scope">
-            {{ scope.row.province}}{{ scope.row.country }}{{ scope.row.municipal }}
+            {{ scope.row.province}}{{ scope.row.municipal }}{{ scope.row.country }}
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
@@ -48,25 +48,48 @@
       :total="totalCount">
     </el-pagination>
 
-    <el-dialog title="编辑网点信息" :visible.sync="editDetail" :rules="editRules">
+    <el-dialog title="编辑网点信息" :visible.sync="editDetail">
 
       <div id="editBox">
-        <el-form ref="detail" :model="detail" label-width="125px">
+        <el-form ref="detail" :model="detail" label-width="125px" :rules="editRules">
           <el-form-item label="网点编号">
-            <el-input v-model="detail.id" readonly></el-input>
+            <el-input v-model="detail.networkId" readonly></el-input>
           </el-form-item>
-          <el-form-item label="网点名称">
-            <el-input v-model="detail.sender"></el-input>
+          <el-form-item label="网点名称" prop="networkName">
+            <el-input v-model="detail.networkName"></el-input>
           </el-form-item>
           <el-form-item label="网点地址">
-            <el-input v-model="detail.recipient"></el-input>
+            <el-cascader
+              size="large"
+              :options="addressoptions"
+              v-model="detail.address">
+            </el-cascader>
           </el-form-item>
           <el-form-item label="注册时间">
-            <el-input v-model="detail.deliveryTime" readonly></el-input>
+            <el-input v-model="detail.registerDate" readonly></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="editClick('detail')">确认</el-button>
-            <el-button>取消</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-dialog>
+    <el-dialog title="新增网点信息" :visible.sync="addDetail">
+
+      <div id="addBox">
+        <el-form ref="addMessage" :model="addMessage" label-width="125px" :rules="addRules">
+          <el-form-item label="网点名称" prop="networkName">
+            <el-input v-model="addMessage.networkName"></el-input>
+          </el-form-item>
+          <el-form-item label="网点地址">
+            <el-cascader
+              size="large"
+              :options="addressoptions"
+              v-model="addMessage.address">
+            </el-cascader>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="addClick('addMessage')">确认</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -75,20 +98,26 @@
 </template>
 
 <script>
+import { regionData,  CodeToText, TextToCode} from 'element-china-area-data';
 export default {
   name: "branchList",
   data() {
     return {
+      addressoptions: regionData,
       detail: {
-        id:'',
-        name:'',
+        networkId:'',
+        networkName:'',
         address: null,
-        deliveryTime:'',
+        registerDate:'',
+      },
+      addMessage:{
+        networkName:'',
+        address: null,
       },
       dialogFormVisible: false,
       lookDetail: false,
       editDetail: false,
-
+      addDetail:false,
       searchContent:'',
       tableCol: [
         //{prop: "id", label: "id"},
@@ -97,7 +126,14 @@ export default {
         {prop: "registerDate", label: "注册时间"},
       ],
       editRules:{
-
+        networkName:[
+          { required: true, message: '网点名称不能为空', trigger: 'change' },
+        ]
+      },
+      addRules:{
+        networkName:[
+          { required: true, message: '网点名称不能为空', trigger: 'change' },
+        ]
       },
       tableData: [
       ],
@@ -123,28 +159,118 @@ export default {
     },
 
     add(){
-
+      this.addDetail = true
     },
-    addClick(){
-
+    addClick(message){
+      this.$refs[message].validate((valid) => {
+        if (valid) {
+          this.$confirm('确定新增此网点?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.addConfirm()
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消修改'
+            });
+          });
+        } else {
+          return false;
+        }
+      });
     },
     addConfirm(){
-
+      let branchMessage = {
+        networkName:this.addMessage.name,
+        province:CodeToText[`${this.addMessage.address[0]}`],
+        municipal:CodeToText[`${this.addMessage.address[1]}`],
+        country:CodeToText[`${this.addMessage.address[2]}`],
+      }
+      this.$axios({
+        method: 'post',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        data: JSON.stringify(branchMessage),
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/network-management/addOneNetwork',
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+        if (response.data.message==="网点增加成功"){
+          this.$message({
+            message: '此网点新增成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('此网点新增失败');
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     edit(row){
-      this.detail.id = row.id
-      this.detail.sender = row.sender
-      this.detail.recipient = row.recipient
-      this.detail.arrivalTime = row.arrivalTime
-      this.detail.deliveryTime = row.deliveryTime
-      this.detail.state = row.state
+      this.detail.networkId = row.networkId
+      this.detail.networkName = row.networkName
+      let  array = []
+      array[0] = TextToCode[`${row.province}`].code
+      array[1] = TextToCode[`${row.province}`][`${row.municipal}`].code
+      array[2] = TextToCode[`${row.province}`][`${row.municipal}`][`${row.country}`].code
+      this.detail.address = array
+      this.detail.registerDate = row.registerDate
       this.editDetail = true
     },
-    editClick(){
-
+    editClick(message){
+      this.$refs[message].validate((valid) => {
+        if (valid) {
+          this.$confirm('确定提交此修改?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.editConfirm()
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消修改'
+            });
+          });
+        } else {
+          return false;
+        }
+      });
     },
-    editConfirm(){
-
+    editConfirm(){//
+      let branchMessage = {
+        networkId:this.detail.networkId,
+        networkName:this.detail.networkName,
+        province:CodeToText[`${this.detail.address[0]}`],
+        municipal:CodeToText[`${this.detail.address[1]}`],
+        country:CodeToText[`${this.detail.address[2]}`],
+        registerDate:this.detail.registerDate,
+      }
+      this.$axios({
+        method: 'put',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        data: JSON.stringify(branchMessage),
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/network-management/updateNetwork',
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+        // if (response.data.message==="success"){
+        //   this.$message({
+        //     message: '修改物流成功',
+        //     type: 'success'
+        //   });
+        //   this.$router.go(0)
+        // }else {
+        //   this.$message.error('修改物流失败');
+        // }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     deleteClick(row){
       this.$confirm('确定删除此网点?', '提示', {
@@ -168,7 +294,7 @@ export default {
         },
         url: 'http://8.130.39.140:8081/express/api/system-administrator/network-management/deleteNetworkById/'+row.networkId,
       }).then((response) => {          //这里使用了ES6的语法
-        if (response.data.message==="success"){
+        if (response.data.message==="网点删除成功"){
           this.$message({
             message: '删除网点成功',
             type: 'success'

@@ -157,7 +157,7 @@ export default {
       this.detail.phone = row.phoneNumber
       this.detail.registerTime = row.registerDate
       this.detail.password = row.password
-      this.detail.branch = ''
+      this.detail.branch = row.networkId
       this.editDetail = true
     },
     editClick(message){

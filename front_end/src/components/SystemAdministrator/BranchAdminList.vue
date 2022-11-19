@@ -264,7 +264,7 @@ export default {
       this.detail.nickname = row.nickname
       this.detail.password = row.password
       this.detail.phone = row.phoneNumber
-      this.detail.branch = row.branch
+      this.detail.branch = row.networkId
       this.editDetail = true
     },
     editClick(message){
