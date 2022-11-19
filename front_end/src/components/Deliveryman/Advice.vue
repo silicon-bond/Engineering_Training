@@ -16,9 +16,9 @@
             <el-select v-model="ruleForm.branch" placeholder="请选择网点">
               <el-option
                 v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :key="item.networkId"
+                :label="item.networkName"
+                :value="item.networkId">
               </el-option>
             </el-select>
           </el-form-item>
@@ -38,23 +38,12 @@ export default {
   name: "Advice",
   data(){
     return{
+      telephone:'',
+      networkId: '',
       labelPosition:'left',
-      options: [{
-        value: '选项1',
-        label: '福州网点'
-      }, {
-        value: '选项2',
-        label: '厦门网点'
-      }, {
-        value: '选项3',
-        label: '泉州网点'
-      }, {
-        value: '选项4',
-        label: '莆田网点'
-      }, {
-        value: '选项5',
-        label: '漳州网点'
-      }],
+      options: [
+
+      ],
       ruleForm: {
         title:'',
         content:'',
@@ -77,12 +66,63 @@ export default {
     submitForm(message){
       this.$refs[message].validate((valid) => {
         if (valid) {
-
+          let adviceMessage = {
+            networkId:1,
+            title: this.ruleForm.title,
+            description:this.ruleForm.content,
+            providerPhoneNumber:this.telephone
+          }
+          this.$axios({
+            method: 'post',
+            headers: {
+              'Content-type': 'application/json;charset=UTF-8'
+            },
+            data: JSON.stringify(adviceMessage),
+            url: 'http://8.130.39.140:8081/express/api/deliveryman/feedback',
+          }).then((response) => {          //这里使用了ES6的语法
+            if (response.data.code === '1'){
+              alert('发表成功');
+              this.ruleForm.title = ''
+              this.ruleForm.content = ''
+            } else{
+              alert('发表失败');
+            }
+          }).catch((error) => {
+            console.log(error)       //请求失败返回的数据
+          })
         } else {
           return false;
         }
       });
     },
+    getnetwork(){
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        // data: JSON.stringify(info),
+        url: 'http://8.130.39.140:8081/express/api/allNetworks',
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+        if (response.data.code==='1') {
+          this.options = response.data.data
+          let opt=this.options.filter((item) => {
+            return item.networkId === this.networkId
+          })
+          this.options=opt
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
+
+  },
+  created() {
+    let info=JSON.parse(localStorage.getItem('userinfo_kuaidi'))
+    this.telephone=info.telephone
+    this.networkId=info.networkId
+    this.getnetwork()
   }
 }
 </script>

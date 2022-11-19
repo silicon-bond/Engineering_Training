@@ -28,6 +28,10 @@
             <i class="el-icon-message"></i>
             <span slot="title">意见箱</span>
           </el-menu-item>
+          <el-menu-item index="/user/personalCenter">
+            <i class="el-icon-message"></i>
+            <span slot="title">个人中心</span>
+          </el-menu-item>
         </el-menu>
       </div>
       <div id="rightBox">
@@ -63,6 +67,7 @@ export default {
       if (key === "/user/mail") this.$router.push('/user/mail')
       if (key === "/user/personalCenter") this.$router.push('/user/personalCenter')
       if (key === "/user/advice") this.$router.push('/user/advice')
+      if (key === "/user/personalCenter") this.$router.push('/user/personalCenter')
     },
     logout(){
       localStorage.clear();

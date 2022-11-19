@@ -1,1 +1,53 @@
-/* pages/receipt/content.wxss */
+.containerBox{
+  padding: 5rpx;
+  display: flex;
+  flex-direction:column;
+  margin: 0 auto;
+  width: 710rpx;
+  height: 800rpx;
+  border: 3rpx solid #c2bfbb;
+  border-radius: 20rpx;
+  box-shadow: 10rpx 10rpx 15rpx rgba(0, 0, 0, 0.15);
+  background-color: #fff;
+  margin-bottom: 15rpx;
+  margin-top: 15rpx;
+}
+.containerBox-info-Id{
+  display: flex;
+  flex-direction: row;
+}
+.containerBox-info-Id-text{
+  float: left;
+}
+.containerBox-info-time{
+  display: flex;
+  flex-direction: row;
+}
+.containerBox-info-state{
+  display: flex;
+  flex-direction: row;
+}
+.containerBox-info-network{
+  display: flex;
+  flex-direction: row;
+}
+.containerBox-info-diliver-address{
+  display: flex;
+  flex-direction: row;
+}
+.containerBox-info-diliver-phone{
+  display: flex;
+  flex-direction: row;
+}
+.containerBox-info-receipt-address{
+  display: flex;
+  flex-direction: row;
+}
+.containerBox-info-receipt-phone{
+  display: flex;
+  flex-direction: row;
+}
+.containerBox-info-des{
+  display: flex;
+  flex-direction: row;
+}

@@ -12,7 +12,7 @@
 </view>
 <block wx:if="{{stateForRD}}">
   <view wx:for="{{expressListForDelivery}}" wx:for-item="item">
-  <view class="containerBox">
+  <view class="containerBox" bindtap="navigateToDetail" data-id="{{item.expressId}}">
     <view class="containerBox-id">订单号：{{item.expressId}}</view>
     <view class="containerBox-info">
       <image class="containerBox-info-img" src="../../resources/jidiwuliu.png"></image>
@@ -35,7 +35,7 @@
 </block>
 <block wx:else>
   <view wx:for="{{expressListForRecive}}" wx:for-item="item">
-  <view class="containerBox">
+  <view class="containerBox" bindtap="navigateToDetail" data-id="{{item.expressId}}">
     <view class="containerBox-id">订单号：{{item.expressId}}</view>
     <view class="containerBox-info">
       <image class="containerBox-info-img" src="../../resources/jidiwuliu.png"></image>

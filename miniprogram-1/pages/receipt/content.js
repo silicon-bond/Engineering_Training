@@ -5,14 +5,44 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    expressInfo:{},
+    network:{}
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-
+    console.log(options)
+    var that = this
+    wx.request({
+      url: 'http://8.130.39.140:8081/express/api/express/'+options.expressId,
+      method: 'GET',
+      success: function (res) {
+        console.log(res)
+        that.setData({
+          expressInfo:res.data.data
+        })
+        wx.request({
+          url: 'http://8.130.39.140:8081/express/api/allNetworks',
+          method: 'GET',
+          success: function (res) {
+            console.log(res);
+            that.setData({
+              network:res.data.data[that.data.expressInfo.networkId-1],
+            });
+          },
+          fail: function (res) {
+            console.log(res.data);
+            console.log('is failed')
+          }
+        })
+      },
+      fail: function (res) {
+        console.log(res);
+        console.log('is failed')
+      }
+    })
   },
 
   /**
