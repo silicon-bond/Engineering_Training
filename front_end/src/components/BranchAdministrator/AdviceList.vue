@@ -1,24 +1,9 @@
-<!--<template>-->
-<!--  <div>-->
-<!--    网点管理员3-->
-<!--  </div>-->
-<!--</template>-->
-
-<!--<script>-->
-<!--export default {-->
-<!--  name: "AdviceList"-->
-<!--}-->
-<!--</script>-->
-
-<!--<style scoped>-->
-
-<!--</style>-->
 <template>
   <div>
     <div>
       <h3 id="searchTitle">意见查询</h3>
       <div id="search">
-        <el-select v-model="value" placeholder="请选择意见提出人">
+        <el-select v-model="value" placeholder="请选择意见状态">
           <el-option
             v-for="item in options"
             :key="item.value"
@@ -28,13 +13,9 @@
         </el-select>
         <div id="searchContent">
           <el-button type="primary">搜索</el-button>
-
-          <!--          <el-input  v-model="searchContent" placeholder="请输入快递单号"></el-input>-->
         </div>
       </div>
     </div>
-    <el-divider></el-divider>
-    <h3 id="tableTitle">意见信息列表</h3>
     <el-divider></el-divider>
     <div id="table">
       <el-table :data="tableData"
@@ -50,13 +31,16 @@
           align="center"
           show-overflow-tooltip>
         </el-table-column>
-
+        <el-table-column label="意见状态" align="center">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.state===0">未处理</el-tag>
+            <el-tag v-if="scope.row.state===1">已处理</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <!--            <el-button size="mini" type="text" @click="lookClick(scope.$index,scope.row)" class="button" icon="el-icon-view">查看</el-button>-->
-            <!--            <el-button size="mini" type="text" @click="selectClick(scope.$index,scope.row)" class="button" icon="el-icon-select">接单</el-button>-->
-            <el-button size="mini" type="text" @click="transfer()" class="button" icon="el-icon-select">转送</el-button>
-
+            <el-button size="mini" type="text" @click="lookClick(scope.row)" class="button">查看</el-button>
+            <el-button size="mini" type="text" @click="deleteClick(scope.row)" class="button">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -71,6 +55,38 @@
       layout="prev, pager, next"
       :total="totalCount">
     </el-pagination>
+    <el-dialog title="意见详情" :visible.sync="dialogDetail">
+
+      <div id="detailBox">
+        <el-form ref="detail" :model="detail" label-width="115px">
+          <el-form-item label="意见编号">
+            <el-input v-model="detail.abnormalFeedbackId" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="意见标题">
+            <el-input v-model="detail.title" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="意见内容">
+            <el-input v-model="detail.description" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="反馈者联系电话">
+            <el-input v-model="detail.providerPhoneNumber" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="意见状态">
+            <el-select v-model="detail.state" style="width: 100%" disabled>
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="反馈时间">
+            <el-input v-model="detail.feedbackDate" readonly></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -79,26 +95,31 @@ export default {
   name: "AdviceList",
   data() {
     return {
+      dialogDetail:false,
+      detail: {
+        abnormalFeedbackId:'',
+        title:'',
+        description:'',
+        state:'',
+        providerPhoneNumber:'',
+        feedbackDate:''
+      },
       options: [{
-        value: '选项1',
-        label: '用户'
+        value: 0,
+        label: '未处理'
       },  {
-        value: '选项2',
-        label: '快递员'
+        value: 1,
+        label: '已处理'
       }],
       value: '',
       searchContent:'',
       tableCol: [
         //{prop: "id", label: "id"},
-        {prop: "adviceid", label: "意见id"},
-        {prop: "tittle", label: "意见标题"},
-        // {prop: "username", label: "姓名"},
-        // {prop: "weight", label: "重量/kg"},
-        // {prop: "state", label: "物流状态"},
-        {prop: "phoneNumber", label: "手机号码"},
+        {prop: "abnormalFeedbackId", label: "意见编号"},
+        {prop: "title", label: "意见标题"},
+        {prop: "description", label: "意见内容"},
       ],
       tableData: [
-
       ],
 
       pagesize: 5,
@@ -116,57 +137,75 @@ export default {
 
     handleCurrentChange: function(val) {
       this.currentPage = val;
+      this.querySearch(this.currentPage);
     },
-
-    transfer() {
-
+    lookClick(row){
+      this.detail.abnormalFeedbackId = row.abnormalFeedbackId
+      this.detail.title = row.title
+      this.detail.description = row.description
+      this.detail.state = row.state
+      this.detail.providerPhoneNumber = row.providerPhoneNumber
+      this.detail.feedbackDate = row.feedbackDate
+      this.dialogDetail = true
     },
-    // selectClick(){
-    //
-    //   this.$axios({
-    //     method: 'get',
-    //     headers: {
-    //       'Content-type': 'application/json;charset=UTF-8'
-    //     },
-    //     // data: JSON.stringify(info),
-    //     url: 'http://localhost:8080/express/api/network-administrator/getExpress?page=1&pageSize=2&networkId=1&dateStart=2022-10-21',
-    //   }).then((response) => {          //这里使用了ES6的语法
-    //     // console.log(response.data.message)
-    //     if (response.data.code==='1') {
-    //       // this.tableData = response.data.data.records
-    //       // this.totalCount = response.data.data.total
-    //     }
-    //   }).catch((error) => {
-    //     console.log(error)       //请求失败返回的数据
-    //   })
-    //
-    // },
-    querySearch() {
-      // let info = {
-      //   pn:pageNum
-      // }
+    deleteClick(row){
+      this.$confirm('确定删除此意见?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteConfirm(row)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    deleteConfirm(row){
+      this.$axios({
+        method: 'delete',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/abnormal-feedback/'+row.abnormalFeedbackId,
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+        if (response.data.message==="success"){
+          this.$message({
+            message: '删除此意见成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('删除此意见失败');
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
+    querySearch(pageNum) {
+      let branchAdmin = JSON.parse(localStorage.getItem("userinfo_kuaidi"))
+      console.log(branchAdmin)
       this.$axios({
         method: 'get',
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
         // data: JSON.stringify(info),
-        url: 'http://8.130.39.140:8081/express/api/network-administrator/network_id?page=1&pageSize=5&networkId=3',
+        url: 'http://8.130.39.140:8081/express/api/network-administrator/network_id?page='+pageNum+'&pageSize='+this.pagesize+'&network_id='+branchAdmin.networkId,
       }).then((response) => {          //这里使用了ES6的语法
         console.log(response.data)
-        // if (response.data.code==='1') {
-        //   this.tableData = response.data.data.records
-        //   // this.totalCount = response.data.data.total
-        // }
+        this.tableData = response.data.data.records
+        this.totalCount = response.data.data.total
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })
     },
 
   },
-
   created () {
-    this.querySearch()
+    this.querySearch(this.currentPage)
   }
 }
 </script>

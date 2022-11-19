@@ -89,7 +89,7 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="所属网点" prop="branch">
+          <el-form-item label="当前所属网点" prop="branch">
             <el-select v-model="detail.branch" style="width: 100%">
               <el-option
                 v-for="item in options2"
@@ -175,6 +175,9 @@ export default {
         ],
         state:[
           { required: true, message: '物流状态不能为空', trigger: 'change' },
+        ],
+        branch:[
+          { required: true, message: '当前所属网点不能为空', trigger: 'change' },
         ]
       },
       resultStatus:'1',
@@ -212,6 +215,7 @@ export default {
       this.detail.recipientNumber = row.receiptPhoneNumber
       this.detail.deliveryTime = row.orderDate
       this.detail.state = row.state
+      this.detail.branch = row.networkId
       this.editDetail = true
     },
     editClick(message){

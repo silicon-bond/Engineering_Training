@@ -7,7 +7,7 @@
           <el-input v-model="form.name" placeholder="请输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="联系电话" prop="telephone">
-          <el-input v-model="form.telephone" placeholder="请输入联系电话"></el-input>
+          <el-input v-model="form.telephone" readonly></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="form.email" readonly></el-input>
@@ -52,9 +52,6 @@ export default {
         name: [
           { required: true, message: '姓名不能为空', trigger: 'blur' },
         ],
-        telephone:[
-          { required: true, message: '联系电话不能为空', trigger: 'blur' },
-        ],
         detailAddress:[
           { required: true, message: '详细地址不能为空', trigger: 'blur' },
         ]
@@ -87,7 +84,6 @@ export default {
       let userMessage = {
         userId:user.userId,
         username:this.form.name,
-        phoneNumber:this.form.telephone,
         detailAddress:this.form.detailAddress,
         province:CodeToText[`${this.form.address[0]}`],
         municipal:CodeToText[`${this.form.address[1]}`],
@@ -101,12 +97,17 @@ export default {
         data: JSON.stringify(userMessage),
         url: 'http://8.130.39.140:8081/express/user/updateUser',
       }).then((response) => {          //这里使用了ES6的语法
-
         if (response.data.message==="修改成功"){
           this.$message({
             message: '保存个人信息成功',
             type: 'success'
           });
+          user.username = this.form.name
+          user.detailAddress = this.form.detailAddress
+          user.province = CodeToText[`${this.form.address[0]}`],
+          user.municipal = CodeToText[`${this.form.address[1]}`],
+          user.country = CodeToText[`${this.form.address[2]}`],
+          localStorage.setItem("userinfo_kuaidi",JSON.stringify(user))
           this.$router.go(0)
         }else {
           this.$message.error('保存个人信息失败');
@@ -118,7 +119,6 @@ export default {
   },
   created() {
     let user = JSON.parse(localStorage.getItem("userinfo_kuaidi"))
-    console.log(user)
     this.form.name = user.username
     this.form.telephone = user.phoneNumber
     this.form.email = user.email
