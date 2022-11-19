@@ -165,7 +165,7 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         log.info("正在查询express中NetworkId为{},state为{},且时间范围在{}和{}之间的数据", networkId, state, DateStart, DateOver);
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("network_id", networkId)
                 .eq("state", state)
-                .between("order_date", DateStart, DateOver);
+                .between("order_date", DateStart.toString()+" 00:00:00", DateOver.toString()+" 23:59:59");
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;
