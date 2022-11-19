@@ -122,15 +122,20 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("network_id", networkId)
                 .and(wapper -> wapper.eq("state", ExpressState.Uncollected).or().eq("state", ExpressState.ToBeDelivered));
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        result.setRecords(completeListInfo(result.getRecords()));
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;
     }
 
     @Override
-    public Page<Express> getExpressListByNetworkAndDeliverymanId(Integer networkId, Integer deliverymanId, Integer isCompleted, int page, int pageSize) {
+    public Page<Express> getExpressListByNetworkAndDeliverymanId(Integer networkId, Integer deliverymanId, Integer isCompleted, Integer expressId, int page, int pageSize) {
         log.info("正在查询express中deliverymanId为{}的数据", deliverymanId);
-        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("network_id", networkId)
-                .and(wapper -> wapper.eq("delivery_id", deliverymanId).or().eq("collect_id", deliverymanId));
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>();
+        if (expressId != null)
+            queryWrapper = queryWrapper.eq("express_id", expressId);
+        else
+            queryWrapper = queryWrapper.eq("network_id", networkId);
+        queryWrapper = queryWrapper.and(wapper -> wapper.eq("delivery_id", deliverymanId).or().eq("collect_id", deliverymanId));
         if (isCompleted != null){
             if (isCompleted == 0){
                 queryWrapper = queryWrapper.and(wapper -> wapper.eq("state", ExpressState.Collected).eq("collect_id", deliverymanId).or().eq("state", ExpressState.Delivering).eq("delivery_id", deliverymanId));
@@ -139,6 +144,7 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
             }
         }
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        result.setRecords(completeListInfo(result.getRecords()));
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;
     }
@@ -154,6 +160,7 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
     public Page<Express> getExpressListByReceiptPhoneNum(String ReceiptPhoneNumberr, int page, int pageSize) {
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("Receipt_Phone_Number", ReceiptPhoneNumberr);
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        result.setRecords(completeListInfo(result.getRecords()));
         return result;
     }
 
@@ -163,6 +170,7 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("network_id", networkId)
                 .between("order_date", DateStart, DateOver);
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        result.setRecords(completeListInfo(result.getRecords()));
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;
     }
@@ -174,6 +182,7 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
                 .eq("state", state)
                 .between("order_date", DateStart.toString()+" 00:00:00", DateOver.toString()+" 23:59:59");
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        result.setRecords(completeListInfo(result.getRecords()));
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;
     }
@@ -183,6 +192,7 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         log.info("正在查询express中receipt_phone_number为{}数据", receipt_phone_number);
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("receipt_phone_number", receipt_phone_number);
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        result.setRecords(completeListInfo(result.getRecords()));
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;
     }
@@ -191,6 +201,7 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         log.info("正在查询express中deliver_phone_number为{}数据", deliver_phone_number);
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("deliver_phone_number", deliver_phone_number);
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        result.setRecords(completeListInfo(result.getRecords()));
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;
     }
@@ -220,6 +231,7 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         if (deliverymanId != null)
             queryWrapper =  queryWrapper.and(wapper -> wapper.eq("collect_id", deliverymanId).or().eq("delivery_id", deliverymanId));
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        result.setRecords(completeListInfo(result.getRecords()));
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;
     }
@@ -229,6 +241,7 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
         log.info("正在查询express中state为{}的数据",state);
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("state", state);
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        result.setRecords(completeListInfo(result.getRecords()));
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
         return result;
     }
