@@ -24,7 +24,7 @@
           align="center"
           show-overflow-tooltip>
         </el-table-column>
-        <el-table-column prop="province,country,municipal" label="网点所在地址" align="center">
+        <el-table-column prop="province,country,municipal" label="网点所在地址" align="center" show-overflow-tooltip>
           <template slot-scope="scope">
             {{ scope.row.province}}{{ scope.row.municipal }}{{ scope.row.country }}
           </template>
@@ -183,7 +183,7 @@ export default {
     },
     addConfirm(){
       let branchMessage = {
-        networkName:this.addMessage.name,
+        networkName:this.addMessage.networkName,
         province:CodeToText[`${this.addMessage.address[0]}`],
         municipal:CodeToText[`${this.addMessage.address[1]}`],
         country:CodeToText[`${this.addMessage.address[2]}`],

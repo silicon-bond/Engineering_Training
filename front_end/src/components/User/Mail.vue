@@ -26,7 +26,7 @@
           <el-form-item label="详细地址" prop="senderAddress">
             <el-input v-model="Form.senderAddress" placeholder="请输入寄件人地址"></el-input>
           </el-form-item>
-          <el-form-item label="备注" prop="note">
+          <el-form-item label="备注">
             <el-input v-model="Form.note" placeholder="请输入备注信息"></el-input>
           </el-form-item>
         </el-form>
@@ -131,10 +131,7 @@ export default {
         ],
         value:[
           { required: true, message: '请选择网点', trigger: 'blur' }
-        ],
-        note:[
-          { required: true, message: '请输入备注信息', trigger: 'blur' }
-        ],
+        ]
       },
     }
   },
@@ -206,10 +203,18 @@ export default {
           'Content-type': 'application/json;charset=UTF-8'
         },
         data: JSON.stringify(mailMessage),
-        url: 'http://localhost:8081/express/user/addExpress',
+        url: 'http://8.130.39.140:8081/express/user/addExpress',
       }).then((response) => {          //这里使用了ES6的语法
-        alert("寄件成功")
-        this.$router.push('/user/logistics')
+        console.log(response.data)
+        if (response.data.message==="添加成功"){
+          this.$message({
+            message: '寄件成功',
+            type: 'success'
+          });
+          this.$router.push('/user/logistics')
+        }else {
+          this.$message.error('寄件失败');
+        }
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })
