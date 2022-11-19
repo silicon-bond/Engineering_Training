@@ -78,7 +78,7 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" type="text" @click="lookClick(scope.$index,scope.row)" class="button" icon="el-icon-view">查看</el-button>
-            <el-button size="mini" type="text" v-if="(scope.row.state ===1&&scope.row.collectId===deliverymanId)||(scope.row.state ===4&&scope.row.deliveryId===deliverymanId)" @click="sendClick(scope.$index,scope.row)" class="button" icon="el-icon-view">送达</el-button>
+            <el-button size="mini" type="text" v-if="(scope.row.state ===1&&scope.row.collectId===deliverymanId)||(scope.row.state ===4&&scope.row.deliveryId===deliverymanId)" @click="sendClick(scope.$index,scope.row)" class="button" icon="el-icon-over">送达</el-button>
 <!--            <el-button size="mini" type="text" @click="handleEdit(scope.$index,scope.row)" v-if="scope.row.state !== 1"class="button" icon="el-icon-delete">删除</el-button>-->
           </template>
         </el-table-column>
@@ -121,8 +121,8 @@ export default {
         label: '运输中'
       },
         {
-          value: '3',
-          label: '待派送'
+          value: '4',
+          label: '派送中'
         },
         {
         value: '5',
@@ -137,6 +137,8 @@ export default {
         // {prop: "receiptName", label: "收件人"},
         {prop: "detailaddress", label: "寄件地址"},
         {prop: "recipeaddress", label: "收货地址"},
+        {prop: "networkname", label: "当前所在网点"},
+
       ],
       tableData: [
 
@@ -207,7 +209,7 @@ export default {
           'Content-type': 'application/json;charset=UTF-8'
         },
         // data: JSON.stringify(info),
-        url: 'http://8.130.39.140:8081/express/api/deliveryman/expressState/?state='+this.value+'&networkId='+this.networkId+'&deliverymanId='+this.deliverymanId+'&page='+pageNum+'&pageSize='+this.pagesize,
+        url: 'http://8.130.39.140:8081/express/api/deliveryman/myAllExpresses/?state='+this.value+'&deliverymanId='+this.deliverymanId+'&page='+pageNum+'&pageSize='+this.pagesize,
       }).then((response) => {          //这里使用了ES6的语法
         console.log(this.value)
         console.log(response.data.data)
@@ -217,8 +219,9 @@ export default {
           this.totalCount = response.data.data.total
 
           this.tableData.forEach((item,index)=>{
-            item.detailaddress=item.deliverProvince+item.deliverMunicipal+item.deliverCountry+item.deliverStreet+item.deliverDetailAddress
-            item.recipeaddress=item.receiptProvince+item.receiptMunicipal+item.receiptCountry+item.receiptStreet+item.receiptDetailAddress
+            item.detailaddress=item.deliverProvince+item.deliverMunicipal+item.deliverCountry+item.deliverDetailAddress
+            item.recipeaddress=item.receiptProvince+item.receiptMunicipal+item.receiptCountry+item.receiptDetailAddress
+            item.networkname=item.network.municipal+item.network.networkName
 
           })
         }
@@ -228,7 +231,7 @@ export default {
     },
 
     sendClick(index,row){
-      this.$confirm('确定接单此物流?', '提示', {
+      this.$confirm('确定送达此物流?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -238,7 +241,7 @@ export default {
       }).catch(() => {
         this.$message({
           type: 'info',
-          message: '已取消接单'
+          message: '已取消送达'
         });
       });
     },
@@ -273,7 +276,7 @@ export default {
           'Content-type': 'application/json;charset=UTF-8'
         },
         // data: JSON.stringify(info),
-        url: 'http://8.130.39.140:8081/express/api/deliveryman/myExpressList/?deliverymanId='+this.deliverymanId+'&networkId='+this.networkId+'&page='+pageNum+'&pageSize='+this.pagesize,
+        url: 'http://8.130.39.140:8081/express/api/deliveryman/myAllExpresses/?deliverymanId='+this.deliverymanId+'&page='+pageNum+'&pageSize='+this.pagesize,
       }).then((response) => {          //这里使用了ES6的语法
         console.log(response.data.data)
         if (response.data.code==='1') {
@@ -284,6 +287,7 @@ export default {
           this.tableData.forEach((item,index)=>{
             item.detailaddress=item.deliverProvince+item.deliverMunicipal+item.deliverCountry+item.deliverDetailAddress
             item.recipeaddress=item.receiptProvince+item.receiptMunicipal+item.receiptCountry+item.receiptDetailAddress
+            item.networkname=item.network.municipal+item.network.networkName
 
           })
           this.totalCount = response.data.data.total

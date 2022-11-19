@@ -202,7 +202,10 @@ export default {
             message: '修改快递员信息成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }else {
           this.$message.error('修改快递员信息失败');
         }
@@ -238,7 +241,10 @@ export default {
             message: '删除快递员成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }else {
           this.$message.error('删除快递员失败');
         }

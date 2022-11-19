@@ -73,11 +73,25 @@
           <el-form-item label="寄件人电话号码" prop="senderNumber">
             <el-input v-model="detail.senderNumber"></el-input>
           </el-form-item>
+          <el-form-item label="省/市/区">
+            <el-cascader
+              size="large"
+              :options="jijianoptions"
+              v-model="detail.senderSSQ">
+            </el-cascader>
+          </el-form-item>
           <el-form-item label="收件人" prop="recipient">
             <el-input v-model="detail.recipient"></el-input>
           </el-form-item>
           <el-form-item label="收件人电话号码" prop="recipientNumber">
             <el-input v-model="detail.recipientNumber"></el-input>
+          </el-form-item>
+          <el-form-item label="省/市/区">
+            <el-cascader
+              size="large"
+              :options="shoujianoptions"
+              v-model="detail.recipientSSQ">
+            </el-cascader>
           </el-form-item>
           <el-form-item label="状态" prop="state">
             <el-select v-model="detail.state" style="width: 100%">
@@ -112,16 +126,21 @@
 </template>
 
 <script>
+import { regionData,  CodeToText, TextToCode} from 'element-china-area-data';
 export default {
   name: "LogisticsList",
   data() {
     return {
+      jijianoptions: regionData,
+      shoujianoptions: regionData,
       detail: {
         id:'',
         sender:'',
         senderNumber:'',
+        senderSSQ: null,
         recipient:'',
         recipientNumber:'',
+        recipientSSQ: null,
         deliveryTime:'',
         state:'',
         branch:''
@@ -213,6 +232,11 @@ export default {
       this.detail.id = row.expressId
       this.detail.sender = row.deliverName
       this.detail.senderNumber = row.deliverPhoneNumber
+      let  array = []
+      array[0] = TextToCode[`${row.deliverProvince}`].code
+      array[1] = TextToCode[`${row.deliverProvince}`][`${row.municipal}`].code
+      array[2] = TextToCode[`${row.deliverProvince}`][`${row.municipal}`][`${row.country}`].code
+      this.detail.senderSSQ = array
       this.detail.recipient = row.receiptName
       this.detail.recipientNumber = row.receiptPhoneNumber
       this.detail.deliveryTime = row.orderDate
@@ -250,19 +274,22 @@ export default {
         state:this.detail.state
       }
       this.$axios({
-        method: 'post',
+        method: 'put',
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
         data: JSON.stringify(logisticsMessage),
-        url: 'http://8.130.39.140:8081/express/api/expressupdateById',
+        url: 'http://8.130.39.140:8081/express/api/express/updateById',
       }).then((response) => {          //这里使用了ES6的语法
         if (response.data.message==="success"){
           this.$message({
             message: '修改物流成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }else {
           this.$message.error('修改物流失败');
         }
@@ -331,7 +358,10 @@ export default {
             message: '删除物流成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }else {
           this.$message.error('删除物流失败');
         }

@@ -166,7 +166,6 @@ export default {
         },
         url: 'http://8.130.39.140:8081/express/api/abnormal-feedback?page='+pageNum+'&pageSize='+this.pagesize+'&factor=',
       }).then((response) => {          //这里使用了ES6的语法
-        console.log(response.data)
         this.tableData = response.data.data.records
         this.totalCount = response.data.data.total
       }).catch((error) => {

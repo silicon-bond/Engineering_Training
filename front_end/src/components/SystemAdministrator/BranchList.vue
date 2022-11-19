@@ -202,7 +202,10 @@ export default {
             message: '此网点新增成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }else {
           this.$message.error('此网点新增失败');
         }
@@ -264,7 +267,10 @@ export default {
             message: '修改网点信息成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }else {
           this.$message.error('修改网点信息失败');
         }
@@ -299,7 +305,10 @@ export default {
             message: '删除网点成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }else {
           this.$message.error('删除网点失败');
         }

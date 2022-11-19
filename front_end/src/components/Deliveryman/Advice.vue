@@ -67,7 +67,7 @@ export default {
       this.$refs[message].validate((valid) => {
         if (valid) {
           let adviceMessage = {
-            networkId:1,
+            networkId:this.networkId,
             title: this.ruleForm.title,
             description:this.ruleForm.content,
             providerPhoneNumber:this.telephone

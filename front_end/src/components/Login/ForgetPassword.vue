@@ -174,8 +174,7 @@ export default {
             data: JSON.stringify(userMessage),
             url: 'http://8.130.39.140:8081/express/user/Forgetpassword',
           }).then((response) => {          //这里使用了ES6的语法
-            console.log(response.data.data)
-            if (true) {
+            if (response.data.message==='修改成功') {
                this.$message({
                   showClose: true,
                   message: '修改密码成功！跳转至登陆页面...',

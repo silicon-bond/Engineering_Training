@@ -132,6 +132,7 @@ export default {
           { required: true, message: '姓名不能为空', trigger: 'change' },
         ],
         phone:[
+          { pattern:/^1[3|4|5|7|8][0-9]{9}$/,message: '请输入正确的手机号码',trigger: 'change' },
           { required: true, message: '联系电话不能为空', trigger: 'change' },
         ],
         password:[
@@ -156,6 +157,7 @@ export default {
 
     handleCurrentChange: function(val) {
       this.currentPage = val;
+      this.querySearch(this.currentPage);
     },
     edit(row){
       this.detail.id = row.deliverymanId
@@ -208,7 +210,10 @@ export default {
             message: '修改快递员信息成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }else {
           this.$message.error('修改快递员信息失败');
         }
@@ -230,7 +235,7 @@ export default {
         });
       });
     },
-    deleteConfirm(row){
+    deleteConfirm(row){//
       this.$axios({
         method: 'delete',
         headers: {
@@ -238,16 +243,18 @@ export default {
         },
         url: 'http://8.130.39.140:8081/express/api/deliveryman?id='+row.deliverymanId,
       }).then((response) => {          //这里使用了ES6的语法
-        console.log(response.data)
-        // if (response.data.message==="success"){
-        //   this.$message({
-        //     message: '删除快递员成功',
-        //     type: 'success'
-        //   });
-        //   this.$router.go(0)
-        // }else {
-        //   this.$message.error('删除快递员失败');
-        // }
+        if (response.data.message==="success"){
+          this.$message({
+            message: '删除快递员成功',
+            type: 'success'
+          });
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
+        }else {
+          this.$message.error('删除快递员失败');
+        }
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })

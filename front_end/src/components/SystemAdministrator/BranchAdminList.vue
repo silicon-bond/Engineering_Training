@@ -252,7 +252,10 @@ export default {
             message: '网点管理员新增成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }else {
           this.$message.error('网点管理员新增失败');
         }
@@ -311,7 +314,10 @@ export default {
             message: '修改网点管理员成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }else {
           this.$message.error('修改网点管理员失败');
         }
@@ -346,7 +352,10 @@ export default {
             message: '删除网点管理员成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }else {
           this.$message.error('删除网点管理员失败');
         }

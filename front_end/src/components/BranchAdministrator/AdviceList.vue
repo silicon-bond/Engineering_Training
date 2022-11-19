@@ -33,8 +33,8 @@
         </el-table-column>
         <el-table-column label="意见状态" align="center">
           <template slot-scope="scope">
-            <el-tag v-if="scope.row.state===0">未处理</el-tag>
-            <el-tag v-if="scope.row.state===1">已处理</el-tag>
+            <el-tag type="danger" v-if="scope.row.state===0">未处理</el-tag>
+            <el-tag type="success" v-if="scope.row.state===1">已处理</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
@@ -164,12 +164,13 @@ export default {
       });
     },
     handleConfirm(row){
+      let branchAdmin = JSON.parse(localStorage.getItem("userinfo_kuaidi"))
       let adviceMessage = {
         abnormalFeedbackId:row.abnormalFeedbackId,
         description:row.description,
         feedbackDate:row.feedbackDate,
         networkId:row.networkId,
-        principalId:row.principalId,
+        principalId:branchAdmin.networkAdministratorId,
         providerPhoneNumber:row.providerPhoneNumber,
         state:1,
         title:row.title
@@ -187,7 +188,10 @@ export default {
             message: '处理意见成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }else {
           this.$message.error('处理意见失败');
         }
@@ -223,7 +227,10 @@ export default {
             message: '删除此意见成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }else {
           this.$message.error('删除此意见失败');
         }
@@ -233,7 +240,6 @@ export default {
     },
     querySearch(pageNum) {
       let branchAdmin = JSON.parse(localStorage.getItem("userinfo_kuaidi"))
-      console.log(branchAdmin)
       this.$axios({
         method: 'get',
         headers: {

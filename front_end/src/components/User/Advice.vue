@@ -17,7 +17,7 @@
               <el-option
                 v-for="item in options"
                 :key="item.networkId"
-                :label="item.municipal+item.networkName"
+                :label="item.country+item.networkName"
                 :value="item.networkId">
               </el-option>
             </el-select>
@@ -93,7 +93,9 @@ export default {
             message: '发表意见成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
         }else {
           this.$message.error('发表意见失败');
         }

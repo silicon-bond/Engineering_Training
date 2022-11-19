@@ -213,6 +213,12 @@ export default {
 
     },
     selectClick(index,row){
+      let info=JSON.parse(localStorage.getItem('userinfo_kuaidi'))
+      if(info.username===''){
+        alert('请完善个人信息')
+        this.$router.push('/deliveryman/personalCenter')
+      }
+      else {
       this.$confirm('确定接单此物流?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -226,7 +232,8 @@ export default {
           message: '已取消接单'
         });
       });
-    },
+    }
+      },
     selectConfirm(row) {
       this.$axios({
           method: 'get',

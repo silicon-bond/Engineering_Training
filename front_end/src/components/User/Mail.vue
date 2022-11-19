@@ -46,7 +46,7 @@
           <el-form-item label="联系电话" prop="recipientTelephone">
             <el-input v-model="Form.recipientTelephone" placeholder="请输入收件人联系电话"></el-input>
           </el-form-item>
-          <el-form-item label="普通地址">
+          <el-form-item label="省/市/区">
             <el-cascader
             size="large"
             :options="shoujianoptions"
@@ -112,6 +112,7 @@ export default {
           { required: true, message: '请输入寄件人姓名', trigger: 'blur' },
         ],
         senderTelephone: [
+          { pattern:/^1[3|4|5|7|8][0-9]{9}$/,message: '请输入正确的手机号码',trigger: 'change' },
           { required: true, message: '请输入寄件人联系电话', trigger: 'blur' }
         ],
         senderptAddress: [
@@ -124,6 +125,7 @@ export default {
           { required: true, message: '请输入收件人姓名', trigger: 'blur' },
         ],
         recipientTelephone: [
+          { pattern:/^1[3|4|5|7|8][0-9]{9}$/,message: '请输入正确的手机号码',trigger: 'change' },
           { required: true, message: '请输入收件人联系电话', trigger: 'blur' }
         ],
         recipientAddress: [
@@ -211,7 +213,9 @@ export default {
             message: '寄件成功',
             type: 'success'
           });
-          this.$router.push('/user/logistics')
+          setTimeout(()=> {
+            this.$router.push('/user/logistics')
+          }, 1000)
         }else {
           this.$message.error('寄件失败');
         }

@@ -195,7 +195,10 @@ export default {
             message: '修改用户成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }else {
           this.$message.error('修改用户失败');
         }
@@ -230,7 +233,10 @@ export default {
             message: '删除用户成功',
             type: 'success'
           });
-          this.$router.go(0)
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }else {
           this.$message.error('删除用户失败');
         }
