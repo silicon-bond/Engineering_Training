@@ -41,15 +41,15 @@
       <image class="containerBox-info-img" src="../../resources/jidiwuliu.png"></image>
       <view class="containerBox-info-name">
         <view class="containerBox-info-name-place">{{item.deliverMunicipal}}</view>
-        <view class="containerBox-info-name-name2">{{item.deliverName}}</view>
+        <view style="font-size: 25rpx; text-align: center;" class="containerBox-info-name-name2">{{item.deliverName}}</view>
       </view>
       <view class="containerBox-info-name">
         <image class="containerBox-info-name-arrow" src="../../resources/arrow-right-full.png"></image>
-        <view class="containerBox-info-name-state">{{state[item['state']]}}</view>
+        <view style="text-align: center;"  class="containerBox-info-name-state">{{state[item['state']]}}</view>
       </view>
       <view class="containerBox-info-name">
         <view class="containerBox-info-name-place">{{item.receiptMunicipal}}</view>
-        <view class="containerBox-info-name-name2">{{item.receiptName}}</view>
+        <view style="font-size: 25rpx; text-align: center;" class="containerBox-info-name-name2">{{item.receiptName}}</view>
       </view>
       <image class="containerBox-info-right" src="../../resources/baoguo_o.png"></image>
     </view>

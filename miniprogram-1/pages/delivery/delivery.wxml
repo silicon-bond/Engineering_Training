@@ -21,9 +21,9 @@
   </view>
   <view class="containerDescription-info">
     <view class="containerDescription-info-label">
-    <picker  bindchange="bindPickerChange" value="{{index}}" range="{{networks}}" range-key="{{'networkName'}}">
+    <picker  bindchange="bindPickerChange" value="{{index}}" range="{{networks}}" range-key="{{'tmp'}}">
     <view >
-      请选择寄件网点：{{checkedNetwork.networkName}}
+      请选择寄件网点：{{checkedNetwork.country}}{{checkedNetwork.networkName}}
     </view>
     </picker>
     </view>

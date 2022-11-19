@@ -1,14 +1,16 @@
 {
   "pages": [
     "pages/deliveryMan/deliveryMan",
+    "pages/delivery/delivery",
+    "pages/login/login",
+    
     "pages/home/home",
     
     "pages/deliveryManwuliu/deliveryManwuliu",
     "pages/deliveryManjiedan/deliveryManjiedan",
     "pages/deliveryMangr/deliveryMangr",
     "pages/deliveryManfk/deliveryManfk",
-    "pages/login/login",
-    "pages/delivery/delivery",
+   
     "pages/receipt/receipt",
     "pages/info/info",
     "pages/info/infoTwo",
