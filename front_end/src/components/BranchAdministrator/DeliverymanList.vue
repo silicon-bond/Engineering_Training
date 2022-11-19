@@ -28,13 +28,11 @@
 <!--          </el-option>-->
 <!--        </el-select>-->
         <div id="searchContent">
-          <el-input  v-model="searchContent" placeholder="请输入快递员工号"></el-input>
+          <el-input  v-model="searchContent" placeholder="请输入快递员编号"></el-input>
         </div>
         <el-button type="primary">搜索</el-button>
       </div>
     </div>
-    <el-divider></el-divider>
-    <h3 id="tableTitle">快递员信息列表</h3>
     <el-divider></el-divider>
     <div id="table">
       <el-table :data="tableData"
@@ -53,10 +51,8 @@
 
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <!--            <el-button size="mini" type="text" @click="lookClick(scope.$index,scope.row)" class="button" icon="el-icon-view">查看</el-button>-->
-            <!--            <el-button size="mini" type="text" @click="selectClick(scope.$index,scope.row)" class="button" icon="el-icon-select">接单</el-button>-->
-            <el-button size="mini" type="text" @click="transfer()" class="button" icon="el-icon-select">转送</el-button>
-
+            <el-button size="mini" type="text" @click="edit(scope.row)" class="button">编辑</el-button>
+            <el-button size="mini" type="text" @click="deleteClick(scope.row)" class="button">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -71,6 +67,34 @@
       layout="prev, pager, next"
       :total="totalCount">
     </el-pagination>
+    <el-dialog title="编辑快递员信息" :visible.sync="editDetail">
+
+      <div id="editBox">
+        <el-form ref="detail" :model="detail" label-width="125px"  :rules="editRules">
+          <el-form-item label="快递员编号">
+            <el-input v-model="detail.id" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="快递员姓名" prop="username">
+            <el-input v-model="detail.username"></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email">
+            <el-input v-model="detail.email" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="联系电话" prop="phone">
+            <el-input v-model="detail.phone"></el-input>
+          </el-form-item>
+          <el-form-item label="注册时间">
+            <el-input v-model="detail.registerTime" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="密码" prop="password">
+            <el-input v-model="detail.password"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="editClick('detail')">确认</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -79,27 +103,43 @@ export default {
   name: "DeliverymanList",
   data() {
     return {
-      options: [{
-        value: '选项1',
-        label: '未揽件'
-      },  {
-        value: '选项2',
-        label: '未派送'
-      }],
-      value: '',
+      detail: {
+        id:'',
+        username:'',
+        email:'',
+        phone:'',
+        registerTime:'',
+        password:'',
+        branch:''
+      },
+      dialogFormVisible: false,
+      editDetail: false,
+
       searchContent:'',
       tableCol: [
         //{prop: "id", label: "id"},
-        {prop: "deliverymanId", label: "快递员工号"},
+        {prop: "deliverymanId", label: "快递员编号"},
+        {prop: "username", label: "快递员姓名"},
         {prop: "email", label: "邮箱"},
-        {prop: "username", label: "姓名"},
-        {prop: "weight", label: "重量/kg"},
-        {prop: "state", label: "物流状态"},
-        {prop: "phoneNumber", label: "手机号码"},
+        {prop: "phoneNumber", label: "联系电话"},
+        {prop: "registerDate", label: "注册时间"},
       ],
-      tableData: [
 
+      tableData: [
       ],
+      editRules:{
+        username:[
+          { required: true, message: '姓名不能为空', trigger: 'change' },
+        ],
+        phone:[
+          { required: true, message: '联系电话不能为空', trigger: 'change' },
+        ],
+        password:[
+          { required: true, message: '密码不能为空', trigger: 'change' },
+        ]
+      },
+      resultStatus:'1',
+
 
       pagesize: 5,
       //当前页码
@@ -117,59 +157,120 @@ export default {
     handleCurrentChange: function(val) {
       this.currentPage = val;
     },
-
-    transfer() {
-
+    edit(row){
+      this.detail.id = row.deliverymanId
+      this.detail.email = row.email
+      this.detail.username = row.username
+      this.detail.phone = row.phoneNumber
+      this.detail.registerTime = row.registerDate
+      this.detail.password = row.password
+      this.editDetail = true
     },
-    // selectClick(){
-    //
-    //   this.$axios({
-    //     method: 'get',
-    //     headers: {
-    //       'Content-type': 'application/json;charset=UTF-8'
-    //     },
-    //     // data: JSON.stringify(info),
-    //     url: 'http://localhost:8080/express/api/network-administrator/getExpress?page=1&pageSize=2&networkId=1&dateStart=2022-10-21',
-    //   }).then((response) => {          //这里使用了ES6的语法
-    //     // console.log(response.data.message)
-    //     if (response.data.code==='1') {
-    //       // this.tableData = response.data.data.records
-    //       // this.totalCount = response.data.data.total
-    //     }
-    //   }).catch((error) => {
-    //     console.log(error)       //请求失败返回的数据
-    //   })
-    //
-    // },
-    querySearch() {
-      // let info = {
-      //   pn:pageNum
-      // }
-      console.log(345);
+    editClick(message){
+      this.$refs[message].validate((valid) => {
+        if (valid) {
+          this.$confirm('确定提交此修改?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.editConfirm()
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消修改'
+            });
+          });
+        } else {
+          return false;
+        }
+      });
+    },
+    editConfirm(){
+      let deliverymanMessage = {
+        deliverymanId:this.detail.id,
+        email:this.detail.email,
+        username:this.detail.username,
+        phoneNumber:this.detail.phone,
+        password:this.detail.password,
+      }
+      this.$axios({
+        method: 'put',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        data: JSON.stringify(deliverymanMessage),
+        url: 'http://8.130.39.140:8081/express/api/deliveryman',
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+        if (response.data.message==="success"){
+          this.$message({
+            message: '修改快递员信息成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('修改快递员信息失败');
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
+    deleteClick(row){
+      this.$confirm('确定删除此快递员?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteConfirm(row)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    deleteConfirm(row){
+      this.$axios({
+        method: 'delete',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/deliveryman?id='+row.deliverymanId,
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+        // if (response.data.message==="success"){
+        //   this.$message({
+        //     message: '删除快递员成功',
+        //     type: 'success'
+        //   });
+        //   this.$router.go(0)
+        // }else {
+        //   this.$message.error('删除快递员失败');
+        // }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
+    querySearch(pageNum) {
+      let branchAdmin = JSON.parse(localStorage.getItem("userinfo_kuaidi"))
       this.$axios({
         method: 'get',
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
         // data: JSON.stringify(info),
-        url: 'http://8.130.39.140:8081/express/api/network-administrator/getDeliveryman?page=1&pageSize=10&networkId=3',
+        url: 'http://8.130.39.140:8081/express/api/network-administrator/getDeliveryman?page='+pageNum+'&pageSize='+this.pagesize+'&networkId='+branchAdmin.networkId,
       }).then((response) => {          //这里使用了ES6的语法
-      console.log(123);
-        console.log(response.data)
-        if (response.data.code==='1') {
-          this.tableData = response.data.data.records
-          // this.totalCount = response.data.data.total
-        }
+        this.tableData = response.data.data.records
+        this.totalCount = response.data.data.total
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })
     },
-
   },
-
   created () {
-    console.log(123123);
-    this.querySearch()
+    this.querySearch(this.currentPage)
   }
 }
 </script>

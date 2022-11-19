@@ -4,6 +4,7 @@ package edu.example.express.controller;
 import edu.example.express.entity.*;
 import edu.example.express.entity.dto.ResultBean;
 
+import edu.example.express.mapper.DeliverymanMapper;
 import edu.example.express.service.*;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,9 @@ public class DeliverymanController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private NetworkAdministratorService networkAdministratorService;
 
     @Resource
     private AbnormalFeedbackService abnormalFeedbackService;
@@ -79,8 +83,8 @@ public class DeliverymanController {
         return new ResultBean<>(deliverymanService.insertDeliveryman(deliveryman));
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
-    public ResultBean<?> deleteById(@PathVariable("id") Integer id) {
+    @RequestMapping(method = RequestMethod.DELETE)
+    public ResultBean<?> deleteById(@RequestParam("id") Integer id) {
         return new ResultBean<>(deliverymanService.deleteDeliverymanById(id));
     }
 

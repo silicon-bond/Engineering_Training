@@ -127,6 +127,16 @@ public class NetworkAdministratorController {
         return new ResultBean<>(expressService.getExpressListByNetworkIdAndDate(NetworkId, page, pageSize, dateStart, dateOver));
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/getExpressByStateAndTime")
+    public ResultBean<?> getExpressByNetworkId(@RequestParam(name = "page", defaultValue = "1") int page,
+                                               @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                               @RequestParam(name = "state") int state,
+                                               @RequestParam(name = "networkId") int networkId,
+                                               @RequestParam(name = "dateStart", defaultValue = "2000-01-01") LocalDate dateStart,
+                                               @RequestParam(name = "dateOver", defaultValue = "2099-12-31") LocalDate dateOver) {
+        return new ResultBean<>(expressService.getExpressListByNetworkIdAndDateAndState(state, networkId, page, pageSize, dateStart, dateOver));
+    }
+
     /**
      * 根据网点id查询快递员
      */

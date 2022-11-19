@@ -1,0 +1,42 @@
+<!--pages/houseMaster/change/index.wxml-->
+<view class="my-container">
+  <view class="header">
+    <view bindtap="back" class="back"><image mode="widthFix" src="../../resources/back1.png"></image></view>
+    反馈问题
+  </view>
+  <view class="wrapper">
+    <view class="page-section">
+      <view class="weui-cells__title">意见标题</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <input bindinput="bindKeyInput" class="weui-input" placeholder="请输入标题" :value=""/>
+        </view>
+      </view>
+    </view>
+    <view class="page-section">
+      <view class="weui-cells__title">意见内容</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <textarea maxlength="400" style="background-color: white; height: 300rpx;" bindinput="bindTextInput" class="weui-input" placeholder="意见内容" />
+        </view>
+      </view>
+    </view>
+    <view class="page-section">
+      <view class="weui-cells__title">所属网点</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+            <view class="picker">
+               {{array[index]}}
+            </view>
+          </picker>
+        </view>
+      </view>
+    </view>
+
+      <button bindtap="submit" style="width:100%" class="btn-area" type="primary" >提交</button>
+
+
+    
+  </view>
+</view>

@@ -1,0 +1,65 @@
+<!--pages/houseMaster/change/index.wxml-->
+<view class="my-container">
+  <view class="header">
+    <view bindtap="back" class="back"><image mode="widthFix" src="../../resources/back1.png"></image></view>
+    个人中心
+  </view>
+  <view class="wrapper">
+    <view class="page-section">
+      <view class="weui-cells__title">用户Id</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <input disabled="true" class="weui-input" value="{{userInfo.deliverymanId}}"/>
+        </view>
+      </view>
+    </view>
+    <view class="page-section">
+      <view class="weui-cells__title">姓名</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <input maxlength="10" bindinput="bindNameInput" class="weui-input" placeholder="请输入姓名" value="{{userInfo.username}}"/>
+        </view>
+      </view>
+    </view>
+    <view class="page-section">
+      <view class="weui-cells__title">邮箱</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <input disabled="true" class="weui-input" value="{{userInfo.email}}"/>
+        </view>
+      </view>
+    </view>
+    <view class="page-section">
+      <view class="weui-cells__title">电话</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <input bindinput="bindTelInput" class="weui-input" value="{{userInfo.phoneNumber}}"/>
+        </view>
+      </view>
+    </view>
+    <view class="page-section">
+      <view class="weui-cells__title">所属网点</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <picker disabled="true" bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+            <view class="picker">
+               {{array[index]}}
+            </view>
+          </picker>
+        </view>
+      </view>
+    </view>
+
+    <view class="page-section">
+      <view class="weui-cells__title">注册时间</view>
+      <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+          <input disabled="true" class="weui-input" value="{{userInfo.registerDate}}"/>
+        </view>
+      </view>
+    </view>
+
+    <button bindtap="submit" style="width:100%" class="btn-area" type="primary" >修改</button>
+
+  </view>
+</view>

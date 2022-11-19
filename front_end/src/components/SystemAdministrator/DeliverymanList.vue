@@ -50,6 +50,9 @@
           <el-form-item label="快递员编号">
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
+          <el-form-item label="快递员姓名" prop="username">
+            <el-input v-model="detail.username"></el-input>
+          </el-form-item>
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="detail.email" readonly></el-input>
           </el-form-item>
@@ -63,7 +66,14 @@
             <el-input v-model="detail.password"></el-input>
           </el-form-item>
           <el-form-item label="所属网点" prop="branch">
-            <el-input v-model="detail.branch"></el-input>
+            <el-select filterable v-model="detail.branch" placeholder="请选择网点" style="width: 100%">
+              <el-option
+                v-for="item in options"
+                :key="item.networkId"
+                :label="item.country+item.networkName"
+                :value="item.networkId">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="editClick('detail')">确认</el-button>
@@ -81,12 +91,14 @@ export default {
     return {
       detail: {
         id:'',
+        username:'',
         email:'',
         phone:'',
         registerTime:'',
         password:'',
         branch:''
       },
+      options: [],
       dialogFormVisible: false,
       editDetail: false,
 
@@ -94,6 +106,7 @@ export default {
       tableCol: [
         //{prop: "id", label: "id"},
         {prop: "deliverymanId", label: "快递员编号"},
+        {prop: "username", label: "快递员姓名"},
         {prop: "email", label: "邮箱"},
         {prop: "phoneNumber", label: "联系电话"},
         {prop: "registerDate", label: "注册时间"},
@@ -102,11 +115,17 @@ export default {
       tableData: [
       ],
       editRules:{
+        username:[
+          { required: true, message: '姓名不能为空', trigger: 'change' },
+        ],
         phone:[
           { required: true, message: '联系电话不能为空', trigger: 'change' },
         ],
         password:[
           { required: true, message: '密码不能为空', trigger: 'change' },
+        ],
+        branch:[
+          { required: true, message: '所属网点不能为空', trigger: 'change' },
         ]
       },
       resultStatus:'1',
@@ -134,6 +153,7 @@ export default {
     edit(row){
       this.detail.id = row.deliverymanId
       this.detail.email = row.email
+      this.detail.username = row.username
       this.detail.phone = row.phoneNumber
       this.detail.registerTime = row.registerDate
       this.detail.password = row.password
@@ -252,9 +272,22 @@ export default {
         },
         url: 'http://8.130.39.140:8081/express/api/system-administrator/person-management/getDeliverymanByPage?page='+pageNum+'&pageSize='+this.pagesize,
       }).then((response) => {          //这里使用了ES6的语法
-        console.log(response.data)
         this.tableData = response.data.data.records
         this.totalCount = response.data.data.total
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
+    getAllBranch(){
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/allNetworks',
+      }).then((response) => {          //这里使用了ES6的语法
+        this.options = response.data.data
+        console.log(this.options)
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })
@@ -262,6 +295,7 @@ export default {
   },
   created() {
     this.querySearch(this.currentPage)
+    this.getAllBranch()
   }
 }
 </script>

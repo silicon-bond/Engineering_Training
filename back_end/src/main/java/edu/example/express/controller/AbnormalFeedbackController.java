@@ -65,7 +65,7 @@ public class AbnormalFeedbackController {
     /**
     * 修改
     */
-    @RequestMapping(method = RequestMethod.PUT)
+    @RequestMapping(method = RequestMethod.POST, value = "updateById")
     public ResultBean<?> updateById(@RequestBody AbnormalFeedback abnormalFeedback) {
         return new ResultBean<>(abnormalFeedbackService.updateAbnormalFeedback(abnormalFeedback));
     }

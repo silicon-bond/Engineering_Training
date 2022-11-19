@@ -47,6 +47,9 @@
           <el-form-item label="用户编号">
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
+          <el-form-item label="姓名" prop="username">
+            <el-input v-model="detail.nickname"></el-input>
+          </el-form-item>
           <el-form-item label="邮箱" prop="email">
             <el-input v-model="detail.email" readonly></el-input>
           </el-form-item>
@@ -79,6 +82,7 @@ export default {
       detail: {
         id:'',
         email:'',
+        nickname:'',
         address:'',
         phone:'',
         registerTime:'',
@@ -90,6 +94,7 @@ export default {
       tableCol: [
         //{prop: "id", label: "id"},
         {prop: "userId", label: "用户编号"},
+        {prop: "username", label: "姓名"},
         {prop: "email", label: "邮箱"},
         {prop: "detailAddress", label: "地址"},
         {prop: "phoneNumber", label: "联系电话"},
@@ -99,6 +104,9 @@ export default {
       tableData: [
       ],
       editRules:{
+        username:[
+          { required: true, message: '姓名不能为空', trigger: 'change' },
+        ],
         address:[
           { required: true, message: '地址不能为空', trigger: 'change' },
         ],
@@ -137,6 +145,7 @@ export default {
     edit(row){
       this.detail.id = row.userId
       this.detail.email = row.email
+      this.detail.nickname = row.username
       this.detail.address = row.detailAddress
       this.detail.phone = row.phoneNumber
       this.detail.registerTime = row.registerDate
@@ -166,6 +175,7 @@ export default {
     editConfirm(){
       let userMessage = {
         userId:this.detail.id,
+        username:this.detail.nickname,
         email:this.detail.email,
         detailAddress:this.detail.address,
         phoneNumber:this.detail.phone,

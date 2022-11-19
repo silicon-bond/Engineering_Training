@@ -1,0 +1,72 @@
+/* pages/houseMaster/main/index.wxss */
+
+.my-container {
+  box-sizing: border-box;
+  padding: 40rpx;
+}
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  justify-content: space-between;
+}
+
+.wrapper-item {
+  letter-spacing: 3rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: calc(50% - 15rpx);
+  background-color: orange;
+  margin: 15rpx 0;
+  height: 220rpx;
+  border-radius: 15rpx;
+  color: #fff;
+}
+
+.wrapper-item-icon {
+  width: 80rpx;
+  height: 80rpx;
+  margin-bottom: 10rpx;
+}
+
+.wrapper-item-icon image {
+  width: 100%;
+}
+
+.wrapper-item-text {
+  text-align: center;
+}
+
+.first-word {
+  font-size: 36rpx;
+  font-weight: bold;
+  letter-spacing: 5rpx;
+}
+
+.bgColor1 {
+  background: linear-gradient(to bottom right, rgb(27,185,180), rgb(142, 218, 214))
+}
+
+.bgColor2 {
+  background: linear-gradient(to bottom right, rgb(7,138,247), rgb(164, 202, 235))
+}
+
+.bgColor3 {
+  background: linear-gradient(to bottom right, rgb(103,57,182), rgb(174, 142, 226))
+  
+}
+
+.leave {
+  position: fixed;
+  left: 40rpx;
+  bottom: 40rpx;
+  width: 80rpx;
+}
+
+.leave image {
+  width: 100%;
+}

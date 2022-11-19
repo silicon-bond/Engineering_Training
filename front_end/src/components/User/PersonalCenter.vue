@@ -3,11 +3,14 @@
     <div id="personalBox">
       <h2 id="personalTitle">个人信息</h2>
       <el-form ref="form" :model="form" label-width="80px" style="float: left;width: 40%" :rules="rules">
-        <el-form-item label="昵称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入昵称"></el-input>
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="form.name" placeholder="请输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="联系电话" prop="telephone">
           <el-input v-model="form.telephone" placeholder="请输入联系电话"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="form.email" readonly></el-input>
         </el-form-item>
         <el-form-item label="省/市/区">
           <el-cascader
@@ -18,6 +21,9 @@
         </el-form-item>
         <el-form-item label="详细地址" prop="detailAddress">
           <el-input v-model="form.detailAddress" placeholder="请输入详细地址"></el-input>
+        </el-form-item>
+        <el-form-item label="注册时间" prop="registerTime">
+          <el-input v-model="form.registerTime" readonly></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="SubmitClick('form')">确认修改</el-button>
@@ -37,12 +43,14 @@ export default {
       form: {
         name: '',
         telephone:'',
+        email:'',
+        registerTime:'',
         address:null,
         detailAddress:''
       },
       rules:{
         name: [
-          { required: true, message: '昵称不能为空', trigger: 'blur' },
+          { required: true, message: '姓名不能为空', trigger: 'blur' },
         ],
         telephone:[
           { required: true, message: '联系电话不能为空', trigger: 'blur' },
@@ -91,7 +99,7 @@ export default {
           'Content-type': 'application/json;charset=UTF-8'
         },
         data: JSON.stringify(userMessage),
-        url: 'http://localhost:8081/express/user/updateUser',
+        url: 'http://8.130.39.140:8081/express/user/updateUser',
       }).then((response) => {          //这里使用了ES6的语法
 
         if (response.data.message==="修改成功"){
@@ -113,7 +121,9 @@ export default {
     console.log(user)
     this.form.name = user.username
     this.form.telephone = user.phoneNumber
+    this.form.email = user.email
     this.form.detailAddress = user.detailAddress
+    this.form.registerTime = user.registerDate
     let  array = []
     array[0] = TextToCode[`${user.province}`].code
     array[1] = TextToCode[`${user.province}`][`${user.municipal}`].code
