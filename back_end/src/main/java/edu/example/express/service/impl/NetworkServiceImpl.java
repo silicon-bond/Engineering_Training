@@ -30,7 +30,7 @@ public class NetworkServiceImpl extends ServiceImpl<NetworkMapper, Network> impl
         log.info("正在执行分页查询network: page = {} pageSize = {}",page,pageSize);
         QueryWrapper<Network> queryWrapper =  new QueryWrapper<Network>().like("", factor);
         //TODO 这里需要自定义用于匹配的字段,并把wrapper传入下面的page方法
-        Page<Network> result = super.page(new Page<>(page, pageSize),queryWrapper);
+        Page<Network> result = super.page(new Page<>(page, pageSize));
         log.info("分页查询network完毕: 结果数 = {} ",result.getRecords().size());
         return result;
     }

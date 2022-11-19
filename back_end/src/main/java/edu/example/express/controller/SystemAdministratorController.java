@@ -64,7 +64,8 @@ public class SystemAdministratorController {
 
     @PutMapping("/person-management/update/1")
     public ResultBean UpdateUser(@RequestBody User user){
-        if (user.getPhoneNumber() != null){
+        String system_phone = systemAdministratorService.getPhoneNumberByRoleAndId(1,user.getUserId());
+        if (user.getPhoneNumber() != null && !system_phone.equals(user.getPhoneNumber())){
             if (systemAdministratorService.ifUsedPhoneNumber(user.getPhoneNumber())){
                 return new ResultBean("电话已经被使用","403");
             }
@@ -114,7 +115,8 @@ public class SystemAdministratorController {
 
     @PutMapping("/person-management/update/2")
     public ResultBean UpdateDeliveryman(@RequestBody Deliveryman deliveryman){
-        if (deliveryman.getPhoneNumber() != null){
+        String system_phone = systemAdministratorService.getPhoneNumberByRoleAndId(1,deliveryman.getDeliverymanId());
+        if (deliveryman.getPhoneNumber() != null && !system_phone.equals(deliveryman.getPhoneNumber())){
             if (systemAdministratorService.ifUsedPhoneNumber(deliveryman.getPhoneNumber())){
                 return new ResultBean("电话已经被使用","403");
             }
@@ -164,7 +166,8 @@ public class SystemAdministratorController {
 
     @PutMapping("/person-management/update/3")
     public ResultBean UpdateNetworkAdministrator(@RequestBody NetworkAdministrator networkAdministrator){
-        if (networkAdministrator.getPhoneNumber() != null){
+        String system_phone = systemAdministratorService.getPhoneNumberByRoleAndId(1,networkAdministrator.getNetworkAdministratorId());
+        if (networkAdministrator.getPhoneNumber() != null && !system_phone.equals(networkAdministrator.getPhoneNumber())){
             if (systemAdministratorService.ifUsedPhoneNumber(networkAdministrator.getPhoneNumber())){
                 return new ResultBean("电话已经被使用","403");
             }

@@ -73,6 +73,7 @@ public interface SystemAdministratorService {
 
     Boolean ifUsedPhoneNumber(String phoneNumber);
 
+    String getPhoneNumberByRoleAndId(int role,int id);
 
 
     /**

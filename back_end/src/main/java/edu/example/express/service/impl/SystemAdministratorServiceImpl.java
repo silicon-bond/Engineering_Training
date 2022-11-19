@@ -177,6 +177,7 @@ public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministra
         return networkList;
     }
 
+
     @Override
     public SystemAdministrator getSystemAdministratorByAccount(String account) {
         log.info("正在查询systemAdministrator中account为{}的数据", account);
@@ -353,5 +354,28 @@ public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministra
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String getPhoneNumberByRoleAndId(int role, int id) {
+        if (role == 1){
+            String table = "user";
+            String value = "user_id";
+            String phoneNumber = systemAdministratorMapper.getPhoneByRoleAndId(table,value,id);
+            return phoneNumber;
+        }
+        if (role == 2){
+            String table = "deliveryman";
+            String value = "deliveryman_id";
+            String phoneNumber = systemAdministratorMapper.getPhoneByRoleAndId(table,value,id);
+            return phoneNumber;
+        }
+        if (role == 3){
+            String table = "network_administrator";
+            String value = "network_administrator_id";
+            String phoneNumber = systemAdministratorMapper.getPhoneByRoleAndId(table,value,id);
+            return phoneNumber;
+        }
+        return "";
     }
 }

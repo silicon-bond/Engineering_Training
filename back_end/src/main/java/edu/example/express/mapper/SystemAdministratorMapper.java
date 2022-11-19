@@ -28,4 +28,7 @@ public interface SystemAdministratorMapper extends BaseMapper<SystemAdministrato
 
     @Select("select phone_number from network_administrator")
     public List<String> getNetworkAdministratorPhoneNumber();
+
+    @Select("select phone_number from ${table} where ${role} = #{id}")
+    public String getPhoneByRoleAndId(String table,String role,int id);
 }
