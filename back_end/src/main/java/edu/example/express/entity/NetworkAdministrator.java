@@ -38,8 +38,7 @@ public class NetworkAdministrator extends Model<NetworkAdministrator> {
     private String phoneNumber;
 
     @TableField(exist = false)
-    private String networkName;
-
+    private Network network;
 
     @Override
     protected Serializable pkVal() {

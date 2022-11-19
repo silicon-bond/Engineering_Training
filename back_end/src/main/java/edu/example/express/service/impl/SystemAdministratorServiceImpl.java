@@ -295,12 +295,12 @@ public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministra
 
     private Deliveryman completeInfo1(Deliveryman entity){
         Network network = networkService.getNetworkById(entity.getNetworkId());
-        entity.setNetworkName(network.getNetworkName());
+        entity.setNetwork(network);
         return entity;
     }
 
     private List<Deliveryman> completeListInfo1(List<Deliveryman> entityList){
-        List<Deliveryman> newList = new ArrayList<Deliveryman>();
+        List<Deliveryman> newList = new ArrayList<>();
         for (Deliveryman entity : entityList){
             newList.add(completeInfo1(entity));
         }
@@ -309,7 +309,7 @@ public class SystemAdministratorServiceImpl extends ServiceImpl<SystemAdministra
 
     private NetworkAdministrator completeInfo2(NetworkAdministrator entity){
         Network network = networkService.getNetworkById(entity.getNetworkId());
-        entity.setNetworkName(network.getNetworkName());
+        entity.setNetwork(network);
         return entity;
     }
 
