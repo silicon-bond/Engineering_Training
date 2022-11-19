@@ -56,6 +56,7 @@ Page({
           if (res.confirm) { //这里是点击了确定以后
             console.log('用户点击确定')
             let localDate = util.formatTime(new Date())
+            console.log(localDate);
             wx.request({
               url: 'http://8.130.39.140:8081/express/api/express',
               data:{
@@ -76,6 +77,9 @@ Page({
                 receiptPhoneNumber:that.data.infoReceipt['receipt_phone_number'],
                 description:that.data.description,
                 ordererId:that.data.userInfo['userId']
+              },
+              header: {
+                'content-type': 'application/json'
               },
               method: 'POST',
               success: function (res) {
