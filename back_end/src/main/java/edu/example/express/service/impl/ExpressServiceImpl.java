@@ -82,7 +82,7 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
     @Override
     public Express getExpressByIdAndNetworkId(int id, int networkId) {
         log.info("正在查询express中id为{}的数据",id);
-        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("express_id", id).eq("networkId", networkId);
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("express_id", id).eq("network_id", networkId);
         Express express = super.getOne(queryWrapper);
         log.info("查询id为{}的express{}",id,(null == express?"无结果":"成功"));
         return express;
