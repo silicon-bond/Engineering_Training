@@ -4,7 +4,7 @@
 var app = getApp()
 Page({
   data: {
-    motto: 'Express 简单快递小程序',
+    motto: '快递服务系统',
     userInfo: {},
     userEmail:'',
     userPassword:'',
@@ -46,9 +46,18 @@ Page({
             key:"userInfo",
             data:res.data.data
           });
-          wx.switchTab({
-            url: '../home/home'
-          })
+          if (res.data.data.userId != null) {
+            wx.switchTab({
+              url: '../home/home'
+            })
+          } else {
+            wx.redirectTo({
+              url: '../deliveryMan/deliveryMan',
+            })
+          }
+          // wx.switchTab({
+          //   url: '../home/home'
+          // })
         }  
       },
       fail: function (res) {
