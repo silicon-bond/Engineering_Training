@@ -1,8 +1,8 @@
 <view class="courier">
-  <image class="courier-png" src="../../resources/jijian.png"></image>
-  <view class="courier-P1" bindtap="showD" >寄件</view>
-  <image class="courier-png" src="../../resources/shoujianxiang.png"></image>
-  <view class="courier-P1" bindtap="showR">收件</view>
+  <image bindtap="showD" class="courier-png" src="../../resources/jijian.png"></image>
+  <view class="courier-P1" bindtap="showD" >待派送</view>
+  <image bindtap="showR" class="courier-png" src="../../resources/shoujianxiang.png"></image>
+  <view class="courier-P1" bindtap="showR">未揽件</view>
 </view>
 
 <view class="header">
@@ -18,15 +18,15 @@
       <image class="containerBox-info-img" src="../../resources/jidiwuliu.png"></image>
       <view class="containerBox-info-name">
         <view class="containerBox-info-name-place">{{item.deliverMunicipal}}</view>
-        <view class="containerBox-info-name-name2">{{item.deliverName}}</view>
+        <view style="font-size: 25rpx; text-align: center;" class="containerBox-info-name-name2">{{item.deliverName}}</view>
       </view>
       <view class="containerBox-info-name">
         <image class="containerBox-info-name-arrow" src="../../resources/arrow-right-full.png"></image>
-        <view class="containerBox-info-name-state">{{state[item['state']]}}</view>
+        <view style="text-align: center;" class="containerBox-info-name-state">{{state[item['state']]}}</view>
       </view>
       <view class="containerBox-info-name">
         <view class="containerBox-info-name-place">{{item.receiptMunicipal}}</view>
-        <view class="containerBox-info-name-name2">{{item.receiptName}}</view>
+        <view style="font-size: 25rpx; text-align: center;"  class="containerBox-info-name-name2">{{item.receiptName}}</view>
       </view>
       <image class="containerBox-info-right" src="../../resources/baoguo_o.png"></image>
     </view>
@@ -41,15 +41,15 @@
       <image class="containerBox-info-img" src="../../resources/jidiwuliu.png"></image>
       <view class="containerBox-info-name">
         <view class="containerBox-info-name-place">{{item.deliverMunicipal}}</view>
-        <view class="containerBox-info-name-name2">{{item.deliverName}}</view>
+        <view style="font-size: 25rpx; text-align: center;" class="containerBox-info-name-name2">{{item.deliverName}}</view>
       </view>
       <view class="containerBox-info-name">
         <image class="containerBox-info-name-arrow" src="../../resources/arrow-right-full.png"></image>
-        <view class="containerBox-info-name-state">{{state[item['state']]}}</view>
+        <view style="text-align: center;" class="containerBox-info-name-state">{{state[item['state']]}}</view>
       </view>
       <view class="containerBox-info-name">
         <view class="containerBox-info-name-place">{{item.receiptMunicipal}}</view>
-        <view class="containerBox-info-name-name2">{{item.receiptName}}</view>
+        <view style="font-size: 25rpx; text-align: center;" class="containerBox-info-name-name2">{{item.receiptName}}</view>
       </view>
       <image class="containerBox-info-right" src="../../resources/baoguo_o.png"></image>
     </view>

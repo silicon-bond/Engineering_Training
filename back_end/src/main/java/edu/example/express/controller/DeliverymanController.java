@@ -90,6 +90,14 @@ public class DeliverymanController {
 
     @RequestMapping(method = RequestMethod.PUT)
     public ResultBean<?> updateById(@RequestBody Deliveryman deliveryman) {
+        Integer deliverymanId = deliveryman.getDeliverymanId();
+        String phoneNumber = deliveryman.getPhoneNumber();
+        Deliveryman dm = deliverymanService.getDeliverymanByPhoneNumber(phoneNumber);
+        User user = userService.getUserByPhoneNumber(phoneNumber);
+        NetworkAdministrator networkAdministrator = networkAdministratorService.getNetworkAdministratorByPhoneNumber(phoneNumber);
+        if ((dm != null && dm.getDeliverymanId() != deliverymanId) || user != null || networkAdministrator != null){
+            return new ResultBean<>("该电话号码已被绑定", "500");
+        }
         return new ResultBean<>(deliverymanService.updateDeliveryman(deliveryman));
     }
 
@@ -144,6 +152,14 @@ public class DeliverymanController {
                                                     @RequestParam(name = "deliverymanId")Integer deliverymanId,
                                                     @RequestParam(name = "expressId", required = false)Integer expressId){
         return new ResultBean<>(expressService.getCompletedExpressList(page, pageSize, deliverymanId, expressId));
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/myAllExpresses")
+    private ResultBean<?> getMyAllExpresses(@RequestParam(name = "page", defaultValue = "1") int page,
+                                            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                            @RequestParam(name = "deliverymanId")Integer deliverymanId,
+                                            @RequestParam(name = "state", required = false)Integer state){
+        return new ResultBean<>(expressService.getMyAllExpresses(page, pageSize, deliverymanId, state));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/expressById")

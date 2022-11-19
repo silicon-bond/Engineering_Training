@@ -105,7 +105,9 @@
       </view>
     </view>
 
- 
+    
+
+    <button bindtap="submit" style="width:100%" class="btn-area" type="primary" >接单</button>
 
   </view>
 </view>

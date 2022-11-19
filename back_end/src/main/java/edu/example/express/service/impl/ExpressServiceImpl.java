@@ -82,7 +82,7 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
     @Override
     public Express getExpressByIdAndNetworkId(int id, int networkId) {
         log.info("正在查询express中id为{}的数据",id);
-        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("express_id", id).eq("networkId", networkId);
+        QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("express_id", id).eq("network_id", networkId);
         Express express = super.getOne(queryWrapper);
         log.info("查询id为{}的express{}",id,(null == express?"无结果":"成功"));
         return express;
@@ -316,6 +316,21 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
                         .ne("state", ExpressState.Delivering).eq("delivery_id", deliverymanId));
         if (expressId != null)
             queryWrapper = queryWrapper.eq("express_id", expressId);
+        Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        result.setRecords(completeListInfo(result.getRecords()));
+        return result;
+    }
+
+    @Override
+    public Page<Express> getMyAllExpresses(int page, int pageSize, Integer deliverymanId, Integer state) {
+        QueryWrapper<Express> queryWrapper = new QueryWrapper<Express>();
+        queryWrapper = queryWrapper.nested(
+                wapper -> wapper.eq("collect_id", deliverymanId)
+                        .or().eq("delivery_id", deliverymanId)
+        );
+        if (state != null){
+            queryWrapper.eq("state", state);
+        }
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
         result.setRecords(completeListInfo(result.getRecords()));
         return result;

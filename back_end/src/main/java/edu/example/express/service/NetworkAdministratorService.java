@@ -81,4 +81,6 @@ public interface NetworkAdministratorService {
 
     NetworkAdministrator getNetworkAdministratorByAccount(String account);
 
+    NetworkAdministrator getNetworkAdministratorByPhoneNumber(String phoneNumber);
+
 }

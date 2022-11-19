@@ -1,18 +1,22 @@
 {
   "pages": [
     "pages/deliveryMan/deliveryMan",
+    "pages/home/home",
+    
+    "pages/deliveryManwuliu/deliveryManwuliu",
+    "pages/deliveryManjiedan/deliveryManjiedan",
     "pages/deliveryMangr/deliveryMangr",
     "pages/deliveryManfk/deliveryManfk",
-  
     "pages/login/login",
-    "pages/home/home",
     "pages/delivery/delivery",
     "pages/receipt/receipt",
     "pages/info/info",
     "pages/info/infoTwo",
     "pages/receipt/content",
-    "pages/deliveryManwuliu/deliveryManwuliu",
-    "pages/deliveryManjiedan/deliveryManjiedan"  
+    "pages/jiedandetail/jiedandetail",
+    "pages/wanchendetail/wanchendetail",
+    "pages/userfk/userfk",
+    "pages/usergr/usergr"
   ],
   "tabBar": {
     "color": "#5B5B5B",

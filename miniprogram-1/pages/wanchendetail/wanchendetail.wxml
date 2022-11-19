@@ -105,7 +105,8 @@
       </view>
     </view>
 
- 
+    
+    <button wx:if="{{isShow}}" bindtap="submit" style="width:100%" class="btn-area" type="primary" >完成</button>
 
   </view>
 </view>

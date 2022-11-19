@@ -3,32 +3,32 @@
   <view class="wrapper">
     <view bindtap="toView" data-id="1" class="wrapper-item bgColor1">
       <view style="text-align: center;" class="wrapper-item-icon">
-        <image mode="widthFix" src="../../resources/jijian.png"></image>
+        <image mode="widthFix" src="../../resources/003-派送.png"></image>
       </view>
       <view class="wrapper-item-text"><text class="first-word">物</text>流信息</view>
     </view>
     <view bindtap="toView" data-id="2" class="wrapper-item bgColor2">
       <view class="wrapper-item-icon">
-        <image mode="widthFix" src="../../resources/jijian.png"></image>
+        <image mode="widthFix" src="../../resources/007-打包.png"></image>
       </view>
       <view class="wrapper-item-text"><text class="first-word">接</text>单管理</view>
     </view>
     <view bindtap="toView" data-id="3" class="wrapper-item bgColor3">
       <view class="wrapper-item-icon">
-        <image mode="widthFix" src="../../resources/jijian.png"></image>
+        <image mode="widthFix" src="../../resources/012-服务.png"></image>
       </view>
       <view class="wrapper-item-text"><text class="first-word">反</text>馈问题</view>
     </view>
-    <view bindtap="toView" data-id="4" class="wrapper-item bgColor3">
+    <view bindtap="toView" data-id="4" class="wrapper-item bgColor4">
       <view class="wrapper-item-icon">
-        <image mode="widthFix" src="../../resources/jijian.png"></image>
+        <image mode="widthFix" src="../../resources/014-快递员.png"></image>
       </view>
       <view class="wrapper-item-text"><text class="first-word">个</text>人中心</view>
     </view>
   </view>
 </view>
 <view class="leave" bindtap="leave">
-  <image mode="widthFix" src="../../resources/jijian.png"></image>
+  <image mode="widthFix" src="../../resources/tuichudenglu.png"></image>
 </view>
 
 

@@ -60,6 +60,10 @@
   
 }
 
+.bgColor4 {
+  background: linear-gradient(to bottom right, rgb(201, 31, 25), rgb(240, 125, 96))
+}
+
 .leave {
   position: fixed;
   left: 40rpx;
