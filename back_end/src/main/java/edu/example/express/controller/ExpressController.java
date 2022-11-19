@@ -12,6 +12,7 @@ import edu.example.express.service.ExpressService;
 import edu.example.express.entity.Express;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
+import java.time.LocalDate;
 import java.util.List;
 
 import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
@@ -36,6 +37,18 @@ public class ExpressController {
 
     @Autowired
     ExpressMapper expressMapper;
+
+    /**
+     * 根据网点ID&日期范围进行分页查询
+     */
+    @GetMapping("/listPageByNetworkIdAndDate")
+    public ResultBean<?> listByPage3(@RequestParam(name = "networkId", defaultValue = "1") int networkId,
+                                     @RequestParam(name = "page", defaultValue = "1") int page,
+                                     @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
+                                     @RequestParam(name = "dateStart", defaultValue = "2000-01-01") LocalDate DateStart,
+                                     @RequestParam(name = "dateOver",defaultValue = "2022-12-30") LocalDate DateOver) {
+        return new ResultBean<>(expressService.getExpressListByNetworkIdAndDate(networkId, page, pageSize, DateStart, DateOver));
+    }
 
     /**
     * 查询分页数据
