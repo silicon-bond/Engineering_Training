@@ -89,6 +89,16 @@
               </el-option>
             </el-select>
           </el-form-item>
+          <el-form-item label="所属网点" prop="branch">
+            <el-select v-model="detail.branch" style="width: 100%">
+              <el-option
+                v-for="item in options2"
+                :key="item.networkId"
+                :label="item.country+item.networkName"
+                :value="item.networkId">
+              </el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item label="发货时间" prop="deliveryTime">
             <el-input v-model="detail.deliveryTime" readonly></el-input>
           </el-form-item>
@@ -114,9 +124,11 @@ export default {
         recipientNumber:'',
         deliveryTime:'',
         state:'',
+        branch:''
       },
       dialogFormVisible: false,
       editDetail: false,
+      options2:[],
       options: [{
         value: 0,
         label: '未揽件'
@@ -320,10 +332,24 @@ export default {
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })
-    }
+    },
+    getAllBranch(){
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/allNetworks',
+      }).then((response) => {          //这里使用了ES6的语法
+        this.options2 = response.data.data
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
   },
   created() {
     this.querySearch(this.currentPage)
+    this.getAllBranch()
   }
 }
 </script>
