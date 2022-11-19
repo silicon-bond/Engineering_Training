@@ -40,6 +40,7 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" type="text" @click="lookClick(scope.row)" class="button">查看</el-button>
+            <el-button size="mini" type="text" @click="handleClick(scope.row)" v-if="scope.row.state===0" class="button">处理</el-button>
             <el-button size="mini" type="text" @click="deleteClick(scope.row)" class="button">删除</el-button>
           </template>
         </el-table-column>
@@ -147,6 +148,52 @@ export default {
       this.detail.providerPhoneNumber = row.providerPhoneNumber
       this.detail.feedbackDate = row.feedbackDate
       this.dialogDetail = true
+    },
+    handleClick(row){
+      this.$confirm('确定已处理此意见?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.handleConfirm(row)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    handleConfirm(row){
+      let adviceMessage = {
+        abnormalFeedbackId:row.abnormalFeedbackId,
+        description:row.description,
+        feedbackDate:row.feedbackDate,
+        networkId:row.networkId,
+        principalId:row.principalId,
+        providerPhoneNumber:row.providerPhoneNumber,
+        state:1,
+        title:row.title
+      }
+      this.$axios({
+        method: 'post',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        data: JSON.stringify(adviceMessage),
+        url: 'http://8.130.39.140:8081/express/api/abnormal-feedback/updateById',
+      }).then((response) => {          //这里使用了ES6的语法
+        if (response.data.message==="success"){
+          this.$message({
+            message: '处理意见成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('处理意见失败');
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     deleteClick(row){
       this.$confirm('确定删除此意见?', '提示', {

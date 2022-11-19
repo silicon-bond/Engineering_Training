@@ -241,7 +241,7 @@ export default {
         }
       });
     },
-    editConfirm(){//
+    editConfirm(){
       let branchMessage = {
         networkId:this.detail.networkId,
         networkName:this.detail.networkName,
@@ -256,18 +256,18 @@ export default {
           'Content-type': 'application/json;charset=UTF-8'
         },
         data: JSON.stringify(branchMessage),
-        url: 'http://8.130.39.140:8081/express/api/system-administrator/network-management/updateNetwork',
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/network-management/updateNetworkById',
       }).then((response) => {          //这里使用了ES6的语法
         console.log(response.data)
-        // if (response.data.message==="success"){
-        //   this.$message({
-        //     message: '修改物流成功',
-        //     type: 'success'
-        //   });
-        //   this.$router.go(0)
-        // }else {
-        //   this.$message.error('修改物流失败');
-        // }
+        if (response.data.message==="网点修改成功"){
+          this.$message({
+            message: '修改网点信息成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('修改网点信息失败');
+        }
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })
