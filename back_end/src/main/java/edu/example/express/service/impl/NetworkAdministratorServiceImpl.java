@@ -108,4 +108,13 @@ public class NetworkAdministratorServiceImpl extends ServiceImpl<NetworkAdminist
         log.info("查询account为{}的networkAdministrator{}",account,(null == networkAdministrator?"无结果":"成功"));
         return networkAdministrator;
     }
+
+    @Override
+    public NetworkAdministrator getNetworkAdministratorByPhoneNumber(String phoneNumber) {
+        log.info("正在查询networkAdministrator中phoneNumber为{}的数据", phoneNumber);
+        QueryWrapper<NetworkAdministrator> queryWrapper =  new QueryWrapper<NetworkAdministrator>().eq("phone_number", phoneNumber);
+        NetworkAdministrator networkAdministrator = super.getOne(queryWrapper);
+        log.info("查询account为{}的networkAdministrator{}",phoneNumber,(null == networkAdministrator?"无结果":"成功"));
+        return networkAdministrator;
+    }
 }
