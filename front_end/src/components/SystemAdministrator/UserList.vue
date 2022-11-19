@@ -23,7 +23,6 @@
           align="center"
           show-overflow-tooltip>
         </el-table-column>
-
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button size="mini" type="text" @click="edit(scope.row)" class="button">编辑</el-button>

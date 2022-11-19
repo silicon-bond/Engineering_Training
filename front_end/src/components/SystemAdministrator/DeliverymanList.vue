@@ -161,7 +161,33 @@ export default {
       });
     },
     editConfirm(){
+      let deliverymanMessage = {
+        deliverymanId:this.detail.id,
+        email:this.detail.email,
+        phoneNumber:this.detail.phone,
+        password:this.detail.password,
 
+      }
+      this.$axios({
+        method: 'put',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        data: JSON.stringify(deliverymanMessage),
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/person-management/update/2',
+      }).then((response) => {          //这里使用了ES6的语法
+        if (response.data.message==="快递员修改成功"){
+          this.$message({
+            message: '修改快递员信息成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('修改快递员信息失败');
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     deleteClick(row){
       this.$confirm('确定删除此快递员?', '提示', {

@@ -42,10 +42,10 @@
             <i class="el-icon-chat-line-square"></i>
             <span slot="title">网点管理</span>
           </el-menu-item>
-          <el-menu-item index="/system/adviceList" >
-            <i class="el-icon-reading"></i>
-            <span slot="title">意见箱管理</span>
-          </el-menu-item>
+<!--          <el-menu-item index="/system/adviceList" >-->
+<!--            <i class="el-icon-reading"></i>-->
+<!--            <span slot="title">意见箱管理</span>-->
+<!--          </el-menu-item>-->
         </el-menu>
       </div>
       <div id="rightBox">
@@ -82,7 +82,7 @@ export default {
       if (key === "/system/deliverymanList") this.$router.push('/system/deliverymanList')
       if (key === "/system/branchAdminList") this.$router.push('/system/branchAdminList')
       if (key === "/system/branchList") this.$router.push('/system/branchList')
-      if (key === "/system/adviceList") this.$router.push('/system/adviceList')
+      // if (key === "/system/adviceList") this.$router.push('/system/adviceList')
     },
     logout(){
       localStorage.clear();
