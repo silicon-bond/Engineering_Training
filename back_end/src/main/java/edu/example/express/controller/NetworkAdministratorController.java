@@ -137,8 +137,8 @@ public class NetworkAdministratorController {
                                                @RequestParam(name = "dateStart", defaultValue = "2000-01-01") LocalDate dateStart,
                                                @RequestParam(name = "dateOver", defaultValue = "2099-12-31") LocalDate dateOver) {
         log.info("正在查询express中state为{}的数据", state);
-        dateStart = dateStart.plusDays(1);
-        dateOver = dateOver.plusDays(2);
+//        dateStart = dateStart.plusDays(1);
+//        dateOver = dateOver.plusDays(2);
         if(state == 110){
             return new ResultBean<>(expressService.getExpressListByNetworkIdAndDate(networkId, page, pageSize, dateStart, dateOver));
         }else{

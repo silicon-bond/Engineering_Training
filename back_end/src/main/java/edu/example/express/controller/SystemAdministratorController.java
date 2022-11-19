@@ -169,7 +169,7 @@ public class SystemAdministratorController {
     @PutMapping("/person-management/update/3")
     public ResultBean UpdateNetworkAdministrator(@RequestBody NetworkAdministrator networkAdministrator){
         String system_phone = systemAdministratorService.getPhoneNumberByRoleAndId(3,networkAdministrator.getNetworkAdministratorId());
-        System.out.println(system_phone);
+//        System.out.println(system_phone);
         if (networkAdministrator.getPhoneNumber() != null && !system_phone.equals(networkAdministrator.getPhoneNumber())){
             if (systemAdministratorService.ifUsedPhoneNumber(networkAdministrator.getPhoneNumber())){
                 return new ResultBean("电话已经被使用","403");
@@ -203,6 +203,7 @@ public class SystemAdministratorController {
     @PostMapping("/network-management/addOneNetwork")
     public ResultBean<Network> addOneNetwork(@RequestBody Network network){
         LocalDate localDate = LocalDate.now();
+        System.out.println(localDate);
         network.setRegisterDate(localDate);
         int result = systemAdministratorService.addOneNetwork(network);
         ResultBean resultBean = new ResultBean("网点增加成功","",result);
@@ -287,11 +288,11 @@ public class SystemAdministratorController {
     }
 
 
-//    public static void main(String[] args) {
-//        LocalDateTime localDateTime = LocalDateTime.now();
-//        System.out.println(localDateTime);
-//
-//    }
+    public static void main(String[] args) {
+        LocalDate localDateTime = LocalDate.now();
+        System.out.println(localDateTime);
+
+    }
 }
 
 

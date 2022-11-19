@@ -177,8 +177,10 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
     @Override
     public Page<Express> getExpressListByNetworkIdAndDate(Integer networkId, int page, int pageSize, LocalDate DateStart, LocalDate DateOver){
         log.info("正在查询express中NetworkId为{}且时间范围在{}和{}之间的数据", networkId, DateStart, DateOver);
+        System.out.println(DateStart.toString()+" 00:00:00");
+        System.out.println(DateOver.toString()+" 23:59:59");
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("network_id", networkId)
-                .between("order_date", DateStart, DateOver);
+                .between("order_date", DateStart.toString()+" 00:00:00", DateOver.toString()+" 23:59:59");
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
         result.setRecords(completeListInfo(result.getRecords()));
         log.info("分页查询express完毕: 结果数 = {} ",result.getRecords().size());
@@ -188,6 +190,8 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
     @Override
     public Page<Express> getExpressListByNetworkIdAndDateAndState(int state, Integer networkId, int page, int pageSize, LocalDate DateStart, LocalDate DateOver){
         log.info("正在查询express中NetworkId为{},state为{},且时间范围在{}和{}之间的数据", networkId, state, DateStart, DateOver);
+        System.out.println(DateStart.toString()+" 00:00:00");
+        System.out.println(DateOver.toString()+" 23:59:59");
         QueryWrapper<Express> queryWrapper =  new QueryWrapper<Express>().eq("network_id", networkId)
                 .eq("state", state)
                 .between("order_date", DateStart.toString()+" 00:00:00", DateOver.toString()+" 23:59:59");
