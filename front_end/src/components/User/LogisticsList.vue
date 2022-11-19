@@ -34,11 +34,17 @@
           <el-form-item label="寄件人电话号码">
             <el-input v-model="detail.senderNumber" readonly></el-input>
           </el-form-item>
+          <el-form-item label="寄件地址">
+            <el-input v-model="detail.senderAddress" readonly></el-input>
+          </el-form-item>
           <el-form-item label="收件人">
             <el-input v-model="detail.recipient" readonly></el-input>
           </el-form-item>
           <el-form-item label="收件人电话号码">
             <el-input v-model="detail.recipientNumber" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="收件地址">
+            <el-input v-model="detail.recipientAddress" readonly></el-input>
           </el-form-item>
           <el-form-item label="状态">
             <el-select v-model="detail.state" style="width: 100%" disabled>
@@ -110,8 +116,10 @@ export default {
         id:'',
         sender:'',
         senderNumber:'',
+        senderAddress:'',
         recipient:'',
         recipientNumber:'',
+        recipientAddress:'',
         deliveryTime:'',
         state:'',
         arrivalTime:''
@@ -173,8 +181,10 @@ export default {
       this.detail.id = row.expressId
       this.detail.sender = row.deliverName
       this.detail.senderNumber = row.deliverPhoneNumber
+      this.detail.senderAddress = row.deliverProvince+row.deliverCountry+row.deliverMunicipal+row.deliverDetailAddress
       this.detail.recipient = row.receiptName
       this.detail.recipientNumber = row.receiptPhoneNumber
+      this.detail.recipientAddress = row.receiptProvince+row.receiptCountry+row.receiptMunicipal+row.receiptDetailAddress
       this.detail.deliveryTime = row.orderDate
       this.detail.state = row.state
       this.dialogDetail = true
@@ -189,6 +199,7 @@ export default {
         },
         url: 'http://8.130.39.140:8081/express/user/getExpressByStateAndID?page='+pageNum+'&pageSize='+this.pagesize+'&id=&state=&phoneNum='+user.phoneNumber,
       }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
         this.tableData = response.data.data.records
         this.totalCount = response.data.data.total
       }).catch((error) => {

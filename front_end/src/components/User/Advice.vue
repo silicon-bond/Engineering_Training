@@ -17,7 +17,7 @@
               <el-option
                 v-for="item in options"
                 :key="item.networkId"
-                :label="item.networkName"
+                :label="item.municipal+item.networkName"
                 :value="item.networkId">
               </el-option>
             </el-select>

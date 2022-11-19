@@ -54,6 +54,9 @@
           <el-form-item label="账号" prop="account">
             <el-input v-model="detail.account"></el-input>
           </el-form-item>
+          <el-form-item label="昵称" prop="nickname">
+            <el-input v-model="detail.nickname"></el-input>
+          </el-form-item>
           <el-form-item label="联系电话" prop="phone">
             <el-input v-model="detail.phone"></el-input>
           </el-form-item>
@@ -64,7 +67,7 @@
             <el-input v-model="detail.branch"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="editClick">确认</el-button>
+            <el-button type="primary" @click="editClick('detail')">确认</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -77,6 +80,9 @@
           <el-form-item label="账号" prop="account">
             <el-input v-model="addMessage.account"></el-input>
           </el-form-item>
+          <el-form-item label="昵称" prop="nickname">
+            <el-input v-model="addMessage.nickname"></el-input>
+          </el-form-item>
           <el-form-item label="联系电话" prop="phone">
             <el-input v-model="addMessage.phone"></el-input>
           </el-form-item>
@@ -88,7 +94,7 @@
               <el-option
                 v-for="item in options"
                 :key="item.networkId"
-                :label="item.networkName"
+                :label="item.municipal+item.networkName"
                 :value="item.networkId">
               </el-option>
             </el-select>
@@ -110,6 +116,7 @@ export default {
       detail: {
         id:'',
         account:'',
+        nickname:'',
         phone:'',
         password:'',
         branch:''
@@ -118,7 +125,8 @@ export default {
         account:'',
         phone:'',
         password:'',
-        branch:''
+        branch:'',
+        nickname:''
       },
       dialogFormVisible: false,
       editDetail: false,
@@ -128,6 +136,7 @@ export default {
         //{prop: "id", label: "id"},
         {prop: "networkAdministratorId", label: "系统管理员编号"},
         {prop: "account", label: "账号"},
+        {prop: "nickname", label: "昵称"},
         {prop: "password", label: "密码"},
         {prop: "phoneNumber", label: "联系电话"},
         {prop: "branch", label: "所属网点"},
@@ -137,6 +146,9 @@ export default {
       tableData: [
       ],
       addRules:{
+        nickname:[
+          { required: true, message: '昵称不能为空', trigger: 'change' },
+        ],
         account:[
           { required: true, message: '账号不能为空', trigger: 'change' },
         ],
@@ -151,6 +163,9 @@ export default {
         ]
       },
       editRules:{
+        nickname:[
+          { required: true, message: '昵称不能为空', trigger: 'change' },
+        ],
         account:[
           { required: true, message: '账号不能为空', trigger: 'change' },
         ],
@@ -207,12 +222,40 @@ export default {
         }
       });
     },
-    addConfirm(){//未实现
-
+    addConfirm(){
+      let branchAdminMessage = {
+        account:this.addMessage.account,
+        password:this.addMessage.password,
+        networkId:this.addMessage.branch,
+        phoneNumber:this.addMessage.phone,
+        nickname:this.addMessage.nickname
+      }
+      this.$axios({
+        method: 'post',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        data: JSON.stringify(branchAdminMessage),
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/person-management/addOneNetworkAdministrator',
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+        if (response.data.message==="网点管理员增加成功"){
+          this.$message({
+            message: '网点管理员新增成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('网点管理员新增失败');
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     edit(row){
       this.detail.id = row.networkAdministratorId
       this.detail.account = row.account
+      this.detail.nickname = row.nickname
       this.detail.password = row.password
       this.detail.phone = row.phoneNumber
       this.detail.branch = row.branch
@@ -238,39 +281,71 @@ export default {
         }
       });
     },
-    editConfirm(){//未实现
-      let userMessage = {
-        userId:this.detail.id,
-        email:this.detail.email,
-        detailAddress:this.detail.address,
+    editConfirm(){
+      let branchAdminMessage = {
+        networkAdministratorId:this.detail.id,
+        account:this.detail.account,
+        nickname:this.detail.nickname,
         phoneNumber:this.detail.phone,
-        password:this.detail.password
+        password:this.detail.password,
+        networkId:this.detail.branch
       }
       this.$axios({
         method: 'put',
         headers: {
           'Content-type': 'application/json;charset=UTF-8'
         },
-        data: JSON.stringify(userMessage),
-        url: 'http://8.130.39.140:8081/express/api/system-administrator/person-management/update/1',
+        data: JSON.stringify(branchAdminMessage),
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/person-management/update/3',
       }).then((response) => {          //这里使用了ES6的语法
-        if (response.data.message==="用户修改成功"){
+        if (response.data.message==="网点管理员修改成功"){
           this.$message({
-            message: '修改用户成功',
+            message: '修改网点管理员成功',
             type: 'success'
           });
           this.$router.go(0)
         }else {
-          this.$message.error('修改用户失败');
+          this.$message.error('修改网点管理员失败');
         }
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据
       })
     },
-    deleteClick(){
-
+    deleteClick(row){
+      this.$confirm('确定删除此网点管理员?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteConfirm(row)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     },
-
+    deleteConfirm(row){
+      this.$axios({
+        method: 'delete',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/deleteByIdAndRole?id='+row.networkAdministratorId+'&role=3',
+      }).then((response) => {          //这里使用了ES6的语法
+        if (response.data.message==="success"){
+          this.$message({
+            message: '删除网点管理员成功',
+            type: 'success'
+          });
+          this.$router.go(0)
+        }else {
+          this.$message.error('删除网点管理员失败');
+        }
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
+    },
     querySearch(pageNum) {
       this.$axios({
         method: 'get',
