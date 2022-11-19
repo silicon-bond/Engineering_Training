@@ -88,8 +88,8 @@ public class Express extends Model<Express> {
     @TableField("orderer_id")
     private Integer ordererId;
 
-    @TableField(value = "network_name", exist = false)
-    private String networkName;
+    @TableField(exist = false)
+    private Network network;
 
 
     @Override

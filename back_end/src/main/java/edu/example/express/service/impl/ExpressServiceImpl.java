@@ -243,6 +243,7 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
 
         queryWrapper.and(QueryWrapper -> QueryWrapper.eq("deliver_phone_number",phoneNum).or().eq("receipt_phone_number",phoneNum));
         Page<Express> result = super.page(new Page<>(page, pageSize), queryWrapper);
+        result.setRecords(completeListInfo(result.getRecords()));
 
         return result;
     }
@@ -261,7 +262,7 @@ public class ExpressServiceImpl extends ServiceImpl<ExpressMapper, Express> impl
 
     private Express completeInfo(Express express){
         Network network = networkService.getNetworkById(express.getNetworkId());
-        express.setNetworkName(network.getNetworkName());
+        express.setNetwork(network);
         return express;
     }
 
