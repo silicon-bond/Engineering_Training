@@ -1,8 +1,8 @@
 <view class="courier">
   <image bindtap="showD" class="courier-png" src="../../resources/jijian.png"></image>
-  <view class="courier-P1" bindtap="showD" >待派送</view>
+  <view class="courier-P1" bindtap="showD" >收件</view>
   <image bindtap="showR" class="courier-png" src="../../resources/shoujianxiang.png"></image>
-  <view class="courier-P1" bindtap="showR">未揽件</view>
+  <view class="courier-P1" bindtap="showR">寄件</view>
 </view>
 
 <view class="header">

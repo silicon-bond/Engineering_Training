@@ -30,7 +30,7 @@ Page({
                 duration: 2000
               })
               setTimeout(()=> {
-                wx.redirectTo({
+                wx.reLaunch({
                   url: '../deliveryMan/deliveryMan',
                 })
               }, 2000)

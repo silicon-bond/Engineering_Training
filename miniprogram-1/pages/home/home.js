@@ -22,7 +22,7 @@ Page({
 
   exit() {
     wx.clearStorage()
-    wx.redirectTo({
+    wx.reLaunch({
       url: '../login/login',
     })
   },
