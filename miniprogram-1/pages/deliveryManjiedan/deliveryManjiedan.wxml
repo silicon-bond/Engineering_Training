@@ -7,7 +7,7 @@
 
 <view class="header">
   <input type="number" class="search" placeholder="请输入快递单号查询" bindinput="searchIdInput" value="{{searchid}}"/>
-  <image class="search-icon" src="../../resources/搜索.png" bindtap="searchById"></image>
+  <image class="search-icon" src="../../resources/shousuo.png" bindtap="searchById"></image>
   
 </view>
 <block wx:if="{{stateForRD}}">

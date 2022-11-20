@@ -84,7 +84,7 @@ Page({
               method: 'POST',
               success: function (res) {
                 console.log(res);
-                wx.redirectTo({
+                wx.switchTab({
                   url: '../receipt/receipt',
                 })
               },

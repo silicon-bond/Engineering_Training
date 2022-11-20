@@ -1,5 +1,5 @@
 <view bindtap="touserinfo" class="header">
-  <image class="header-portrait" src="../../resources/002-快递箱.png"></image>
+  <image class="header-portrait" src="../../resources/kuaidixiang.png"></image>
   <view class="header-text">
     <view class="header-name">用户{{userInfo.userId}}</view>
     <view class="header-intro">欢迎使用快递服务</view>
