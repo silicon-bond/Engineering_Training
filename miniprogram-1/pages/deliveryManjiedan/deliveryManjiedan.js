@@ -54,7 +54,7 @@ Page({
     if(this.data.searchid==""){
       if(this.data.stateForRD) {
         wx.request({
-          url: `http://8.130.39.140:8081/express/api/deliveryman/myUnCompletedExpressList?deliverymanId=${that.data.userInfo.deliverymanId}&page=1&pageSize=4`,
+          url: `http://8.130.39.140:8081/express/api/deliveryman/myUnCompletedExpressList?deliverymanId=${that.data.userInfo.deliverymanId}&page=1&pageSize=5`,
           method: 'GET',
           success: function (res) {
             console.log(111);
@@ -74,7 +74,7 @@ Page({
         })
       } else {
         wx.request({
-          url: `http://8.130.39.140:8081/express/api/deliveryman/myCompletedExpressList?deliverymanId=${that.data.userInfo.deliverymanId}&page=1&pageSize=4`,
+          url: `http://8.130.39.140:8081/express/api/deliveryman/myCompletedExpressList?deliverymanId=${that.data.userInfo.deliverymanId}&page=1&pageSize=5`,
           method: 'GET',
           success: function (res) {
             console.log(222);
@@ -96,7 +96,7 @@ Page({
     }else{
       if(this.data.stateForRD){
         wx.request({
-          url: `http://8.130.39.140:8081/express/api/deliveryman/myUnCompletedExpressList?expressId=${that.data.searchid}&deliverymanId=${that.data.userInfo.deliverymanId}&page=1&pageSize=4`,
+          url: `http://8.130.39.140:8081/express/api/deliveryman/myUnCompletedExpressList?expressId=${that.data.searchid}&deliverymanId=${that.data.userInfo.deliverymanId}&page=1&pageSize=5`,
           method: 'GET',
           success: function (res) {
             console.log(res);
@@ -121,7 +121,7 @@ Page({
         })
     }else{
       wx.request({
-        url: `http://8.130.39.140:8081/express/api/deliveryman/myCompletedExpressList?expressId=${that.data.searchid}&deliverymanId=${that.data.userInfo.deliverymanId}&page=1&pageSize=4`,
+        url: `http://8.130.39.140:8081/express/api/deliveryman/myCompletedExpressList?expressId=${that.data.searchid}&deliverymanId=${that.data.userInfo.deliverymanId}&page=1&pageSize=5`,
         method: 'GET',
         success: function (res) {
           console.log(res);
@@ -178,7 +178,7 @@ Page({
           userInfo:res.data
         })
         wx.request({
-          url: `http://8.130.39.140:8081/express/api/deliveryman/myUnCompletedExpressList?deliverymanId=${res.data.deliverymanId}&page=1&pageSize=4`,
+          url: `http://8.130.39.140:8081/express/api/deliveryman/myUnCompletedExpressList?deliverymanId=${res.data.deliverymanId}&page=1&pageSize=5`,
           method: 'GET',
           success: function (res) {
             console.log(111);
@@ -197,7 +197,7 @@ Page({
           }
         })
         wx.request({
-          url: `http://8.130.39.140:8081/express/api/deliveryman/myCompletedExpressList?deliverymanId=${res.data.deliverymanId}&page=1&pageSize=4`,
+          url: `http://8.130.39.140:8081/express/api/deliveryman/myCompletedExpressList?deliverymanId=${res.data.deliverymanId}&page=1&pageSize=5`,
           method: 'GET',
           success: function (res) {
             console.log(222);
@@ -255,7 +255,7 @@ Page({
     var that = this
     if(that.data.stateForRD){
       wx.request({
-        url: `http://8.130.39.140:8081/express/api/deliveryman/myUnCompletedExpressList?deliverymanId=${that.data.userInfo.deliverymanId}&page=1&pageSize=4`,
+        url: `http://8.130.39.140:8081/express/api/deliveryman/myUnCompletedExpressList?deliverymanId=${that.data.userInfo.deliverymanId}&page=1&pageSize=5`,
         method: 'GET',
         success: function (res) {
           console.log('下拉111');
@@ -275,7 +275,7 @@ Page({
       })
     }else{
       wx.request({
-        url: `http://8.130.39.140:8081/express/api/deliveryman/myCompletedExpressList?deliverymanId=${that.data.userInfo.deliverymanId}&page=1&pageSize=4`,
+        url: `http://8.130.39.140:8081/express/api/deliveryman/myCompletedExpressList?deliverymanId=${that.data.userInfo.deliverymanId}&page=1&pageSize=5`,
         method: 'GET',
         success: function (res) {
           console.log('下拉222');
@@ -303,7 +303,7 @@ Page({
     var that = this
     if(this.data.stateForRD){
       wx.request({
-        url: `http://8.130.39.140:8081/express/api/deliveryman/myUnCompletedExpressList?deliverymanId=${that.data.userInfo.deliverymanId}&page=${that.data.pageD}&pageSize=4`,
+        url: `http://8.130.39.140:8081/express/api/deliveryman/myUnCompletedExpressList?deliverymanId=${that.data.userInfo.deliverymanId}&page=${that.data.pageD}&pageSize=5`,
         method: 'GET',
         success: function (res) {
           console.log('底部111');
@@ -323,7 +323,7 @@ Page({
       })
     }else{
       wx.request({
-        url: `http://8.130.39.140:8081/express/api/deliveryman/myCompletedExpressList?deliverymanId=${that.data.userInfo.deliverymanId}&page=${that.data.pageR}&pageSize=4`,
+        url: `http://8.130.39.140:8081/express/api/deliveryman/myCompletedExpressList?deliverymanId=${that.data.userInfo.deliverymanId}&page=${that.data.pageR}&pageSize=5`,
         method: 'GET',
         success: function (res) {
           console.log('底部222');

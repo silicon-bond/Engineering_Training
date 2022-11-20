@@ -5,8 +5,8 @@
     <view class="header-intro">欢迎使用快递服务</view>
   </view>
 </view>
-<view bindtap="tofangkui" class="info">
-  <view class="courier">
+<view class="info">
+  <view bindtap="tofangkui" class="courier">
     <view class="courier-P1">
       <image class="courier-P1-portrait" src="../../resources/aniukefu2.png"></image>
       <view class="courier-P1-text">

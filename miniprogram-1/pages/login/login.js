@@ -57,7 +57,7 @@ Page({
                 url: '../home/home'
               })
             } else {
-              wx.redirectTo({
+              wx.reLaunch({
                 url: '../deliveryMan/deliveryMan',
               })
             }
