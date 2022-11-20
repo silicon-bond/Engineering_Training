@@ -282,7 +282,8 @@ export default {
         receiptProvince:CodeToText[`${this.detail.recipientSSQ[0]}`],
         receiptMunicipal:CodeToText[`${this.detail.recipientSSQ[1]}`],
         receiptCountry:CodeToText[`${this.detail.recipientSSQ[2]}`],
-        state:this.detail.state
+        state:this.detail.state,
+        networkId:this.detail.branch
       }
       this.$axios({
         method: 'put',

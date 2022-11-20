@@ -164,7 +164,7 @@ export default {
       const data = response.data.data
       let tmp = []
       for (let i = 0; i < data.length; i++) {
-        tmp.push({value: `${data[i].networkId}`, label: `${data[i].networkName}`})
+        tmp.push({value: `${data[i].networkId}`, label: `${data[i].country}`+`${data[i].networkName}`})
       }
       that.options = tmp
     }).catch((error) => {

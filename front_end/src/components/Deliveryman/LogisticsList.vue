@@ -186,8 +186,8 @@ export default {
           // console.log(this.tableData)
           this.totalCount = response.data.data.total
           this.tableData.forEach((item,index)=>{
-            item.detailaddress=item.deliverProvince+item.deliverMunicipal+item.deliverCountry+item.deliverStreet+item.deliverDetailAddress
-            item.recipeaddress=item.receiptProvince+item.receiptMunicipal+item.receiptCountry+item.receiptStreet+item.receiptDetailAddress
+            item.detailaddress=item.deliverProvince+item.deliverMunicipal+item.deliverCountry+item.deliverDetailAddress
+            item.recipeaddress=item.receiptProvince+item.receiptMunicipal+item.receiptCountry+item.receiptDetailAddress
 
           })
         }
@@ -245,9 +245,15 @@ export default {
         }).then((response) => {          //这里使用了ES6的语法
           console.log(response.data)
           if (response.data.code==='1') {
-              this.querySearch(this.currentPage)
-            // this.totalCount = response.data.data.total
+            this.$message({
+              message: '接单成功',
+              type: 'success'
+            });
+            setTimeout(()=> {
+              this.$router.go(0)
+            }, 1000)
           }
+
         }).catch((error) => {
           console.log(error)       //请求失败返回的数据
         })

@@ -81,9 +81,14 @@ export default {
             url: 'http://8.130.39.140:8081/express/api/deliveryman/feedback',
           }).then((response) => {          //这里使用了ES6的语法
             if (response.data.code === '1'){
-              alert('发表成功');
-              this.ruleForm.title = ''
-              this.ruleForm.content = ''
+              this.$message({
+                message: '发表意见成功',
+                type: 'success'
+              });
+              setTimeout(()=> {
+                this.$router.go(0)
+              }, 1000)
+
             } else{
               alert('发表失败');
             }
@@ -120,7 +125,7 @@ export default {
   },
   created() {
     let info=JSON.parse(localStorage.getItem('userinfo_kuaidi'))
-    this.telephone=info.telephone
+    this.telephone=info.phoneNumber
     this.networkId=info.networkId
     this.getnetwork()
   }

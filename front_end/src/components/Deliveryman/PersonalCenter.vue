@@ -18,7 +18,7 @@
     <div id="personalBox">
       <h2 id="personalTitle">个人信息</h2>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px" style="float: left;width: 40%">
-        <el-form-item label="姓名">
+        <el-form-item label="姓名" prop="name">
           <el-input v-model="form.name"  placeholder="请输入姓名"></el-input>
         </el-form-item>
         <el-form-item label="联系电话" prop="telephone">
@@ -55,6 +55,9 @@ export default {
 
       },
       rules: {
+        name: [
+          { required: true, message: '姓名不能为空', trigger: 'change' }
+        ],
         telephone: [
           { pattern:/^1[3|4|5|7|8][0-9]{9}$/,message: '请输入正确的手机号码',trigger: 'change' },
           { required: true, message: '电话号码不能为空', trigger: 'change' }
@@ -100,7 +103,7 @@ export default {
     onSubmit() {
       let user = JSON.parse(localStorage.getItem("userinfo_kuaidi"))
       user.username=this.form.name
-      user.Phonenumber=this.form.telephone
+      user.phoneNumber=this.form.telephone
       console.log(user)
       this.$axios({
         method: 'put',

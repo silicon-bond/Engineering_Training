@@ -257,9 +257,14 @@ export default {
       }).then((response) => {          //这里使用了ES6的语法
         console.log(response.data)
         if (response.data.code==='1') {
-          // this.tableData = response.data.data
-          // this.totalCount = response.data.data.total
-          this.querySearch(this.currentPage)
+          this.$message({
+            message: '成功送达',
+            type: 'success'
+          });
+          setTimeout(()=> {
+            this.$router.go(0)
+          }, 1000)
+
         }
       }).catch((error) => {
         console.log(error)       //请求失败返回的数据

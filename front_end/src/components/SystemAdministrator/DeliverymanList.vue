@@ -187,7 +187,8 @@ export default {
         email:this.detail.email,
         phoneNumber:this.detail.phone,
         password:this.detail.password,
-        username:this.detail.username
+        username:this.detail.username,
+        networkId:this.detail.branch
       }
       this.$axios({
         method: 'put',
