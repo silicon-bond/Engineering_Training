@@ -134,7 +134,7 @@ export default {
     this.form.telephone=user.phoneNumber
     this.form.deliverymanId=user.deliverymanId
     this.form.email=user.email
-    this.form.network=user.network.municipal+user.network.networkName
+    this.form.network=user.network.country+user.network.networkName
 
   }
 }
