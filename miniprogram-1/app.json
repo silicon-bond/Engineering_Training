@@ -1,8 +1,9 @@
 {
   "pages": [
+    "pages/login/login",
     "pages/deliveryMan/deliveryMan",
     "pages/delivery/delivery",
-    "pages/login/login",
+
     
     "pages/home/home",
     
