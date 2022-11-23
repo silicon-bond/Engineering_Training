@@ -245,9 +245,15 @@ export default {
       })
     },
     searchClick(){
-      this.resultStatus='2'
       this.currentPage=1
-      this.searchById(this.currentPage)
+      if (this.searchContent === ''){
+        this.resultStatus='1'
+        this.querySearch(this.currentPage)
+      }
+      else {
+        this.resultStatus='2'
+        this.searchById(this.currentPage)
+      }
     },
     searchById(pageNum){
       this.$axios({

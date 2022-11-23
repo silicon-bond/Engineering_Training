@@ -27,15 +27,21 @@
     <el-dialog title="物流详情" :visible.sync="dialogDetail">
 
       <div id="detailBox">
-        <el-form ref="detail" :model="detail" label-width="80px">
+        <el-form ref="detail" :model="detail" label-width="125px">
           <el-form-item label="订单编号">
             <el-input v-model="detail.id" readonly></el-input>
           </el-form-item>
           <el-form-item label="寄件人">
             <el-input v-model="detail.sender" readonly></el-input>
           </el-form-item>
+          <el-form-item label="寄件人联系电话">
+            <el-input v-model="detail.deliverPhoneNumber" readonly></el-input>
+          </el-form-item>
           <el-form-item label="收件人">
             <el-input v-model="detail.recipient" readonly></el-input>
+          </el-form-item>
+          <el-form-item label="收件人联系电话">
+            <el-input v-model="detail.receiptPhoneNumber" readonly></el-input>
           </el-form-item>
           <el-form-item label="状态">
             <el-input v-model="detail.state" readonly></el-input>
@@ -112,7 +118,9 @@ export default {
       detail: {
         id:'',
         sender:'',
+        deliverPhoneNumber:'',
         recipient:'',
+        receiptPhoneNumber:'',
         state:'',
         deliveryAddress:'',
         recipentAddress:''
@@ -200,6 +208,8 @@ export default {
       this.detail.id = row.expressId
       this.detail.sender = row.deliverName
       this.detail.recipient = row.receiptName
+      this.detail.deliverPhoneNumber = row.deliverPhoneNumber
+      this.detail.receiptPhoneNumber = row.receiptPhoneNumber
       // this.detail.arrivalTime = row.arrivalTime
       // this.detail.deliveryTime = row.deliveryTime
       if (row.state===0){
@@ -270,7 +280,7 @@ export default {
         },
         url: 'http://8.130.39.140:8081/express/api/deliveryman/expressList/?networkId='+this.networkId+'&page='+pageNum+'&pageSize='+this.pagesize,
       }).then((response) => {          //这里使用了ES6的语法
-        // console.log(response.data.data)
+        console.log(response.data.data)
         if (response.data.code==='1') {
           this.tableData = response.data.data.records
           this.totalCount = response.data.data.total

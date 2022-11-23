@@ -30,7 +30,7 @@
         <div id="searchContent">
           <el-input  v-model="searchContent" placeholder="请输入快递员编号"></el-input>
         </div>
-        <el-button type="primary">搜索</el-button>
+        <el-button type="primary" @click="searchClick">搜索</el-button>
       </div>
     </div>
     <el-divider></el-divider>
@@ -157,7 +157,40 @@ export default {
 
     handleCurrentChange: function(val) {
       this.currentPage = val;
-      this.querySearch(this.currentPage);
+      if (this.resultStatus === '1'){
+        this.querySearch(this.currentPage);
+      }
+      else{
+        this.searchByfactor(this.currentPage);
+      }
+    },
+    searchClick(){
+      this.currentPage=1
+      if (this.searchContent === ''){
+        this.resultStatus='1'
+        this.querySearch(this.currentPage)
+      }
+      else {
+        this.resultStatus='2'
+        this.searchByfactor(this.currentPage)
+      }
+    },
+    searchByfactor(pageNum){//未实现
+      let branchAdmin = JSON.parse(localStorage.getItem("userinfo_kuaidi"))
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/deliveryman/getDeliveryman/deliveryman_idAndNetwork_id?deliveryman_id='+this.searchContent+'&network_id='+branchAdmin.networkId,
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+        this.tableData = []
+        this.tableData.push(response.data.data)
+        this.totalCount = 1
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     edit(row){
       this.detail.id = row.deliverymanId

@@ -12,7 +12,7 @@
           </el-option>
         </el-select>
         <div id="searchContent">
-          <el-button type="primary">搜索</el-button>
+          <el-button type="primary" @click="searchClick">搜索</el-button>
         </div>
       </div>
     </div>
@@ -114,6 +114,7 @@ export default {
       }],
       value: '',
       searchContent:'',
+      resultStatus:'1',
       tableCol: [
         //{prop: "id", label: "id"},
         {prop: "abnormalFeedbackId", label: "意见编号"},
@@ -138,7 +139,34 @@ export default {
 
     handleCurrentChange: function(val) {
       this.currentPage = val;
-      this.querySearch(this.currentPage);
+      if (this.resultStatus === '1'){
+        this.querySearch(this.currentPage);
+      }
+      else{
+        this.searchByfactor(this.currentPage);
+      }
+    },
+    searchClick(){
+      this.resultStatus='2'
+      this.currentPage=1
+      this.searchByfactor(this.currentPage)
+    },
+    searchByfactor(pageNum){
+      let branchAdmin = JSON.parse(localStorage.getItem("userinfo_kuaidi"))
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/network-administrator/network_id/state?page='+pageNum+'&pageSize='+this.pagesize+'&network_id='+branchAdmin.networkId+'&state='+this.value,
+      }).then((response) => {          //这里使用了ES6的语法
+        console.log(response.data)
+        this.tableData = response.data.data.records
+        this.totalCount = response.data.data.total
+
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     lookClick(row){
       this.detail.abnormalFeedbackId = row.abnormalFeedbackId

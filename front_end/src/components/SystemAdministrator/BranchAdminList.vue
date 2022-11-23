@@ -6,7 +6,7 @@
         <div id="searchContent">
           <el-input  v-model="searchContent" placeholder="请输入网点管理员编号"></el-input>
         </div>
-        <el-button type="primary">搜索</el-button>
+        <el-button type="primary" @click="searchClick">搜索</el-button>
         <el-button id="addUserbtn" type="primary" @click="add">添加网点管理员</el-button>
       </div>
     </div>
@@ -139,6 +139,7 @@ export default {
       editDetail: false,
       addDetail:false,
       searchContent:'',
+      resultStatus:'1',
       tableCol: [
         //{prop: "id", label: "id"},
         {prop: "networkAdministratorId", label: "系统管理员编号"},
@@ -204,7 +205,39 @@ export default {
   methods: {
     handleCurrentChange: function(val) {
       this.currentPage = val;
-      this.querySearch(this.currentPage);
+      if (this.resultStatus === '1'){
+        this.querySearch(this.currentPage);
+      }
+      else{
+        this.searchByfactor(this.currentPage);
+      }
+    },
+    searchClick(){
+      this.currentPage=1
+      if (this.searchContent === ''){
+        this.resultStatus='1'
+        this.querySearch(this.currentPage)
+      }
+      else {
+        this.resultStatus='2'
+        this.searchByfactor(this.currentPage)
+      }
+    },
+    searchByfactor(pageNum){
+      this.$axios({
+        method: 'get',
+        headers: {
+          'Content-type': 'application/json;charset=UTF-8'
+        },
+        url: 'http://8.130.39.140:8081/express/api/system-administrator/person-management/getNetworkAdministratorById/'+this.searchContent
+      }).then((response) => {          //这里使用了ES6的语法
+        this.tableData = []
+        this.tableData.push(response.data.data)
+        this.totalCount = 1
+
+      }).catch((error) => {
+        console.log(error)       //请求失败返回的数据
+      })
     },
     add(){
       this.getAllBranch()
