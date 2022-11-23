@@ -94,6 +94,16 @@ public class DeliverymanServiceImpl extends ServiceImpl<DeliverymanMapper,Delive
     }
 
     @Override
+    public Deliveryman getDeliverymanByDeliverymanIdAndNetworkId(int deliverymanId, int networkId) {
+        log.info("正在执行查询deliveryman: deliverymanId = {} networkId = {}", deliverymanId, networkId);
+        QueryWrapper<Deliveryman> queryWrapper =  new QueryWrapper<Deliveryman>().eq("deliveryman_id", deliverymanId).eq("network_id", networkId);
+        Deliveryman deliveryman = super.getOne(queryWrapper);
+        deliveryman = completeInfo(deliveryman);
+        log.info("查询deliverymanId={} networkId={} 的deliveryman{}",deliverymanId, networkId,(null == deliveryman?"无结果":"成功"));
+        return deliveryman;
+    }
+
+    @Override
     public Deliveryman getDeliverymanByEmail(String email) {
         log.info("正在查询deliveryman中email为{}的数据", email);
         QueryWrapper<Deliveryman> queryWrapper =  new QueryWrapper<Deliveryman>().eq("email", email);

@@ -69,4 +69,6 @@ public interface DeliverymanService {
     Deliveryman getDeliverymanByEmail(String email);
 
     Deliveryman getDeliverymanByPhoneNumber(String phoneNumber);
+
+    Deliveryman getDeliverymanByDeliverymanIdAndNetworkId(int deliverymanId, int networkId);
 }

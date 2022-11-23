@@ -35,6 +35,12 @@ public class DeliverymanController {
     @Resource
     private AbnormalFeedbackService abnormalFeedbackService;
 
+    @RequestMapping(method = RequestMethod.GET, value = "/getDeliveryman/deliveryman_idAndNetwork_id")
+    public ResultBean<?> getDeliverymanByIdAndNetworkId(@RequestParam(name = "deliveryman_id", defaultValue = "1") int deliveryman_id,
+                                    @RequestParam(name = "network_id", defaultValue = "1") int network_id) {
+        return new ResultBean<>(deliverymanService.getDeliverymanByDeliverymanIdAndNetworkId(deliveryman_id, network_id));
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public ResultBean<?> listByPage(@RequestParam(name = "page", defaultValue = "1") int page,
                                     @RequestParam(name = "pageSize", defaultValue = "10") int pageSize,
